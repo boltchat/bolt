@@ -10,7 +10,12 @@ func logConnection(conn *net.TCPConn) {
 }
 
 func handleConnection(conn *net.TCPConn) {
+	// Log the connection
 	logConnection(conn)
+
+	b := make([]byte, 512)
+	conn.Read(b)
+	fmt.Println(string(b))
 }
 
 func main() {
