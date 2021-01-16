@@ -5,8 +5,12 @@ import (
 	"net"
 )
 
+func logConnection(conn *net.TCPConn) {
+	fmt.Printf("%s connected! Say hi.\n", conn.RemoteAddr().String())
+}
+
 func handleConnection(conn *net.TCPConn) {
-	fmt.Println(conn)
+	logConnection(conn)
 }
 
 func main() {
