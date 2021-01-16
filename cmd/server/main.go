@@ -3,15 +3,13 @@ package main
 import (
 	"fmt"
 	"net"
-)
 
-func logConnection(conn *net.TCPConn) {
-	fmt.Printf("%s connected! Say hi.\n", conn.RemoteAddr().String())
-}
+	"keesvv/go-tcp-chat/internals/logging"
+)
 
 func handleConnection(conn *net.TCPConn) {
 	// Log the connection
-	logConnection(conn)
+	logging.LogConnection(conn)
 
 	b := make([]byte, 512)
 	conn.Read(b)
