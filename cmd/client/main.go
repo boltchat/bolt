@@ -1,6 +1,7 @@
 package main
 
 import (
+	"keesvv/go-tcp-chat/internals/message"
 	"net"
 )
 
@@ -14,6 +15,10 @@ func main() {
 		panic(err)
 	}
 
-	conn.Write([]byte("Hi there! ~Kees"))
+	msg := message.Message{
+		Content: "Hi there! ~Kees",
+	}
+
+	msg.Send(conn)
 	conn.Close()
 }
