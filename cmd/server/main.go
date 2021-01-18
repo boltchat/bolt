@@ -1,36 +1,9 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
+	"keesvv/go-tcp-chat/internals/handlers"
 	"net"
-
-	"keesvv/go-tcp-chat/internals/logging"
-	"keesvv/go-tcp-chat/internals/message"
 )
-
-func handleConnection(conn *net.TCPConn) {
-	// TODO: clean up this absolute mess
-	logging.LogConnection(conn)
-
-	rawBytes := make([]byte, 4096)
-	_, connErr := conn.Read(rawBytes)
-
-	if connErr != nil {
-		return
-	}
-
-	b := bytes.TrimRight(rawBytes, "\x00")
-
-	msg := &message.Message{}
-	err := json.Unmarshal(b, msg)
-
-	if err != nil {
-		panic(err)
-	}
-
-	msg.Print()
-}
 
 func main() {
 	l, err := net.ListenTCP("tcp", &net.TCPAddr{
@@ -50,6 +23,6 @@ func main() {
 		}
 
 		// Accept new connection
-		go handleConnection(conn)
+		go handlers.HandleConnection(conn)
 	}
 }
