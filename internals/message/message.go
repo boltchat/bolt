@@ -1,11 +1,30 @@
 package message
 
-import "net"
+import (
+	"encoding/json"
+	"keesvv/go-tcp-chat/internals/user"
+	"net"
+)
 
+/*
+Message represents a message that is
+either transmitted or stored locally.
+*/
 type Message struct {
-	Content string
+	Content string     `json:"content"`
+	User    *user.User `json:"user"`
 }
 
-func (m *Message) Send(conn *net.TCPConn) {
-	conn.Write([]byte(m.Content)) // TODO:
+/*
+Send sends the message to an established
+TCP connection.
+*/
+func (m *Message) Send(conn *net.TCPConn) error {
+	b, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+
+	conn.Write(b)
+	return nil
 }
