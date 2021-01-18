@@ -2,6 +2,7 @@ package message
 
 import (
 	"encoding/json"
+	"fmt"
 	"keesvv/go-tcp-chat/internals/user"
 	"net"
 )
@@ -27,4 +28,11 @@ func (m *Message) Send(conn *net.TCPConn) error {
 
 	conn.Write(b)
 	return nil
+}
+
+/*
+Print prints a message to stdout.
+*/
+func (m *Message) Print() {
+	fmt.Printf("[%v] <%s> %s\n", 0, m.User.Nickname, m.Content)
 }

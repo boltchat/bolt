@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net"
 
 	"keesvv/go-tcp-chat/internals/logging"
@@ -26,7 +25,7 @@ func handleConnection(conn *net.TCPConn) {
 		panic(err)
 	}
 
-	fmt.Println(msg)
+	msg.Print()
 }
 
 func main() {
