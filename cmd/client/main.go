@@ -2,6 +2,7 @@ package main
 
 import (
 	"keesvv/go-tcp-chat/internals/message"
+	"keesvv/go-tcp-chat/internals/user"
 	"net"
 )
 
@@ -16,7 +17,10 @@ func main() {
 	}
 
 	msg := message.Message{
-		Content: "Hi there! ~Kees",
+		Content: "Hi there!",
+		User: &user.User{
+			Nickname: "Kees",
+		},
 	}
 
 	msg.Send(conn)
