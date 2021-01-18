@@ -14,7 +14,11 @@ func handleConnection(conn *net.TCPConn) {
 	logging.LogConnection(conn)
 
 	rawBytes := make([]byte, 4096)
-	conn.Read(rawBytes)
+	_, connErr := conn.Read(rawBytes)
+
+	if connErr != nil {
+		return
+	}
 
 	b := bytes.TrimRight(rawBytes, "\x00")
 
