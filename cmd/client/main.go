@@ -1,9 +1,13 @@
 package main
 
 import (
+	"bufio"
+	"fmt"
 	"keesvv/go-tcp-chat/internals/message"
 	"keesvv/go-tcp-chat/internals/user"
 	"net"
+	"os"
+	"strings"
 )
 
 func main() {
@@ -16,13 +20,24 @@ func main() {
 		panic(err)
 	}
 
-	msg := message.Message{
-		Content: "Hi there!",
-		User: &user.User{
-			Nickname: "Kees",
-		},
-	}
+	reader := bufio.NewReader(os.Stdin)
 
-	msg.Send(conn)
-	conn.Close()
+	for {
+		fmt.Print("> ")
+		content, readError := reader.ReadString('\n')
+		content = strings.TrimSpace(content)
+
+		if readError != nil {
+			panic(readError)
+		}
+
+		msg := message.Message{
+			Content: content,
+			User: &user.User{
+				Nickname: "Kees",
+			},
+		}
+
+		msg.Send(conn)
+	}
 }
