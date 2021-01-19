@@ -7,10 +7,10 @@ import (
 	"net"
 )
 
-func Connect(nick string, ip string, port int) (*Connection, error) {
+func Connect(opts Options) (*Connection, error) {
 	conn, err := net.DialTCP("tcp", nil, &net.TCPAddr{
-		IP:   net.ParseIP(ip),
-		Port: port,
+		IP:   net.ParseIP(opts.Hostname),
+		Port: opts.Port,
 	})
 
 	if err != nil {
@@ -18,7 +18,7 @@ func Connect(nick string, ip string, port int) (*Connection, error) {
 	}
 
 	user := &user.User{
-		Nickname: nick,
+		Nickname: opts.Nickname,
 	}
 
 	evt := events.NewJoinEvent(user)

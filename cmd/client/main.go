@@ -7,7 +7,12 @@ import (
 )
 
 func main() {
-	conn, err := client.Connect("Kees", "127.0.0.1", 3300)
+	conn, err := client.Connect(client.Options{
+		Hostname: "127.0.0.1",
+		Port:     3300,
+		Nickname: "keesvv",
+	})
+
 	if err != nil {
 		panic(err)
 	}
