@@ -8,8 +8,15 @@ import (
 )
 
 func Connect(opts Options) (*Connection, error) {
+	ips, lookupErr := net.LookupIP(opts.Hostname)
+	if lookupErr != nil {
+		return &Connection{}, lookupErr
+	}
+
+	ip := ips[0]
+
 	conn, err := net.DialTCP("tcp", nil, &net.TCPAddr{
-		IP:   net.ParseIP(opts.Hostname),
+		IP:   ip,
 		Port: opts.Port,
 	})
 

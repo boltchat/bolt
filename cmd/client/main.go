@@ -8,7 +8,7 @@ import (
 
 func main() {
 	conn, err := client.Connect(client.Options{
-		Hostname: "127.0.0.1",
+		Hostname: "localhost",
 		Port:     3300,
 		Nickname: "keesvv",
 	})
