@@ -3,10 +3,11 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net"
 
+	"keesvv/go-tcp-chat/internals/events"
 	"keesvv/go-tcp-chat/internals/logging"
-	"keesvv/go-tcp-chat/internals/message"
 )
 
 /*
@@ -19,7 +20,7 @@ func HandleConnection(conn *net.TCPConn) {
 	for {
 		b := make([]byte, 4096)
 
-		// Wait for and receive new messages
+		// Wait for and receive incoming events
 		_, connErr := conn.Read(b)
 
 		if connErr != nil {
@@ -31,16 +32,17 @@ func HandleConnection(conn *net.TCPConn) {
 		// Trim empty bytes at the end
 		b = bytes.TrimRight(b, "\x00")
 
-		msg := &message.Message{}
+		evt := &events.BaseEvent{}
 
-		// Decode the message
-		err := json.Unmarshal(b, msg)
+		// Decode the event
+		err := json.Unmarshal(b, evt)
 
 		if err != nil {
 			panic(err)
 		}
 
-		// Broadcast the message
-		msg.Print()
+		if evt.Event.Type == events.MessageType {
+			fmt.Printf("this is a message event!\n")
+		}
 	}
 }

@@ -28,5 +28,8 @@ func Prompt(r *bufio.Reader, conn *net.TCPConn) {
 		},
 	}
 
-	msg.Send(conn)
+	err := SendMessage(&msg, conn)
+	if err != nil {
+		panic(err)
+	}
 }

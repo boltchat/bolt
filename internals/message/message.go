@@ -1,10 +1,8 @@
 package message
 
 import (
-	"encoding/json"
 	"fmt"
 	"keesvv/go-tcp-chat/internals/user"
-	"net"
 	"time"
 )
 
@@ -16,22 +14,6 @@ type Message struct {
 	SentAt  int64      `json:"sent"`
 	Content string     `json:"content"`
 	User    *user.User `json:"user"`
-}
-
-/*
-Send sends the message to an established
-TCP connection.
-*/
-func (m *Message) Send(conn *net.TCPConn) error {
-	m.SentAt = time.Now().Unix()
-
-	b, err := json.Marshal(m)
-	if err != nil {
-		return err
-	}
-
-	conn.Write(b)
-	return nil
 }
 
 /*
