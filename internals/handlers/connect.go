@@ -3,7 +3,6 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net"
 
 	"keesvv/go-tcp-chat/internals/events"
@@ -41,8 +40,13 @@ func HandleConnection(conn *net.TCPConn) {
 			panic(err)
 		}
 
-		if evt.Event.Type == events.MessageType {
-			fmt.Printf("this is a message event!\n")
+		switch evt.Event.Type {
+		case events.MessageType:
+			msgEvt := &events.MessageEvent{}
+			json.Unmarshal(b, msgEvt)
+			msgEvt.Message.Print()
+		default:
+			// TODO: event not understood
 		}
 	}
 }
