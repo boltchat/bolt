@@ -1,4 +1,4 @@
-package event
+package events
 
 // Type represents an event type identifier.
 type Type int
