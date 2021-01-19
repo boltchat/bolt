@@ -2,6 +2,7 @@ package server
 
 import (
 	"keesvv/go-tcp-chat/internals/handlers"
+	"keesvv/go-tcp-chat/internals/logging"
 	"net"
 )
 
@@ -22,6 +23,8 @@ func (listener *Listener) Listen() error {
 	if err != nil {
 		return err
 	}
+
+	logging.LogListener(listener.IP, listener.Port)
 
 	for {
 		conn, err := l.AcceptTCP()
