@@ -8,24 +8,11 @@ import (
 
 // Listener TODO
 type Listener struct {
-	IP   string
+	Bind []string
 	Port int
 }
 
-/*
-Listen starts a new server/listener.
-*/
-func (listener *Listener) Listen() error {
-	l, err := net.ListenTCP("tcp", &net.TCPAddr{
-		Port: listener.Port,
-	})
-
-	if err != nil {
-		return err
-	}
-
-	logging.LogListener(listener.IP, listener.Port)
-
+func handleListener(l *net.TCPListener) error {
 	for {
 		conn, err := l.AcceptTCP()
 
@@ -36,4 +23,27 @@ func (listener *Listener) Listen() error {
 		// Accept new connection
 		go handlers.HandleConnection(conn)
 	}
+}
+
+/*
+Listen starts a new server/listener.
+*/
+func (listener *Listener) Listen() error {
+	for _, ip := range listener.Bind {
+		l, err := net.ListenTCP("tcp", &net.TCPAddr{
+			IP:   net.ParseIP(ip),
+			Port: listener.Port,
+		})
+
+		if err != nil {
+			return err
+		}
+
+		// TODO
+		logging.LogListener(ip, listener.Port)
+
+		go handleListener(l)
+	}
+
+	return nil
 }
