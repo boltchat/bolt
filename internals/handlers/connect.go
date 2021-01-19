@@ -36,7 +36,11 @@ func HandleConnection(conn *net.TCPConn) {
 		err := json.Unmarshal(b, evt)
 
 		if err != nil {
-			panic(err)
+			// TODO
+			errResponse, _ := json.Marshal(*events.NewErrorEvent("invalid_format"))
+			conn.Write(errResponse)
+			conn.Close()
+			return
 		}
 
 		switch evt.Event.Type {
