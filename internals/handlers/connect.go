@@ -3,7 +3,6 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net"
 
 	"keesvv/go-tcp-chat/internals/events"
@@ -51,7 +50,7 @@ func HandleConnection(conn *net.TCPConn) {
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
-			fmt.Println(joinEvt.User.Nickname)
+			logging.LogConnection(conn) // TODO
 		default:
 			// TODO: event not understood
 		}
