@@ -17,6 +17,10 @@ func Prompt(r *bufio.Reader, conn *net.TCPConn) {
 	content, readError := r.ReadString('\n')
 	content = strings.TrimSpace(content)
 
+	if content == "" {
+		return
+	}
+
 	if readError != nil {
 		panic(readError)
 	}
