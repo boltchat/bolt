@@ -6,6 +6,7 @@ import (
 	"net"
 )
 
+// Listener TODO
 type Listener struct {
 	IP   string
 	Port int
@@ -16,7 +17,6 @@ Listen starts a new server/listener.
 */
 func (listener *Listener) Listen() error {
 	l, err := net.ListenTCP("tcp", &net.TCPAddr{
-		IP:   net.ParseIP(listener.IP),
 		Port: listener.Port,
 	})
 
