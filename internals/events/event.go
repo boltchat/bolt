@@ -8,6 +8,8 @@ type Type int
 const (
 	// MessageType TODO
 	MessageType Type = iota
+	// JoinType TODO
+	JoinType Type = iota
 )
 
 // Event represents a chat event.

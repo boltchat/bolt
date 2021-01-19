@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net"
 
 	"keesvv/go-tcp-chat/internals/events"
@@ -14,8 +15,6 @@ HandleConnection handles a TCP connection
 during its entire lifespan.
 */
 func HandleConnection(conn *net.TCPConn) {
-	logging.LogConnection(conn)
-
 	for {
 		b := make([]byte, 4096)
 
@@ -45,6 +44,10 @@ func HandleConnection(conn *net.TCPConn) {
 			msgEvt := &events.MessageEvent{}
 			json.Unmarshal(b, msgEvt)
 			msgEvt.Message.Print()
+		case events.JoinType:
+			joinEvt := &events.JoinEvent{}
+			json.Unmarshal(b, joinEvt)
+			fmt.Println(joinEvt.User.Nickname)
 		default:
 			// TODO: event not understood
 		}
