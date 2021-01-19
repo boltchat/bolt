@@ -7,25 +7,31 @@ import (
 	"net"
 )
 
-func Connect(ip string, port int) (*net.TCPConn, error) {
+func Connect(nick string, ip string, port int) (*Connection, error) {
 	conn, err := net.DialTCP("tcp", nil, &net.TCPAddr{
 		IP:   net.ParseIP(ip),
 		Port: port,
 	})
 
 	if err != nil {
-		return nil, err
+		return &Connection{}, err
 	}
 
-	evt := events.NewJoinEvent(&user.User{
-		Nickname: "Kees",
-	})
+	user := &user.User{
+		Nickname: nick,
+	}
 
+	evt := events.NewJoinEvent(user)
 	b, jsonErr := json.Marshal(evt)
+
 	if jsonErr != nil {
-		return nil, jsonErr
+		return &Connection{}, jsonErr
 	}
 
 	conn.Write(b)
-	return conn, nil
+
+	return &Connection{
+		TCPConn: conn,
+		User:    *user,
+	}, nil
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"keesvv/go-tcp-chat/internals/events"
 	"keesvv/go-tcp-chat/internals/message"
-	"net"
 	"time"
 )
 
@@ -12,7 +11,7 @@ import (
 SendMessage sends a message to an established
 TCP connection.
 */
-func SendMessage(m *message.Message, conn *net.TCPConn) error {
+func SendMessage(m *message.Message, conn *Connection) error {
 	m.SentAt = time.Now().Unix()
 	evt := events.NewMessageEvent(m)
 
@@ -21,6 +20,6 @@ func SendMessage(m *message.Message, conn *net.TCPConn) error {
 		return err
 	}
 
-	conn.Write(b)
+	conn.TCPConn.Write(b)
 	return nil
 }
