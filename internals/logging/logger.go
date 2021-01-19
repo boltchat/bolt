@@ -3,16 +3,29 @@ package logging
 import (
 	"fmt"
 	"net"
+
+	"github.com/fatih/color"
 )
 
+func logBase(
+	level string,
+	msg string,
+) {
+	fmt.Printf("[%s] %s\n", level, msg)
+}
+
+func logInfo(msg string) {
+	logBase(color.CyanString("INFO"), msg)
+}
+
 func LogListener(ip string, port int) {
-	fmt.Printf("Server listening on %s:%v.\n", ip, port)
+	logInfo(fmt.Sprintf("Server listening on %s:%v.", ip, port))
 }
 
 func LogConnection(conn *net.TCPConn) {
-	fmt.Printf("%s connected! Say hi.\n", conn.RemoteAddr().String())
+	logInfo(fmt.Sprintf("%s connected! Say hi.", conn.RemoteAddr().String()))
 }
 
 func LogDisconnect(conn *net.TCPConn) {
-	fmt.Printf("%s disconnected.\n", conn.RemoteAddr().String())
+	logInfo(fmt.Sprintf("%s disconnected.", conn.RemoteAddr().String()))
 }
