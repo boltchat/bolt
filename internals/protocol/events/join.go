@@ -1,13 +1,15 @@
 package events
 
-import "keesvv/go-tcp-chat/internals/user"
+import (
+	"keesvv/go-tcp-chat/internals/protocol"
+)
 
 type JoinEvent struct {
 	BaseEvent
-	User *user.User `json:"user"`
+	User *protocol.User `json:"user"`
 }
 
-func NewJoinEvent(user *user.User) *JoinEvent {
+func NewJoinEvent(user *protocol.User) *JoinEvent {
 	return &JoinEvent{
 		BaseEvent: BaseEvent{
 			Event: newEvent(JoinType),

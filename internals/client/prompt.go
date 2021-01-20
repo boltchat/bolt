@@ -3,7 +3,7 @@ package client
 import (
 	"bufio"
 	"fmt"
-	"keesvv/go-tcp-chat/internals/message"
+	"keesvv/go-tcp-chat/internals/protocol"
 	"strings"
 
 	"github.com/fatih/color"
@@ -25,7 +25,7 @@ func Prompt(r *bufio.Reader, conn *Connection) {
 		panic(readError)
 	}
 
-	msg := message.Message{
+	msg := protocol.Message{
 		Content: content,
 		User:    &conn.User,
 	}

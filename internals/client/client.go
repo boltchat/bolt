@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"keesvv/go-tcp-chat/internals/events"
-	"keesvv/go-tcp-chat/internals/user"
+	"keesvv/go-tcp-chat/internals/protocol"
+	"keesvv/go-tcp-chat/internals/protocol/events"
 	"keesvv/go-tcp-chat/internals/util"
 	"net"
 )
@@ -27,7 +27,7 @@ func Connect(opts Options) (*Connection, error) {
 		return &Connection{}, err
 	}
 
-	user := &user.User{
+	user := &protocol.User{
 		Nickname: opts.Nickname,
 	}
 
