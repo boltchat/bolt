@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"keesvv/go-tcp-chat/internals/message"
-	"keesvv/go-tcp-chat/internals/user"
 	"strings"
 
 	"github.com/fatih/color"
@@ -28,9 +27,7 @@ func Prompt(r *bufio.Reader, conn *Connection) {
 
 	msg := message.Message{
 		Content: content,
-		User: &user.User{
-			Nickname: "Kees",
-		},
+		User:    &conn.User,
 	}
 
 	err := SendMessage(&msg, conn)
