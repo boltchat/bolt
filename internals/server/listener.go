@@ -12,16 +12,18 @@ type Listener struct {
 	Port int
 }
 
-func handleListener(l *net.TCPListener) error {
+func handleListener(conns []*net.TCPConn, l *net.TCPListener) error {
 	for {
 		conn, err := l.AcceptTCP()
+		conns = append(conns, conn)
+		// fmt.Println(conns)
 
 		if err != nil {
 			return err
 		}
 
 		// Accept new connection
-		go handlers.HandleConnection(conn)
+		go handlers.HandleConnection(conns, conn)
 	}
 }
 
@@ -29,6 +31,9 @@ func handleListener(l *net.TCPListener) error {
 Listen starts a new server/listener.
 */
 func (listener *Listener) Listen() error {
+	// All connections for this listener
+	conns := []*net.TCPConn{}
+
 	for _, ip := range listener.Bind {
 		l, err := net.ListenTCP("tcp", &net.TCPAddr{
 			IP:   net.ParseIP(ip),
@@ -42,7 +47,7 @@ func (listener *Listener) Listen() error {
 		// TODO
 		logging.LogListener(ip, listener.Port)
 
-		go handleListener(l)
+		go handleListener(conns, l)
 	}
 
 	return nil
