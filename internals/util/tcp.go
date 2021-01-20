@@ -5,12 +5,11 @@ import (
 	"net"
 )
 
-func WriteJson(conn *net.TCPConn, data interface{}) error {
+func WriteJson(conn *net.TCPConn, data interface{}) {
 	b, err := json.Marshal(data)
 	if err != nil {
-		return err
+		panic(err)
 	}
 
 	conn.Write(b)
-	return nil
 }
