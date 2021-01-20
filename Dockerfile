@@ -1,9 +1,20 @@
-FROM golang:1.15.6-alpine
+# Build stage
+FROM golang:1.15.6-alpine AS build
+RUN apk add make
 
 WORKDIR /src
-
 COPY . .
 
-RUN go build cmd/server/server.go
+## Compile the static server binary
+RUN make build-server-static
 
-CMD ["./server"]
+# Deploy stage
+FROM busybox:1.32.1
+WORKDIR /app
+COPY --from=build /src/server .
+COPY scripts/entrypoint.sh /entrypoint.sh
+
+## Executable permissions
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
