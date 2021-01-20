@@ -7,6 +7,7 @@ import (
 
 	"keesvv/go-tcp-chat/internals/events"
 	"keesvv/go-tcp-chat/internals/logging"
+	"keesvv/go-tcp-chat/internals/util"
 )
 
 /*
@@ -35,9 +36,7 @@ func HandleConnection(conn *net.TCPConn) {
 		err := json.Unmarshal(b, evt)
 
 		if err != nil {
-			// TODO
-			errResponse, _ := json.Marshal(*events.NewErrorEvent("invalid_format"))
-			conn.Write(errResponse)
+			util.WriteJson(conn, *events.NewErrorEvent("invalid_format"))
 			conn.Close()
 			return
 		}
@@ -52,9 +51,7 @@ func HandleConnection(conn *net.TCPConn) {
 			json.Unmarshal(b, joinEvt)
 			logging.LogConnection(conn) // TODO
 
-			motdEvt := events.NewMotdEvent("This is the message of the day!") // TODO
-			motd, _ := json.Marshal(motdEvt)
-			conn.Write(motd)
+			util.WriteJson(conn, *events.NewMotdEvent("This is the message of the day!"))
 		default:
 			// TODO: event not understood
 		}

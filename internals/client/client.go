@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"keesvv/go-tcp-chat/internals/events"
 	"keesvv/go-tcp-chat/internals/user"
+	"keesvv/go-tcp-chat/internals/util"
 	"net"
 )
 
@@ -30,14 +31,7 @@ func Connect(opts Options) (*Connection, error) {
 		Nickname: opts.Nickname,
 	}
 
-	evt := events.NewJoinEvent(user)
-	b, jsonErr := json.Marshal(evt)
-
-	if jsonErr != nil {
-		return &Connection{}, jsonErr
-	}
-
-	conn.Write(b)
+	util.WriteJson(conn, *events.NewJoinEvent(user))
 
 	return &Connection{
 		TCPConn: conn,

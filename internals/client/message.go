@@ -1,9 +1,9 @@
 package client
 
 import (
-	"encoding/json"
 	"keesvv/go-tcp-chat/internals/events"
 	"keesvv/go-tcp-chat/internals/message"
+	"keesvv/go-tcp-chat/internals/util"
 	"time"
 )
 
@@ -13,13 +13,6 @@ TCP connection.
 */
 func (c *Connection) SendMessage(m *message.Message) error {
 	m.SentAt = time.Now().Unix()
-	evt := events.NewMessageEvent(m)
-
-	b, err := json.Marshal(*evt)
-	if err != nil {
-		return err
-	}
-
-	c.TCPConn.Write(b)
+	util.WriteJson(c.TCPConn, *events.NewMessageEvent(m))
 	return nil
 }
