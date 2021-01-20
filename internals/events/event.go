@@ -12,6 +12,8 @@ const (
 	JoinType Type = iota
 	// ErrorType TODO
 	ErrorType Type = iota
+	// MotdType TODO
+	MotdType Type = iota
 )
 
 // Event represents a chat event.

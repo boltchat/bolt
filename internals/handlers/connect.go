@@ -51,6 +51,10 @@ func HandleConnection(conn *net.TCPConn) {
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
 			logging.LogConnection(conn) // TODO
+
+			motdEvt := events.NewMotdEvent("This is the message of the day!") // TODO
+			motd, _ := json.Marshal(motdEvt)
+			conn.Write(motd)
 		default:
 			// TODO: event not understood
 		}

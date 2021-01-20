@@ -63,6 +63,10 @@ func (c *Connection) HandleEvents() error {
 		}
 
 		switch evt.Event.Type {
+		case events.MotdType:
+			motdEvt := &events.MotdEvent{}
+			json.Unmarshal(b, motdEvt)
+			fmt.Println(motdEvt.Motd) // TODO
 		case events.ErrorType:
 			errEvt := &events.ErrorEvent{}
 			json.Unmarshal(b, errEvt)
