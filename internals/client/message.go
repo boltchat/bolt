@@ -11,7 +11,7 @@ import (
 SendMessage sends a message to an established
 TCP connection.
 */
-func SendMessage(m *message.Message, conn *Connection) error {
+func (c *Connection) SendMessage(m *message.Message) error {
 	m.SentAt = time.Now().Unix()
 	evt := events.NewMessageEvent(m)
 
@@ -20,6 +20,6 @@ func SendMessage(m *message.Message, conn *Connection) error {
 		return err
 	}
 
-	conn.TCPConn.Write(b)
+	c.TCPConn.Write(b)
 	return nil
 }

@@ -30,7 +30,7 @@ func Prompt(r *bufio.Reader, conn *Connection) {
 		User:    &conn.User,
 	}
 
-	err := SendMessage(&msg, conn)
+	err := conn.SendMessage(&msg)
 	if err != nil {
 		panic(err)
 	}
