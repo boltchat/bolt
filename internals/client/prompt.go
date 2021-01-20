@@ -6,13 +6,15 @@ import (
 	"keesvv/go-tcp-chat/internals/message"
 	"keesvv/go-tcp-chat/internals/user"
 	"strings"
+
+	"github.com/fatih/color"
 )
 
 /*
 Prompt prompts the user for sending messages.
 */
 func Prompt(r *bufio.Reader, conn *Connection) {
-	fmt.Print("> ")
+	fmt.Print(color.CyanString("> "))
 	content, readError := r.ReadString('\n')
 	content = strings.TrimSpace(content)
 
