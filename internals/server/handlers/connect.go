@@ -16,6 +16,7 @@ during its entire lifespan.
 */
 func HandleConnection(conn *net.TCPConn) {
 	for {
+		// a := server.Listener{}
 		b := make([]byte, 4096)
 
 		// Wait for and receive incoming events
