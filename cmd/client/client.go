@@ -19,6 +19,8 @@ func main() {
 
 	reader := bufio.NewReader(os.Stdin)
 
+	go conn.HandleEvents()
+
 	for {
 		client.Prompt(reader, conn)
 	}

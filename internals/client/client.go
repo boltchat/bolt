@@ -1,7 +1,9 @@
 package client
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"keesvv/go-tcp-chat/internals/events"
 	"keesvv/go-tcp-chat/internals/user"
 	"net"
@@ -41,4 +43,30 @@ func Connect(opts Options) (*Connection, error) {
 		TCPConn: conn,
 		User:    *user,
 	}, nil
+}
+
+func (c *Connection) HandleEvents() error {
+	for {
+		b := make([]byte, 4096)
+		_, err := c.TCPConn.Read(b)
+
+		if err != nil {
+			return err
+		}
+
+		b = bytes.TrimRight(b, "\x00")
+		evt := &events.BaseEvent{}
+		jsonErr := json.Unmarshal(b, evt)
+
+		if jsonErr != nil {
+			return err
+		}
+
+		switch evt.Event.Type {
+		case events.ErrorType:
+			errEvt := &events.ErrorEvent{}
+			json.Unmarshal(b, errEvt)
+			fmt.Println(errEvt.Error) // TODO
+		}
+	}
 }
