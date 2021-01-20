@@ -4,6 +4,6 @@ WORKDIR /src
 
 COPY . .
 
-RUN go build cmd/server/main.go
+RUN go build cmd/server/server.go
 
-CMD ["./main"]
+CMD ["./server"]
