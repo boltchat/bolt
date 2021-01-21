@@ -9,7 +9,8 @@ import (
 
 func displayPrompt(s tcell.Screen) {
 	_, h := s.Size()
-	s.SetContent(0, h-1, '>', nil, tcell.StyleDefault)
+	style := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
+	s.SetContent(0, h-1, '>', nil, style)
 	s.Show()
 }
 
