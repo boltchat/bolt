@@ -16,6 +16,8 @@ func main() {
 		panic(err)
 	}
 
-	go conn.HandleEvents()
-	tui.Display(conn)
+	evts := make(chan string)
+
+	go conn.HandleEvents(evts)
+	tui.Display(conn, evts)
 }

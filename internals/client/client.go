@@ -39,7 +39,7 @@ func Connect(opts Options) (*Connection, error) {
 	}, nil
 }
 
-func (c *Connection) HandleEvents() error {
+func (c *Connection) HandleEvents(evts chan string) error {
 	for {
 		b := make([]byte, 4096)
 		_, err := c.TCPConn.Read(b)
@@ -57,10 +57,14 @@ func (c *Connection) HandleEvents() error {
 		}
 
 		switch evt.Event.Type {
+		case events.MessageType:
+			msgEvt := &events.MessageEvent{}
+			json.Unmarshal(b, msgEvt)
+			// evts <- append(<-evts, msgEvt.Message.Content)
 		case events.MotdType:
 			motdEvt := &events.MotdEvent{}
 			json.Unmarshal(b, motdEvt)
-			fmt.Println(motdEvt.Motd) // TODO
+			go func() { evts <- motdEvt.Motd }()
 		case events.ErrorType:
 			errEvt := &events.ErrorEvent{}
 			json.Unmarshal(b, errEvt)

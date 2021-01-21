@@ -12,7 +12,7 @@ import (
 /*
 Display displays the TUI.
 */
-func Display(conn *client.Connection) {
+func Display(conn *client.Connection, evts chan string) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
 
@@ -33,7 +33,7 @@ func Display(conn *client.Connection) {
 
 	// Display prompt and chatbox
 	displayPrompt(s, input)
-	displayChatbox(s)
+	go displayChatbox(s, evts)
 
 	for {
 		switch ev := s.PollEvent().(type) {
