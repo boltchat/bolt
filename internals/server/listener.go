@@ -32,7 +32,7 @@ Listen starts a new server/listener.
 */
 func (listener *Listener) Listen() error {
 	// All connections for this listener
-	conns := []*net.TCPConn{}
+	conns := make([]*net.TCPConn, 0, 5)
 
 	for _, ip := range listener.Bind {
 		l, err := net.ListenTCP("tcp", &net.TCPAddr{
