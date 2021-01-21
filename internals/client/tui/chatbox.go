@@ -10,11 +10,15 @@ import (
 const promptOffset int = 1
 
 func printLine(s tcell.Screen, y int, line string) {
-	chars := []rune(line)
+	/*
+		I do not like this workaround at all, but at this
+		point, I've given up on trying to find a better
+		solution. Feel free to create a Pull Request if
+		you're able to improve this.
+	*/
+	chars := []rune("\b\b" + line)
 
-	for x, ch := range chars {
-		s.SetContent(x, y, ch, nil, tcell.StyleDefault)
-	}
+	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
 }
 
 func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
