@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"keesvv/go-tcp-chat/internals/client/format"
 	"keesvv/go-tcp-chat/internals/protocol/events"
 
 	"github.com/gdamore/tcell"
@@ -32,9 +33,9 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 
 		// Append all event to the chatbox
 		for y, event := range evts {
-			formatMap := map[events.Type]formatHandler{
+			formatMap := map[events.Type]format.FormatHandler{
 				events.MotdType:    func(e *events.BaseEvent) string { return "TODO" },
-				events.MessageType: formatMessage,
+				events.MessageType: format.FormatMessage,
 			}
 
 			printLine(s, y, formatMap[event.Event.Type](event))

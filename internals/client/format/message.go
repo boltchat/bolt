@@ -1,4 +1,4 @@
-package tui
+package format
 
 import (
 	"encoding/json"
@@ -7,9 +7,7 @@ import (
 	"time"
 )
 
-type formatHandler = func(e *events.BaseEvent) string
-
-func formatMessage(e *events.BaseEvent) string {
+func FormatMessage(e *events.BaseEvent) string {
 	msgEvt := &events.MessageEvent{}
 	json.Unmarshal(*e.Raw, msgEvt)
 
