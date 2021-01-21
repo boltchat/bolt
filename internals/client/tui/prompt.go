@@ -23,5 +23,5 @@ func displayPrompt(s tcell.Screen, input []rune) {
 	// Draw a vertical line after input
 	s.SetContent(len(input)+2, y, tcell.RuneVLine, nil, tcell.StyleDefault)
 
-	s.Sync() // TODO: optimise
+	s.Show()
 }
