@@ -46,7 +46,7 @@ func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
 		case events.MessageType:
 			msgEvt := &events.MessageEvent{}
 			json.Unmarshal(b, msgEvt)
-			util.WriteJson(conn, msgEvt) // TODO: mutate and write
+			util.Broadcast(conns, msgEvt) // TODO: mutate and write
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
