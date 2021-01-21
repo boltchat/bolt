@@ -1,0 +1,27 @@
+package tui
+
+import "github.com/gdamore/tcell"
+
+func displayPrompt(s tcell.Screen, input []rune) {
+	w, h := s.Size()
+	style := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
+	y := h - 1
+
+	// Clear prompt line
+	for i := 0; i < w; i++ {
+		s.SetContent(i, y, ' ', nil, tcell.StyleDefault)
+	}
+
+	// Print prompt arrow
+	s.SetContent(0, y, '>', nil, style)
+
+	// Print user input
+	for i := 0; i < len(input); i++ {
+		s.SetContent(i+2, y, input[i], nil, tcell.StyleDefault)
+	}
+
+	// Draw a vertical line after input
+	s.SetContent(len(input)+2, y, tcell.RuneVLine, nil, tcell.StyleDefault)
+
+	s.Sync() // TODO: optimise
+}

@@ -1,9 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"keesvv/go-tcp-chat/internals/client"
-	"os"
+	"keesvv/go-tcp-chat/internals/client/tui"
 )
 
 func main() {
@@ -17,9 +16,6 @@ func main() {
 		panic(err)
 	}
 
-	reader := bufio.NewReader(os.Stdin)
-
 	go conn.HandleEvents()
-
-	client.Prompt(reader, conn)
+	tui.Display(conn)
 }
