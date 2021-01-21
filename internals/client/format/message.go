@@ -4,7 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"keesvv/go-tcp-chat/internals/protocol/events"
+	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 func FormatMessage(e *events.BaseEvent) string {
@@ -13,9 +16,15 @@ func FormatMessage(e *events.BaseEvent) string {
 
 	sentAt := time.Unix(msgEvt.Message.SentAt, 0)
 
-	return fmt.Sprintf(
-		"[%v] <%s> %s\n",
+	timestamp := strings.Join([]string{
+		color.HiBlackString("["),
 		sentAt.Format(time.Stamp),
+		color.HiBlackString("]"),
+	}, "")
+
+	return fmt.Sprintf(
+		"%s <%s> %s",
+		timestamp,
 		msgEvt.Message.User.Nickname,
 		msgEvt.Message.Content,
 	)
