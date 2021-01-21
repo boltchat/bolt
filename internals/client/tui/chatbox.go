@@ -40,6 +40,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 			formatMap := map[events.Type]format.FormatHandler{
 				events.MotdType:    format.FormatMotd,
 				events.MessageType: format.FormatMessage,
+				events.ErrorType:   format.FormatError,
 			}
 
 			printLine(s, y, formatMap[event.Event.Type](event))
