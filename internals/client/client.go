@@ -60,7 +60,7 @@ func (c *Connection) HandleEvents(evts chan string) error {
 		case events.MessageType:
 			msgEvt := &events.MessageEvent{}
 			json.Unmarshal(b, msgEvt)
-			// evts <- append(<-evts, msgEvt.Message.Content)
+			go func() { evts <- msgEvt.Message.Content }() // TODO
 		case events.MotdType:
 			motdEvt := &events.MotdEvent{}
 			json.Unmarshal(b, motdEvt)

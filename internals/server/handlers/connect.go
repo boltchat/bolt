@@ -46,13 +46,13 @@ func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
 		case events.MessageType:
 			msgEvt := &events.MessageEvent{}
 			json.Unmarshal(b, msgEvt)
-			msgEvt.Message.Print()
+			util.WriteJson(conn, msgEvt) // TODO: mutate and write
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
 			logging.LogConnection(conn) // TODO
 
-			util.WriteJson(conn, *events.NewMotdEvent("This is the message of the day!"))
+			util.WriteJson(conn, *events.NewMotdEvent("This is the message of the day!")) // TODO
 		default:
 			// TODO: event not understood
 		}
