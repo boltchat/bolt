@@ -13,3 +13,9 @@ func WriteJson(conn *net.TCPConn, data interface{}) {
 
 	conn.Write(b)
 }
+
+func Broadcast(conns []*net.TCPConn, data interface{}) {
+	for _, conn := range conns {
+		WriteJson(conn, data)
+	}
+}
