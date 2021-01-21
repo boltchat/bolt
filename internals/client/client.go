@@ -3,7 +3,6 @@ package client
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"keesvv/go-tcp-chat/internals/protocol"
 	"keesvv/go-tcp-chat/internals/protocol/events"
 	"keesvv/go-tcp-chat/internals/util"
@@ -39,7 +38,7 @@ func Connect(opts Options) (*Connection, error) {
 	}, nil
 }
 
-func (c *Connection) HandleEvents(evts chan string) error {
+func (c *Connection) ReadEvents(evts chan *events.BaseEvent) error {
 	for {
 		b := make([]byte, 4096)
 		_, err := c.TCPConn.Read(b)
@@ -56,19 +55,23 @@ func (c *Connection) HandleEvents(evts chan string) error {
 			return err
 		}
 
-		switch evt.Event.Type {
-		case events.MessageType:
-			msgEvt := &events.MessageEvent{}
-			json.Unmarshal(b, msgEvt)
-			go func() { evts <- msgEvt.Message.Content }() // TODO
-		case events.MotdType:
-			motdEvt := &events.MotdEvent{}
-			json.Unmarshal(b, motdEvt)
-			go func() { evts <- motdEvt.Motd }()
-		case events.ErrorType:
-			errEvt := &events.ErrorEvent{}
-			json.Unmarshal(b, errEvt)
-			fmt.Println(errEvt.Error) // TODO
-		}
+		go func() {
+			evts <- evt
+		}()
+
+		// switch evt.Event.Type {
+		// case events.MessageType:
+		// 	msgEvt := &events.MessageEvent{}
+		// 	json.Unmarshal(b, msgEvt)
+		// 	go func() { evts <- msgEvt.Message.Content }() // TODO
+		// case events.MotdType:
+		// 	motdEvt := &events.MotdEvent{}
+		// 	json.Unmarshal(b, motdEvt)
+		// 	go func() { evts <- motdEvt.Motd }()
+		// case events.ErrorType:
+		// 	errEvt := &events.ErrorEvent{}
+		// 	json.Unmarshal(b, errEvt)
+		// 	fmt.Println(errEvt.Error) // TODO
+		// }
 	}
 }

@@ -3,6 +3,7 @@ package tui
 import (
 	"keesvv/go-tcp-chat/internals/client"
 	"keesvv/go-tcp-chat/internals/protocol"
+	"keesvv/go-tcp-chat/internals/protocol/events"
 	"strings"
 
 	"github.com/gdamore/tcell"
@@ -12,7 +13,7 @@ import (
 /*
 Display displays the TUI.
 */
-func Display(conn *client.Connection, evts chan string) {
+func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
 

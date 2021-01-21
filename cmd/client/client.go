@@ -3,6 +3,7 @@ package main
 import (
 	"keesvv/go-tcp-chat/internals/client"
 	"keesvv/go-tcp-chat/internals/client/tui"
+	"keesvv/go-tcp-chat/internals/protocol/events"
 )
 
 func main() {
@@ -16,8 +17,8 @@ func main() {
 		panic(err)
 	}
 
-	evts := make(chan string)
+	evts := make(chan *events.BaseEvent)
 
-	go conn.HandleEvents(evts)
+	go conn.ReadEvents(evts)
 	tui.Display(conn, evts)
 }
