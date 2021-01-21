@@ -95,6 +95,8 @@ func Prompt(r *bufio.Reader, conn *Connection) {
 				input = []rune{}
 			} else if ev.Key() == tcell.KeyBackspace2 && len(input) > 0 {
 				input = input[:len(input)-1]
+			} else if ev.Key() == tcell.KeyCtrlU {
+				input = []rune{}
 			} else {
 				input = append(input, ev.Rune())
 			}
