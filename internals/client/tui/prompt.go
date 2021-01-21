@@ -5,7 +5,7 @@ import "github.com/gdamore/tcell"
 func displayPrompt(s tcell.Screen, input []rune) {
 	w, h := s.Size()
 	style := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
-	y := h - 1
+	y := h - promptOffset
 
 	// Clear prompt line
 	for i := 0; i < w; i++ {
