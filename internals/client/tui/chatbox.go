@@ -34,7 +34,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 		// Append all event to the chatbox
 		for y, event := range evts {
 			formatMap := map[events.Type]format.FormatHandler{
-				events.MotdType:    func(e *events.BaseEvent) string { return "TODO" },
+				events.MotdType:    format.FormatMotd,
 				events.MessageType: format.FormatMessage,
 			}
 
