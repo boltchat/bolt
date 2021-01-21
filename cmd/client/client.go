@@ -21,7 +21,5 @@ func main() {
 
 	go conn.HandleEvents()
 
-	for {
-		client.Prompt(reader, conn)
-	}
+	client.Prompt(reader, conn)
 }
