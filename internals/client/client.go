@@ -51,6 +51,8 @@ func (c *Connection) ReadEvents(evts chan *events.BaseEvent) error {
 		evt := &events.BaseEvent{}
 		jsonErr := json.Unmarshal(b, evt)
 
+		evt.Raw = &b
+
 		if jsonErr != nil {
 			return err
 		}

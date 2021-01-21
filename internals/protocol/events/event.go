@@ -25,6 +25,7 @@ type Event struct {
 // BaseEvent TODO
 type BaseEvent struct {
 	Event *Event `json:"e"`
+	Raw   *[]byte
 }
 
 func newEvent(t Type) *Event {
