@@ -2,6 +2,8 @@ package client
 
 import (
 	"bufio"
+	"keesvv/go-tcp-chat/internals/protocol"
+	"strings"
 
 	"github.com/gdamore/tcell"
 	"github.com/gdamore/tcell/v2/encoding"
@@ -76,6 +78,20 @@ func Prompt(r *bufio.Reader, conn *Connection) {
 				s.Fini()
 				return
 			} else if ev.Key() == tcell.KeyEnter {
+				if len(strings.TrimSpace(string(input))) < 1 {
+					break
+				}
+
+				msg := protocol.Message{
+					Content: string(input),
+					User:    &conn.User,
+				}
+
+				err := conn.SendMessage(&msg)
+				if err != nil {
+					panic(err)
+				}
+
 				input = []rune{}
 			} else if ev.Key() == tcell.KeyBackspace2 && len(input) > 0 {
 				input = input[:len(input)-1]
@@ -86,14 +102,4 @@ func Prompt(r *bufio.Reader, conn *Connection) {
 			displayPrompt(s, input)
 		}
 	}
-
-	// msg := protocol.Message{
-	// 	Content: content,
-	// 	User:    &conn.User,
-	// }
-
-	// err := conn.SendMessage(&msg)
-	// if err != nil {
-	// 	panic(err)
-	// }
 }
