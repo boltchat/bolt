@@ -10,7 +10,7 @@ standards.
 Not only do I think it's a great fit for an IRC replacement; it might even be suitable for a replacement of
 present-day proprietary protocols and chat applications, such as Discord and Slack. _bolt.chat_ comes with
 a nifty text-base user interface, but since it uses its own protocol, it's possible to build a GUI client
-in, say, Electron (please don't, use [Tauri](https://github.com/tauri-apps/tauri))
+in, say, Electron. (please don't, use [Tauri](https://github.com/tauri-apps/tauri))
 
 ## Installation
 Please have a look at the [Releases](https://github.com/keesvv/bolt.chat/releases) page for the most up-to-date client and server binaries.
@@ -26,7 +26,7 @@ mage
 ```
 
 ## Author
-[Kees van Voorthuizen](https://github.com/keesvv)
+[Kees van Voorthuizen (@keesvv)](https://github.com/keesvv)
 
 ## Logo
 The lightning bolt used in the logo of this project is courtesy of [Icons8](https://icons8.com/icons/set/lightning-bolt--v1).
