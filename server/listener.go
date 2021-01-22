@@ -1,9 +1,10 @@
 package server
 
 import (
-	"keesvv/bolt.chat/server/handlers"
-	"keesvv/bolt.chat/server/logging"
 	"net"
+
+	"github.com/keesvv/bolt.chat/server/handlers"
+	"github.com/keesvv/bolt.chat/server/logging"
 )
 
 // Listener TODO

@@ -1,10 +1,11 @@
 package tui
 
 import (
-	"keesvv/bolt.chat/client"
-	"keesvv/bolt.chat/protocol"
-	"keesvv/bolt.chat/protocol/events"
 	"strings"
+
+	"github.com/keesvv/bolt.chat/client"
+	"github.com/keesvv/bolt.chat/protocol"
+	"github.com/keesvv/bolt.chat/protocol/events"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/gdamore/tcell/v2/encoding"

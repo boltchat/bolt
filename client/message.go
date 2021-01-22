@@ -1,10 +1,11 @@
 package client
 
 import (
-	"keesvv/bolt.chat/protocol"
-	"keesvv/bolt.chat/protocol/events"
-	"keesvv/bolt.chat/util"
 	"time"
+
+	"github.com/keesvv/bolt.chat/protocol"
+	"github.com/keesvv/bolt.chat/protocol/events"
+	"github.com/keesvv/bolt.chat/util"
 )
 
 /*

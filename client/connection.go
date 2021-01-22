@@ -1,8 +1,9 @@
 package client
 
 import (
-	"keesvv/bolt.chat/protocol"
 	"net"
+
+	"github.com/keesvv/bolt.chat/protocol"
 )
 
 // Connection TODO

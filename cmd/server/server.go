@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"keesvv/bolt.chat/server"
+
+	"github.com/keesvv/bolt.chat/server"
 )
 
 func main() {

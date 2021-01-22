@@ -1,9 +1,9 @@
 package main
 
 import (
-	"keesvv/bolt.chat/client"
-	"keesvv/bolt.chat/client/tui"
-	"keesvv/bolt.chat/protocol/events"
+	"github.com/keesvv/bolt.chat/client"
+	"github.com/keesvv/bolt.chat/client/tui"
+	"github.com/keesvv/bolt.chat/protocol/events"
 )
 
 func main() {

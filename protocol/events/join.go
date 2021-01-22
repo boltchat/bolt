@@ -1,7 +1,7 @@
 package events
 
 import (
-	"keesvv/bolt.chat/protocol"
+	"github.com/keesvv/bolt.chat/protocol"
 )
 
 type JoinEvent struct {

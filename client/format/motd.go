@@ -2,7 +2,8 @@ package format
 
 import (
 	"encoding/json"
-	"keesvv/bolt.chat/protocol/events"
+
+	"github.com/keesvv/bolt.chat/protocol/events"
 
 	"github.com/fatih/color"
 )

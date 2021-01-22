@@ -1,6 +1,6 @@
 package events
 
-import "keesvv/bolt.chat/protocol"
+import "github.com/keesvv/bolt.chat/protocol"
 
 // MessageEvent TODO
 type MessageEvent struct {
