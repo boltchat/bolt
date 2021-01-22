@@ -1,6 +1,6 @@
 package tui
 
-import "github.com/gdamore/tcell"
+import "github.com/gdamore/tcell/v2"
 
 func displayPrompt(s tcell.Screen, input []rune) {
 	w, h := s.Size()

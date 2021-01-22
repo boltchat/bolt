@@ -4,7 +4,7 @@ import (
 	"keesvv/go-tcp-chat/internals/client/format"
 	"keesvv/go-tcp-chat/internals/protocol/events"
 
-	"github.com/gdamore/tcell"
+	"github.com/gdamore/tcell/v2"
 )
 
 const promptOffset int = 1
