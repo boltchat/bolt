@@ -26,7 +26,12 @@ const serverEntry string = "cmd/server/server.go"
 type Build mg.Namespace
 type Docker mg.Namespace
 
-func build(os string, arch string, entry string, static bool) error {
+type BuildOptions struct {
+	Static    bool
+	Extension string
+}
+
+func build(os string, arch string, entry string, opts BuildOptions) error {
 	env := map[string]string{
 		"GOOS":   os,
 		"GOARCH": arch,
@@ -40,6 +45,10 @@ func build(os string, arch string, entry string, static bool) error {
 		buildDir,
 		outputName,
 	)
+
+	if opts.Extension != "" {
+		outputPath += fmt.Sprintf(".%s", opts.Extension)
+	}
 
 	args := []string{
 		"build",
@@ -60,6 +69,7 @@ func build(os string, arch string, entry string, static bool) error {
 Build
 */
 
+// Builds all binaries
 func (Build) All() {
 	mg.Deps(
 		Build.ServerDarwinAmd64,
@@ -70,17 +80,19 @@ func (Build) All() {
 
 // Builds the server binary for Linux (amd64)
 func (Build) ServerLinuxAmd64() error {
-	return build("linux", "amd64", serverEntry, false)
+	return build("linux", "amd64", serverEntry, BuildOptions{})
 }
 
 // Builds the server binary for Windows (amd64)
 func (Build) ServerWindowsAmd64() error {
-	return build("windows", "amd64", serverEntry, false)
+	return build("windows", "amd64", serverEntry, BuildOptions{
+		Extension: "exe",
+	})
 }
 
 // Builds the server binary for Darwin/macOS (amd64)
 func (Build) ServerDarwinAmd64() error {
-	return build("darwin", "amd64", serverEntry, false)
+	return build("darwin", "amd64", serverEntry, BuildOptions{})
 }
 
 // Builds the server binary for Darwin/macOS (arm64, M1)
@@ -90,13 +102,10 @@ func (Build) ServerDarwinAmd64() error {
 
 // Builds the server binary for use in a Docker container
 func (Build) ServerContainer() error {
-	return build("linux", "amd64", serverEntry, true)
+	return build("linux", "amd64", serverEntry, BuildOptions{
+		Static: true,
+	})
 }
-
-// func (Build) All() error {
-// 	mg.Deps(Build.ServerLinuxAmd64)
-// 	return nil
-// }
 
 /*
 Docker
