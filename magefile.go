@@ -37,6 +37,11 @@ func build(os string, arch string, entry string, opts BuildOptions) error {
 		"GOARCH": arch,
 	}
 
+	// Build static binary
+	if opts.Static {
+		env["CGO_ENABLED"] = "0"
+	}
+
 	outputName := fmt.Sprintf(
 		"%s-%s-%s-%s", name, serverPrefix, os, arch,
 	)
@@ -54,7 +59,7 @@ func build(os string, arch string, entry string, opts BuildOptions) error {
 		"build",
 		"-o",
 		outputPath,
-		// "-ldflags='-s -w'",
+		// "-ldflags='-s -w'", // TODO: this throws an error
 		entry,
 	}
 
