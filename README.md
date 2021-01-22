@@ -1,6 +1,16 @@
 # bolt.chat
 > ⚡ A fast, lightweight, and secure chat protocol, client and server, written in Go.
 
+## About
+_bolt.chat_ is intended as a modern replacement for [IRC](https://en.wikipedia.org/wiki/Internet_Relay_Chat).
+I started this project because I feel like there aren't many open source chat protocols that follow modern
+standards.
+
+Not only do I think it's a great fit for an IRC replacement; it might even be suitable for a replacement of
+present-day proprietary protocols and chat applications, such as Discord and Slack. _bolt.chat_ comes with
+a nifty text-base user interface, but since it uses its own protocol, it's possible to build a GUI client
+in, say, Electron (please don't, use [Tauri](https://github.com/tauri-apps/tauri))
+
 ## Installation
 Please have a look at the [Releases](https://github.com/keesvv/bolt.chat/releases) page for the most up-to-date client and server binaries.
 
