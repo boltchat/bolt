@@ -1,4 +1,5 @@
-# bolt.chat
+![bolt.chat](./assets/logo/boltchat-logo.jpg)
+
 > ⚡ A fast, lightweight, and secure chat protocol, client and server, written in Go.
 
 ## About
@@ -26,6 +27,9 @@ mage
 
 ## Author
 [Kees van Voorthuizen](https://github.com/keesvv)
+
+## Logo
+The lightning bolt used in the logo of this project is courtesy of [Icons8](https://icons8.com/icons/set/lightning-bolt--v1).
 
 ## License
 This project is licensed under the [GPLv3](./LICENSE).
