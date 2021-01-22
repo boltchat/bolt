@@ -22,8 +22,8 @@ func displayPrompt(s tcell.Screen, input []rune) {
 		s.SetContent(i+2, y, input[i], nil, tcell.StyleDefault)
 	}
 
-	// Draw a vertical line after input
-	s.SetContent(len(input)+2, y, tcell.RuneVLine, nil, tcell.StyleDefault)
+	// Draw cursor after input
+	s.ShowCursor(len(input)+2, y)
 
 	s.Show()
 }
