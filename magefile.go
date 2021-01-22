@@ -10,13 +10,6 @@ import (
 	"github.com/magefile/mage/sh"
 )
 
-/*
-	CGO_ENABLED=0 GOOS=linux \
-		go build -ldflags "-s" -a -installsuffix cgo \
-		-o build/server \
-		$(SERVER_ENTRY)
-*/
-
 const name string = "boltchat"
 const buildDir string = "build"
 
