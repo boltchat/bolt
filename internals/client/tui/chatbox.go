@@ -19,6 +19,12 @@ func printEvent(s tcell.Screen, y int, evt string) {
 	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
 }
 
+func clearLine(s tcell.Screen, y int, w int) {
+	for x := 0; x < w; x++ {
+		s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
+	}
+}
+
 func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 	/*
 		Preallocate a size of 50 for both the
@@ -40,13 +46,12 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 		} else {
 			// Remove first event from buffer and append
 			buff = append(buff[1:], evt)
+			// clearLine(s, hBuff, w)
 		}
 
-		// Clear the chatbox
+		// Clear the buffer
 		for y := 0; y < hBuff; y++ {
-			for x := 0; x < w; x++ {
-				s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
-			}
+			clearLine(s, y, w)
 		}
 
 		// Append all events to the chatbox buffer
