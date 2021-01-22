@@ -1,17 +1,22 @@
 # Build stage
 FROM golang:1.15.6-alpine AS build
-RUN apk add make
+
+## Git is apparently needed for Mage
+RUN apk add git
+
+RUN go get github.com/magefile/mage && \
+  go install github.com/magefile/mage
 
 WORKDIR /src
 COPY . .
 
 ## Compile the static server binary
-RUN make build-server-static
+RUN mage build:serverContainer
 
 # Deploy stage
 FROM busybox:1.32.1
 WORKDIR /app
-COPY --from=build /src/build/server .
+COPY --from=build /src/build/* ./server
 COPY scripts/entrypoint.sh /entrypoint.sh
 
 ## Executable permissions
