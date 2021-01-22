@@ -7,8 +7,6 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-const promptOffset int = 1
-
 func printLine(s tcell.Screen, y int, line string) {
 	/*
 		I do not like this workaround at all, but at this

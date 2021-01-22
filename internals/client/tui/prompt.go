@@ -2,6 +2,8 @@ package tui
 
 import "github.com/gdamore/tcell/v2"
 
+const promptOffset int = 1
+
 func displayPrompt(s tcell.Screen, input []rune) {
 	w, h := s.Size()
 	style := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
