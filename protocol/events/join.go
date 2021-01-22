@@ -1,7 +1,7 @@
 package events
 
 import (
-	"keesvv/go-tcp-chat/internals/protocol"
+	"keesvv/go-tcp-chat/protocol"
 )
 
 type JoinEvent struct {

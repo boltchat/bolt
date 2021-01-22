@@ -1,8 +1,8 @@
 package server
 
 import (
-	"keesvv/go-tcp-chat/internals/logging"
-	"keesvv/go-tcp-chat/internals/server/handlers"
+	"keesvv/go-tcp-chat/server/handlers"
+	"keesvv/go-tcp-chat/server/logging"
 	"net"
 )
 

@@ -2,7 +2,7 @@ package format
 
 import (
 	"encoding/json"
-	"keesvv/go-tcp-chat/internals/protocol/events"
+	"keesvv/go-tcp-chat/protocol/events"
 
 	"github.com/fatih/color"
 )

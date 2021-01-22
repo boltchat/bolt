@@ -1,9 +1,9 @@
 package client
 
 import (
-	"keesvv/go-tcp-chat/internals/protocol"
-	"keesvv/go-tcp-chat/internals/protocol/events"
-	"keesvv/go-tcp-chat/internals/util"
+	"keesvv/go-tcp-chat/protocol"
+	"keesvv/go-tcp-chat/protocol/events"
+	"keesvv/go-tcp-chat/util"
 	"time"
 )
 

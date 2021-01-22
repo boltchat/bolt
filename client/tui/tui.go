@@ -1,9 +1,9 @@
 package tui
 
 import (
-	"keesvv/go-tcp-chat/internals/client"
-	"keesvv/go-tcp-chat/internals/protocol"
-	"keesvv/go-tcp-chat/internals/protocol/events"
+	"keesvv/go-tcp-chat/client"
+	"keesvv/go-tcp-chat/protocol"
+	"keesvv/go-tcp-chat/protocol/events"
 	"strings"
 
 	"github.com/gdamore/tcell/v2"

@@ -3,7 +3,7 @@ package format
 import (
 	"encoding/json"
 	"fmt"
-	"keesvv/go-tcp-chat/internals/protocol/events"
+	"keesvv/go-tcp-chat/protocol/events"
 	"strings"
 	"time"
 
