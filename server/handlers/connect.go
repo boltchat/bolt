@@ -7,7 +7,6 @@ import (
 
 	"github.com/keesvv/bolt.chat/protocol"
 	"github.com/keesvv/bolt.chat/protocol/events"
-	"github.com/keesvv/bolt.chat/server/logging"
 	"github.com/keesvv/bolt.chat/util"
 )
 
@@ -25,7 +24,6 @@ func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
 
 		if connErr != nil {
 			// Broadcast a disconnect message
-			logging.LogDisconnect(conn)
 			util.Broadcast(conns, *events.NewLeaveEvent(&protocol.User{Nickname: "testuser"})) // TODO:
 			return
 		}
