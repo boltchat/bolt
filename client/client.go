@@ -1,9 +1,9 @@
 package client
 
 import (
-	"keesvv/go-tcp-chat/protocol"
-	"keesvv/go-tcp-chat/protocol/events"
-	"keesvv/go-tcp-chat/util"
+	"keesvv/bolt.chat/protocol"
+	"keesvv/bolt.chat/protocol/events"
+	"keesvv/bolt.chat/util"
 	"net"
 )
 

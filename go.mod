@@ -1,4 +1,4 @@
-module keesvv/go-tcp-chat
+module keesvv/bolt.chat
 
 go 1.15
 

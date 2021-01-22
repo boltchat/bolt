@@ -1,6 +1,6 @@
 package events
 
-import "keesvv/go-tcp-chat/protocol"
+import "keesvv/bolt.chat/protocol"
 
 // MessageEvent TODO
 type MessageEvent struct {

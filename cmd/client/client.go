@@ -1,9 +1,9 @@
 package main
 
 import (
-	"keesvv/go-tcp-chat/client"
-	"keesvv/go-tcp-chat/client/tui"
-	"keesvv/go-tcp-chat/protocol/events"
+	"keesvv/bolt.chat/client"
+	"keesvv/bolt.chat/client/tui"
+	"keesvv/bolt.chat/protocol/events"
 )
 
 func main() {

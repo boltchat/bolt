@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"keesvv/go-tcp-chat/server"
+	"keesvv/bolt.chat/server"
 )
 
 func main() {

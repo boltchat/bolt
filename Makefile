@@ -7,4 +7,4 @@ build-server-static:
 		cmd/server/server.go
 
 docker-build:
-	docker build . -t go-tcp-chat
+	docker build . -t bolt.chat

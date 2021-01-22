@@ -3,7 +3,7 @@ package client
 import (
 	"bytes"
 	"encoding/json"
-	"keesvv/go-tcp-chat/protocol/events"
+	"keesvv/bolt.chat/protocol/events"
 )
 
 func (c *Connection) ReadEvents(evts chan *events.BaseEvent) error {

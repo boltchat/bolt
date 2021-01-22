@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"net"
 
-	"keesvv/go-tcp-chat/protocol/events"
-	"keesvv/go-tcp-chat/server/logging"
-	"keesvv/go-tcp-chat/util"
+	"keesvv/bolt.chat/protocol/events"
+	"keesvv/bolt.chat/server/logging"
+	"keesvv/bolt.chat/util"
 )
 
 /*
