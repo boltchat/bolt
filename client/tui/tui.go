@@ -17,6 +17,7 @@ Display displays the TUI.
 func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
+	mode := MessageMode
 
 	// Create a screen
 	s, err := tcell.NewScreen()
@@ -34,7 +35,7 @@ func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 	s.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite))
 
 	// Display prompt and chatbox
-	displayPrompt(s, input)
+	displayPrompt(s, input, mode)
 	go displayChatbox(s, evts)
 
 	for {
@@ -74,7 +75,7 @@ func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 				input = append(input, ev.Rune())
 			}
 
-			displayPrompt(s, input)
+			displayPrompt(s, input, mode)
 		}
 	}
 }
