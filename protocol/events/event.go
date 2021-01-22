@@ -10,6 +10,8 @@ const (
 	MessageType Type = iota
 	// JoinType TODO
 	JoinType Type = iota
+	// LeaveType TODO
+	LeaveType Type = iota
 	// ErrorType TODO
 	ErrorType Type = iota
 	// MotdType TODO

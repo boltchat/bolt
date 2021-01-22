@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net"
 
+	"github.com/keesvv/bolt.chat/protocol"
 	"github.com/keesvv/bolt.chat/protocol/events"
 	"github.com/keesvv/bolt.chat/server/logging"
 	"github.com/keesvv/bolt.chat/util"
@@ -25,6 +26,7 @@ func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
 		if connErr != nil {
 			// Broadcast a disconnect message
 			logging.LogDisconnect(conn)
+			util.Broadcast(conns, *events.NewLeaveEvent(&protocol.User{Nickname: "testuser"})) // TODO:
 			return
 		}
 
@@ -50,9 +52,8 @@ func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
-			logging.LogConnection(conn) // TODO
-
 			util.WriteJson(conn, *events.NewMotdEvent("This is the message of the day!")) // TODO
+			util.Broadcast(conns, joinEvt)
 		default:
 			// TODO: event not understood
 		}

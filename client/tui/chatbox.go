@@ -60,9 +60,13 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 				events.MotdType:    format.FormatMotd,
 				events.MessageType: format.FormatMessage,
 				events.ErrorType:   format.FormatError,
+				events.JoinType:    format.FormatJoin,
+				events.LeaveType:   format.FormatLeave,
 			}
 
-			printEvent(s, y, formatMap[event.Event.Type](event))
+			if formatFunc, ok := formatMap[event.Event.Type]; ok {
+				printEvent(s, y, formatFunc(event))
+			}
 		}
 
 		s.Show()
