@@ -18,15 +18,6 @@ type Config struct {
 
 var config Config
 
-func getConfigRoot() string {
-	root, err := os.UserConfigDir()
-	if err != nil {
-		panic(err)
-	}
-
-	return path.Join(root, "bolt.chat")
-}
-
 func getConfigLocation() string {
 	return path.Join(getConfigRoot(), "config.yml")
 }
