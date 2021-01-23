@@ -13,7 +13,12 @@ func main() {
 	config.LoadIdentityList()
 
 	args := client.GetArgs()
-	identity := config.GetDefaultIdentity()
+
+	identity, identityErr := config.GetIdentity(args.Identity)
+
+	if identityErr != nil {
+		panic(identityErr)
+	}
 
 	conn, err := client.Connect(client.Options{
 		Hostname: args.Hostname,
