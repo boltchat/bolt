@@ -5,7 +5,7 @@ import (
 	"net"
 )
 
-func WriteJson(conn *net.TCPConn, data interface{}) {
+func WriteJson(conn net.Conn, data interface{}) {
 	b, err := json.Marshal(data)
 	if err != nil {
 		panic(err)
@@ -14,7 +14,7 @@ func WriteJson(conn *net.TCPConn, data interface{}) {
 	conn.Write(b)
 }
 
-func Broadcast(conns []*net.TCPConn, data interface{}) {
+func Broadcast(conns []net.Conn, data interface{}) {
 	for _, conn := range conns {
 		WriteJson(conn, data)
 	}

@@ -1,6 +1,8 @@
 package client
 
 import (
+	"crypto/tls"
+	"fmt"
 	"net"
 
 	"github.com/keesvv/bolt.chat/protocol"
@@ -16,10 +18,7 @@ func Connect(opts Options) (*Connection, error) {
 
 	ip := ips[0]
 
-	conn, err := net.DialTCP("tcp", nil, &net.TCPAddr{
-		IP:   ip,
-		Port: opts.Port,
-	})
+	conn, err := tls.Dial("tcp", fmt.Sprintf("%s:%d", ip, opts.Port), &tls.Config{})
 
 	if err != nil {
 		return &Connection{}, err
@@ -32,7 +31,7 @@ func Connect(opts Options) (*Connection, error) {
 	util.WriteJson(conn, *events.NewJoinEvent(user))
 
 	return &Connection{
-		TCPConn: conn,
-		User:    *user,
+		Conn: conn,
+		User: *user,
 	}, nil
 }

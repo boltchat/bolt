@@ -43,7 +43,7 @@ func (listener *Listener) Listen() error {
 	}
 
 	for _, ip := range listener.Bind {
-		l, err := tls.Listen("tcp", fmt.Sprintf("%s:%s", ip, listener.Port), &tls.Config{
+		l, err := tls.Listen("tcp", fmt.Sprintf("%s:%d", ip, listener.Port), &tls.Config{
 			Certificates: []tls.Certificate{
 				cert,
 			},

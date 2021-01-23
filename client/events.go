@@ -10,7 +10,7 @@ import (
 func (c *Connection) ReadEvents(evts chan *events.BaseEvent) error {
 	for {
 		b := make([]byte, 4096)
-		_, err := c.TCPConn.Read(b)
+		_, err := c.Conn.Read(b)
 
 		if err != nil {
 			return err

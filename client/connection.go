@@ -1,13 +1,13 @@
 package client
 
 import (
-	"net"
+	"crypto/tls"
 
 	"github.com/keesvv/bolt.chat/protocol"
 )
 
 // Connection TODO
 type Connection struct {
-	TCPConn *net.TCPConn
-	User    protocol.User
+	Conn *tls.Conn
+	User protocol.User
 }

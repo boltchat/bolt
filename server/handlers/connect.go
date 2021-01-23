@@ -14,7 +14,7 @@ import (
 HandleConnection handles a TCP connection
 during its entire lifespan.
 */
-func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
+func HandleConnection(conns []net.Conn, conn net.Conn) {
 	for {
 		// a := server.Listener{}
 		b := make([]byte, 4096)

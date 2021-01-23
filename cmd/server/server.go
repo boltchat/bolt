@@ -8,7 +8,7 @@ import (
 
 func main() {
 	listener := server.Listener{
-		Bind: []string{"127.0.0.1", "::1"}, // TODO:
+		Bind: []string{"127.0.0.1" /*"::1"*/}, // TODO:
 		Port: 3300,
 	}
 
