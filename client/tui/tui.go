@@ -71,6 +71,14 @@ func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 				}
 			} else if ev.Key() == tcell.KeyCtrlU {
 				input = []rune{}
+			} else if ev.Key() == tcell.KeyUp ||
+				ev.Key() == tcell.KeyDown ||
+				ev.Key() == tcell.KeyLeft ||
+				ev.Key() == tcell.KeyRight ||
+				ev.Key() == tcell.KeyHome ||
+				ev.Key() == tcell.KeyEnd {
+				// TODO: add logic
+				break
 			} else {
 				input = append(input, ev.Rune())
 			}
