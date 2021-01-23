@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"github.com/keesvv/bolt.chat/client/config"
 	"github.com/keesvv/bolt.chat/client/format"
 	"github.com/keesvv/bolt.chat/protocol/events"
 
@@ -35,7 +36,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 
 	for evt := range evtChannel {
 		w, h := s.Size()
-		hBuff := h - promptOffset
+		hBuff := h - config.GetConfig().Prompt.HOffset
 
 		// Append event to the events slice
 		evts = append(evts, evt)

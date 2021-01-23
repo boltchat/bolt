@@ -8,9 +8,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+type Prompt struct {
+	HOffset int `yaml:"hOffset"`
+}
+
 type Config struct {
-	A int `yaml:"a"`
-	B int `yaml:"b"`
+	Prompt Prompt `yaml:"prompt"`
 }
 
 var config Config
@@ -55,7 +58,7 @@ func LoadConfig() {
 	if configRaw != nil {
 		config = *parseConfig(configRaw)
 	} else {
-		config = Config{}
+		config = *GetDefaultConfig()
 	}
 }
 

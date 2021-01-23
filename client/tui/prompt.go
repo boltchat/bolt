@@ -1,8 +1,9 @@
 package tui
 
-import "github.com/gdamore/tcell/v2"
-
-const promptOffset int = 1
+import (
+	"github.com/gdamore/tcell/v2"
+	"github.com/keesvv/bolt.chat/client/config"
+)
 
 type Mode int
 
@@ -17,7 +18,7 @@ var modes = map[Mode]string{
 func displayPrompt(s tcell.Screen, input []rune, mode Mode) {
 	w, h := s.Size()
 	style := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
-	y := h - promptOffset
+	y := h - config.GetConfig().Prompt.HOffset
 
 	modeStr := modes[mode]
 	modeLen := len(modeStr)
