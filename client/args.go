@@ -10,17 +10,16 @@ import (
 type Args struct {
 	Hostname string
 	Port     int
-	Nickname string // TODO: this will change very soon
 }
 
 func printUsage() {
-	fmt.Println("usage: boltchat <host> <nickname>")
+	fmt.Println("usage: boltchat <host>")
 }
 
 func GetArgs() *Args {
 	rawArgs := os.Args[1:]
 
-	if len(rawArgs) < 2 {
+	if len(rawArgs) < 1 {
 		printUsage()
 		os.Exit(1)
 	}
@@ -45,7 +44,6 @@ func GetArgs() *Args {
 	args := &Args{
 		Hostname: hostname,
 		Port:     port,
-		Nickname: rawArgs[1],
 	}
 
 	return args
