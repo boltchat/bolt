@@ -5,24 +5,31 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/keesvv/bolt.chat/client/config"
 )
 
 type Args struct {
 	Hostname string
 	Port     int
-	Nickname string // TODO: this will change very soon
+	Identity string
 }
 
 func printUsage() {
-	fmt.Println("usage: boltchat <host> <nickname>")
+	fmt.Println("usage: boltchat <host> [identity]")
 }
 
 func GetArgs() *Args {
 	rawArgs := os.Args[1:]
 
-	if len(rawArgs) < 2 {
+	// Set identity to 'default' by default
+	identity := config.DefaultIdentity
+
+	if len(rawArgs) < 1 {
 		printUsage()
 		os.Exit(1)
+	} else if len(rawArgs) > 1 {
+		identity = rawArgs[1]
 	}
 
 	splitHost := strings.Split(rawArgs[0], ":")
@@ -45,7 +52,7 @@ func GetArgs() *Args {
 	args := &Args{
 		Hostname: hostname,
 		Port:     port,
-		Nickname: rawArgs[1],
+		Identity: identity,
 	}
 
 	return args
