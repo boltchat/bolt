@@ -1,6 +1,8 @@
 package server
 
 import (
+	"crypto/tls"
+	"fmt"
 	"net"
 
 	"github.com/keesvv/bolt.chat/server/handlers"
@@ -13,11 +15,10 @@ type Listener struct {
 	Port int
 }
 
-func handleListener(conns []*net.TCPConn, l *net.TCPListener) error {
+func handleListener(conns []net.Conn, l net.Listener) error {
 	for {
-		conn, err := l.AcceptTCP()
+		conn, err := l.Accept()
 		conns = append(conns, conn)
-		// fmt.Println(conns)
 
 		if err != nil {
 			return err
@@ -33,12 +34,19 @@ Listen starts a new server/listener.
 */
 func (listener *Listener) Listen() error {
 	// All connections for this listener
-	conns := make([]*net.TCPConn, 0, 5)
+	conns := make([]net.Conn, 0, 5)
+
+	cert, certErr := tls.LoadX509KeyPair("server.crt", "server.key") // TODO:
+
+	if certErr != nil {
+		panic(certErr)
+	}
 
 	for _, ip := range listener.Bind {
-		l, err := net.ListenTCP("tcp", &net.TCPAddr{
-			IP:   net.ParseIP(ip),
-			Port: listener.Port,
+		l, err := tls.Listen("tcp", fmt.Sprintf("%s:%s", ip, listener.Port), &tls.Config{
+			Certificates: []tls.Certificate{
+				cert,
+			},
 		})
 
 		if err != nil {
