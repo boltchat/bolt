@@ -43,10 +43,25 @@ func parseConfig(raw []byte) *Config {
 }
 
 func readConfig() ([]byte, error) {
-	configRaw, err := ioutil.ReadFile(getConfigLocation())
+	configLocation := getConfigLocation()
+	configRaw, err := ioutil.ReadFile(configLocation)
 
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		return nil, err
+	}
+
+	if len(configRaw) == 0 {
+		defaultConf, marshalErr := yaml.Marshal(*GetDefaultConfig())
+		if marshalErr != nil {
+			panic(marshalErr) // TODO
+		}
+
+		writeErr := ioutil.WriteFile(configLocation, defaultConf, 0644)
+		if writeErr != nil {
+			panic(writeErr) // TODO
+		}
+
+		configRaw = defaultConf
 	}
 
 	return configRaw, nil
