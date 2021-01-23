@@ -1,4 +1,4 @@
-![bolt.chat](./assets/logo/boltchat-logo.jpg)
+![bolt.chat](./assets/banner/boltchat-banner.jpg)
 
 > ⚡ A fast, lightweight, and secure chat protocol, client and server, written in Go.
 
