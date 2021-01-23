@@ -1,6 +1,7 @@
 package config
 
 import (
+	"io/ioutil"
 	"os"
 	"path"
 
@@ -12,7 +13,7 @@ type Config struct {
 	B int `yaml:"b"`
 }
 
-var Current Config
+var config Config
 
 func getConfigRoot() string {
 	root, err := os.UserConfigDir()
@@ -29,27 +30,35 @@ func getConfigLocation() string {
 
 func parseConfig(raw []byte) *Config {
 	config := &Config{}
-	yaml.Unmarshal(raw, config)
+	err := yaml.Unmarshal(raw, config)
+
+	if err != nil {
+		panic(err)
+	}
+
 	return config
 }
 
 func readConfig() ([]byte, error) {
-	f, err := os.Open(getConfigLocation())
-	configRaw := make([]byte, 1024)
+	configRaw, err := ioutil.ReadFile(getConfigLocation())
 
 	if err != nil {
 		return nil, err
-	}
-
-	_, readErr := f.Read(configRaw)
-	if readErr != nil {
-		return nil, readErr
 	}
 
 	return configRaw, nil
 }
 
 func LoadConfig() {
-	// TODO
-	Current = *parseConfig([]byte("a: 1\nb: 2"))
+	configRaw, _ := readConfig()
+
+	if configRaw != nil {
+		config = *parseConfig(configRaw)
+	} else {
+		config = Config{}
+	}
+}
+
+func GetConfig() *Config {
+	return &config
 }
