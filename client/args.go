@@ -27,15 +27,24 @@ func GetArgs() *Args {
 
 	splitHost := strings.Split(rawArgs[0], ":")
 	hostname := splitHost[0]
-	port, parseErr := strconv.ParseInt(splitHost[1], 10, 32)
 
-	if parseErr != nil {
-		panic(parseErr)
+	// The default port
+	port := 3300
+
+	// Custom port number is specified
+	if len(splitHost) == 2 {
+		parsedPort, parseErr := strconv.ParseInt(splitHost[1], 10, 32)
+
+		if parseErr != nil {
+			panic(parseErr)
+		}
+
+		port = int(parsedPort)
 	}
 
 	args := &Args{
 		Hostname: hostname,
-		Port:     int(port),
+		Port:     port,
 		Nickname: rawArgs[1],
 	}
 
