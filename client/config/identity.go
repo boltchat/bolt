@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"io/ioutil"
 	"path"
 
@@ -14,6 +15,8 @@ type Identity struct {
 type IdentityList map[string]Identity
 
 var identityList IdentityList
+
+const DefaultIdentity string = "default"
 
 func getIdentityLocation() string {
 	return path.Join(getConfigRoot(), "identity.yml")
@@ -54,8 +57,10 @@ func GetIdentityList() *IdentityList {
 	return &identityList
 }
 
-func GetDefaultIdentity() *Identity {
-	defaultIdentity := identityList["default"]
-	// TODO: throw error if default identity is not defined
-	return &defaultIdentity
+func GetIdentity(id string) (*Identity, error) {
+	if identity, ok := identityList[id]; ok {
+		return &identity, nil
+	}
+
+	return nil, errors.New("identity not found")
 }
