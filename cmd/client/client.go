@@ -10,11 +10,12 @@ import (
 func main() {
 	// Load the config
 	config.LoadConfig()
+	args := client.GetArgs()
 
 	conn, err := client.Connect(client.Options{
-		Hostname: "localhost",
-		Port:     3300,
-		Nickname: "keesvv",
+		Hostname: args.Hostname,
+		Port:     args.Port,
+		Nickname: args.Nickname,
 	})
 
 	if err != nil {
