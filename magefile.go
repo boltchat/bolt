@@ -52,7 +52,8 @@ func build(os string, arch string, entry string, opts BuildOptions) error {
 		"build",
 		"-o",
 		outputPath,
-		// "-ldflags='-s -w'", // TODO: this throws an error
+		"-ldflags",
+		"-s -w",
 		entry,
 	}
 
