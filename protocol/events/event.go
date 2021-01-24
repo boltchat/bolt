@@ -25,7 +25,7 @@ type Event struct {
 	// The event creation date (client-side, untrustworthy)
 	CreatedAt int64 `json:"c"`
 	// The event reception date (server-side, trustworthy)
-	RecvAt int64 `json:"r"`
+	RecvAt int64 `json:"r,omitempty"`
 }
 
 // BaseEvent TODO
