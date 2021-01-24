@@ -19,10 +19,14 @@ func LogInfo(msg string) {
 	logBase(color.CyanString("INFO"), msg)
 }
 
-func LogDebug(msg string) {
+func LogDebug(msg string, data interface{}) {
 	_, isDebug := os.LookupEnv("DEBUG")
 	if !isDebug {
 		return
+	}
+
+	if data != nil {
+		msg = fmt.Sprintf("%s %v", msg, data)
 	}
 
 	logBase(color.HiYellowString("DEBUG"), msg)
