@@ -1,7 +1,7 @@
 package format
 
 import (
-	"github.com/keesvv/bolt.chat/protocol/events"
+	"github.com/bolt-chat/protocol/events"
 )
 
 type FormatHandler = func(e *events.BaseEvent) string

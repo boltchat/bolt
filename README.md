@@ -21,7 +21,7 @@ The project boards for _bolt.chat_ can be found [here](https://github.com/bolt-c
 
 ## Installation
 ### Binaries
-Please have a look at the [Releases](https://github.com/keesvv/bolt.chat/releases) page for the most
+Please have a look at the [Releases](https://github.com/bolt-chat/bolt.chat/releases) page for the most
 up-to-date client and server binaries.
 > Unfortunately, there are currently no binaries available for download. For the time being,
 > follow the steps as described in the subsection **From source**.

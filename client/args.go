@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/keesvv/bolt.chat/client/config"
+	"github.com/bolt-chat/client/config"
 )
 
 type Args struct {

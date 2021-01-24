@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/keesvv/bolt.chat/protocol"
-	"github.com/keesvv/bolt.chat/protocol/events"
-	"github.com/keesvv/bolt.chat/util"
+	"github.com/bolt-chat/protocol"
+	"github.com/bolt-chat/protocol/events"
+	"github.com/bolt-chat/util"
 )
 
 /*

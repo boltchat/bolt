@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/bolt-chat/protocol/events"
 	"github.com/fatih/color"
 	"github.com/gdamore/tcell/v2"
-	"github.com/keesvv/bolt.chat/protocol/events"
 )
 
 func FormatJoin(e *events.BaseEvent) string {
