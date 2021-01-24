@@ -30,8 +30,8 @@ type Event struct {
 
 // BaseEvent TODO
 type BaseEvent struct {
-	Event *Event `json:"e"`
-	Raw   *[]byte
+	Event *Event  `json:"e"`
+	Raw   *[]byte `json:"-"`
 }
 
 // NewBaseEvent TODO
