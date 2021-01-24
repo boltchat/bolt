@@ -12,6 +12,9 @@ present-day proprietary protocols and chat applications, such as Discord and Sla
 a nifty text-base user interface, but since it uses its own protocol, it's possible to build a GUI client
 in, say, Electron. (please don't, use [Tauri](https://github.com/tauri-apps/tauri))
 
+## Roadmap
+The project boards for _bolt.chat_ can be found [here](https://github.com/bolt-chat/bolt.chat/projects).
+
 ## Installation
 Please have a look at the [Releases](https://github.com/keesvv/bolt.chat/releases) page for the most up-to-date client and server binaries.
 
