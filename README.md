@@ -3,6 +3,10 @@
 > ⚡ A fast, lightweight, and secure chat protocol, client and server, written in Go.
 
 ## About
+> ⚠ IMPORTANT: This project is still a work-in-progress. I strongly discourage installing this on a
+> public-facing server as it could potentially harm your security and privacy. See the
+> [roadmap](https://github.com/bolt-chat/bolt.chat/projects) for the progress of this project.
+
 _bolt.chat_ is intended as a modern replacement for [IRC](https://en.wikipedia.org/wiki/Internet_Relay_Chat).
 I started this project because I feel like there aren't many open source chat protocols that follow modern
 standards.
