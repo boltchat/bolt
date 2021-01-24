@@ -9,9 +9,7 @@ type ErrorEvent struct {
 // NewErrorEvent TODO
 func NewErrorEvent(err string) *ErrorEvent {
 	return &ErrorEvent{
-		BaseEvent: BaseEvent{
-			Event: newEvent(ErrorType),
-		},
-		Error: err,
+		BaseEvent: *NewBaseEvent(ErrorType),
+		Error:     err,
 	}
 }

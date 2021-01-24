@@ -11,9 +11,7 @@ type JoinEvent struct {
 
 func NewJoinEvent(user *protocol.User) *JoinEvent {
 	return &JoinEvent{
-		BaseEvent: BaseEvent{
-			Event: newEvent(JoinType),
-		},
-		User: user,
+		BaseEvent: *NewBaseEvent(JoinType),
+		User:      user,
 	}
 }

@@ -30,9 +30,12 @@ type BaseEvent struct {
 	Raw   *[]byte
 }
 
-func newEvent(t Type) *Event {
-	return &Event{
-		Type:      t,
-		CreatedAt: time.Now().Unix(),
+// NewBaseEvent TODO
+func NewBaseEvent(t Type) *BaseEvent {
+	return &BaseEvent{
+		Event: &Event{
+			Type:      t,
+			CreatedAt: time.Now().Unix(),
+		},
 	}
 }

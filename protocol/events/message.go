@@ -11,9 +11,7 @@ type MessageEvent struct {
 // NewMessageEvent TODO
 func NewMessageEvent(msg *protocol.Message) *MessageEvent {
 	return &MessageEvent{
-		BaseEvent: BaseEvent{
-			Event: newEvent(MessageType),
-		},
-		Message: msg,
+		BaseEvent: *NewBaseEvent(MessageType),
+		Message:   msg,
 	}
 }

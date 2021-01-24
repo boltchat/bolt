@@ -11,9 +11,7 @@ type LeaveEvent struct {
 
 func NewLeaveEvent(user *protocol.User) *LeaveEvent {
 	return &LeaveEvent{
-		BaseEvent: BaseEvent{
-			Event: newEvent(LeaveType),
-		},
-		User: user,
+		BaseEvent: *NewBaseEvent(LeaveType),
+		User:      user,
 	}
 }

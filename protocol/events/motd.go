@@ -7,9 +7,7 @@ type MotdEvent struct {
 
 func NewMotdEvent(motd string) *MotdEvent {
 	return &MotdEvent{
-		BaseEvent: BaseEvent{
-			Event: newEvent(MotdType),
-		},
-		Motd: motd,
+		BaseEvent: *NewBaseEvent(MotdType),
+		Motd:      motd,
 	}
 }
