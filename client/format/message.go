@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/keesvv/bolt.chat/protocol/events"
+	"github.com/bolt-chat/protocol/events"
 
 	"github.com/fatih/color"
 )

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/keesvv/bolt.chat/protocol/events"
+	"github.com/bolt-chat/protocol/events"
 
 	"github.com/fatih/color"
 )

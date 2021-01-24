@@ -1,8 +1,8 @@
 package tui
 
 import (
+	"github.com/bolt-chat/client/config"
 	"github.com/gdamore/tcell/v2"
-	"github.com/keesvv/bolt.chat/client/config"
 )
 
 type Mode int

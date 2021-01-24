@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/keesvv/bolt.chat/server/handlers"
-	"github.com/keesvv/bolt.chat/server/logging"
+	"github.com/bolt-chat/server/handlers"
+	"github.com/bolt-chat/server/logging"
 )
 
 // Listener TODO

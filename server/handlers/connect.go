@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/keesvv/bolt.chat/protocol"
-	"github.com/keesvv/bolt.chat/protocol/events"
-	"github.com/keesvv/bolt.chat/util"
+	"github.com/bolt-chat/protocol"
+	"github.com/bolt-chat/protocol/events"
+	"github.com/bolt-chat/server/logging"
+	"github.com/bolt-chat/util"
 )
 
 /*
@@ -24,12 +25,18 @@ func HandleConnection(conns []net.Conn, conn net.Conn) {
 
 		if connErr != nil {
 			// Broadcast a disconnect message
-			util.Broadcast(conns, *events.NewLeaveEvent(&protocol.User{Nickname: "testuser"})) // TODO:
+			evt := *events.NewLeaveEvent(&protocol.User{Nickname: "testuser"}) // TODO:
+			evtRaw, _ := json.Marshal(evt)
+			util.Broadcast(conns, evt) // TODO:
+			logging.LogEvent(string(evtRaw))
 			return
 		}
 
 		// Trim empty bytes at the end
 		b = bytes.TrimRight(b, "\x00")
+
+		// Log raw events in debug mode
+		logging.LogEvent(string(b))
 
 		evt := &events.BaseEvent{}
 

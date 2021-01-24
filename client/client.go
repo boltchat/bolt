@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/keesvv/bolt.chat/protocol"
-	"github.com/keesvv/bolt.chat/protocol/events"
-	"github.com/keesvv/bolt.chat/util"
+	"github.com/bolt-chat/protocol"
+	"github.com/bolt-chat/protocol/events"
+	"github.com/bolt-chat/util"
 )
 
 func Connect(opts Options) (*Connection, error) {

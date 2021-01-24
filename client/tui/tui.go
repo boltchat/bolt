@@ -3,9 +3,9 @@ package tui
 import (
 	"strings"
 
-	"github.com/keesvv/bolt.chat/client"
-	"github.com/keesvv/bolt.chat/protocol"
-	"github.com/keesvv/bolt.chat/protocol/events"
+	"github.com/bolt-chat/client"
+	"github.com/bolt-chat/protocol"
+	"github.com/bolt-chat/protocol/events"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/gdamore/tcell/v2/encoding"

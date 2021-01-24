@@ -3,7 +3,7 @@ package client
 import (
 	"crypto/tls"
 
-	"github.com/keesvv/bolt.chat/protocol"
+	"github.com/bolt-chat/protocol"
 )
 
 // Connection TODO

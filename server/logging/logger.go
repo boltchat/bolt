@@ -2,6 +2,7 @@ package logging
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/fatih/color"
@@ -14,11 +15,28 @@ func logBase(
 	fmt.Printf("%s [%s] %s\n", color.HiBlackString(time.Now().Format("15:04:05")), level, msg)
 }
 
-func logInfo(msg string) {
+func LogInfo(msg string) {
 	logBase(color.CyanString("INFO"), msg)
+}
+
+func LogDebug(msg string, data interface{}) {
+	_, isDebug := os.LookupEnv("DEBUG")
+	if !isDebug {
+		return
+	}
+
+	if data != nil {
+		msg = fmt.Sprintf("%s %v", msg, data)
+	}
+
+	logBase(color.HiYellowString("DEBUG"), msg)
+}
+
+func LogEvent(evt interface{}) {
+	LogDebug("event:", evt)
 }
 
 // LogListener TODO
 func LogListener(ip string, port int) {
-	logInfo(fmt.Sprintf("Server listening on %s:%v.", ip, port))
+	LogInfo(fmt.Sprintf("Server listening on %s:%v.", ip, port))
 }
