@@ -20,8 +20,16 @@ in, say, Electron. (please don't, use [Tauri](https://github.com/tauri-apps/taur
 The project boards for _bolt.chat_ can be found [here](https://github.com/bolt-chat/bolt.chat/projects).
 
 ## Installation
-Please have a look at the [Releases](https://github.com/keesvv/bolt.chat/releases) page for the most up-to-date client and server binaries.
+### Binaries
+Please have a look at the [Releases](https://github.com/keesvv/bolt.chat/releases) page for the most
+up-to-date client and server binaries.
+> Unfortunately, there are currently no binaries available for download. For the time being,
+> follow the steps as described in the subsection **From source**.
 
+### Docker
+If you'd like to run the server in a Docker container, follow the compilation steps below and run `mage docker:build`.
+
+### From source
 If you'd like to compile _bolt.chat_ from source, please follow the steps below:
 
 ```bash
@@ -31,6 +39,13 @@ go get github.com/magefile/mage
 go install github.com/magefile/mage
 mage
 ```
+
+## Quick start
+### Server
+`// TODO`
+
+### Client
+`// TODO`
 
 ## Author
 [Kees van Voorthuizen (@keesvv)](https://github.com/keesvv)
