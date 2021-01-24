@@ -52,7 +52,7 @@ Run `mage` to see all available targets.
 `// TODO`
 
 ### Client
-`// TODO`
+`usage: boltchat <host> [identity]`
 
 ## Author
 [Kees van Voorthuizen (@keesvv)](https://github.com/keesvv)
