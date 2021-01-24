@@ -32,13 +32,20 @@ If you'd like to run the server in a Docker container, follow the compilation st
 ### From source
 If you'd like to compile _bolt.chat_ from source, please follow the steps below:
 
+#### Prerequisites
+* Git
+* Go (v1.15.6)
+
+#### Cloning & installing
 ```bash
-git clone git@github.com:keesvv/bolt.chat.git
+git clone git@github.com:bolt-chat/bolt.chat.git
 cd bolt.chat
 go get github.com/magefile/mage
 go install github.com/magefile/mage
-mage
 ```
+
+#### Building
+Run `mage` to see all available targets.
 
 ## Quick start
 ### Server
