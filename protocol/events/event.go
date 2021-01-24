@@ -18,10 +18,14 @@ const (
 	MotdType Type = iota
 )
 
-// Event represents a chat event.
+// Event represents a general protocol event.
 type Event struct {
-	Type      Type  `json:"t"`
+	// The event identifier/type.
+	Type Type `json:"t"`
+	// The event creation date (client-side, untrustworthy)
 	CreatedAt int64 `json:"c"`
+	// The event reception date (server-side, trustworthy)
+	RecvAt int64 `json:"r"`
 }
 
 // BaseEvent TODO
