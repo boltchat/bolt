@@ -32,6 +32,10 @@ func LogDebug(msg string, data interface{}) {
 	logBase(color.HiYellowString("DEBUG"), msg)
 }
 
+func LogEvent(evt interface{}) {
+	LogDebug("event:", evt)
+}
+
 // LogListener TODO
 func LogListener(ip string, port int) {
 	LogInfo(fmt.Sprintf("Server listening on %s:%v.", ip, port))
