@@ -42,9 +42,16 @@ func readConfig() ([]byte, error) {
 	}
 
 	if len(configRaw) == 0 {
+		configRoot := getConfigRoot()
 		defaultConf, marshalErr := yaml.Marshal(*GetDefaultConfig())
+
 		if marshalErr != nil {
 			panic(marshalErr) // TODO
+		}
+
+		stat, statErr := os.Stat(configRoot)
+		if statErr != nil || !stat.IsDir() {
+			os.MkdirAll(configRoot, 0755)
 		}
 
 		writeErr := ioutil.WriteFile(configLocation, defaultConf, 0644)
@@ -60,12 +67,7 @@ func readConfig() ([]byte, error) {
 
 func LoadConfig() {
 	configRaw, _ := readConfig()
-
-	if configRaw != nil {
-		config = *parseConfig(configRaw)
-	} else {
-		config = *GetDefaultConfig()
-	}
+	config = *parseConfig(configRaw)
 }
 
 func GetConfig() *Config {
