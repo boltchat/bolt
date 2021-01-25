@@ -57,15 +57,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 
 		// Append all events to the chatbox buffer
 		for y, event := range buff {
-			formatMap := map[events.Type]format.FormatHandler{
-				events.MotdType:    format.FormatMotd,
-				events.MessageType: format.FormatMessage,
-				events.ErrorType:   format.FormatError,
-				events.JoinType:    format.FormatJoin,
-				events.LeaveType:   format.FormatLeave,
-			}
-
-			if formatFunc, ok := formatMap[event.Event.Type]; ok {
+			if formatFunc, ok := format.FormatMap[event.Event.Type]; ok {
 				printEvent(s, y, formatFunc(event))
 			}
 		}
