@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"net"
+	"os"
 
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
@@ -57,7 +58,12 @@ func HandleConnection(pool *util.ConnPool, conn *net.TCPConn) {
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
-			util.WriteJson(conn, *events.NewMotdEvent("This is the message of the day!")) // TODO
+
+			motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
+			if hasMotd == true {
+				util.WriteJson(conn, *events.NewMotdEvent(motd)) // Set MOTD (if env is declared)
+			}
+
 			util.Broadcast(pool, joinEvt)
 		default:
 			// TODO: event not understood
