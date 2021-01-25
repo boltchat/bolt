@@ -21,6 +21,7 @@ func printEvent(s tcell.Screen, y int, evt string) {
 }
 
 func clearLine(s tcell.Screen, y int, w int) {
+	// Clear every cell to `w`
 	for x := 0; x < w; x++ {
 		s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
 	}
@@ -47,7 +48,6 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 		} else {
 			// Remove first event from buffer and append
 			buff = append(buff[1:], evt)
-			// clearLine(s, hBuff, w)
 		}
 
 		// Clear the buffer
@@ -70,6 +70,10 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 			}
 		}
 
-		s.Show()
+		/*
+			FIXME: This is for the time being. See issue #2
+			for more information.
+		*/
+		s.Sync()
 	}
 }
