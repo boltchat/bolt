@@ -61,12 +61,13 @@ func HandleConnection(pool *util.ConnPool, conn *net.TCPConn) {
 
 			motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
 			if hasMotd == true {
-				util.WriteJson(conn, *events.NewMotdEvent(motd)) // Set MOTD (if env is declared)
+				// Send MOTD if env var is declared
+				util.WriteJson(conn, *events.NewMotdEvent(motd))
 			}
 
 			util.Broadcast(pool, joinEvt)
 		default:
-			// TODO: event not understood
+			util.WriteJson(conn, *events.NewErrorEvent("invalid_event"))
 		}
 	}
 }
