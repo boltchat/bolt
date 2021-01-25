@@ -3,29 +3,29 @@ package events
 import "time"
 
 // Type represents an event type identifier.
-type Type int
+type Type string
 
 const (
-	// MessageType TODO
-	MessageType Type = iota
-	// JoinType TODO
-	JoinType Type = iota
-	// LeaveType TODO
-	LeaveType Type = iota
-	// ErrorType TODO
-	ErrorType Type = iota
-	// MotdType TODO
-	MotdType Type = iota
+	// MessageType is the event type used for messages.
+	MessageType Type = "msg"
+	// JoinType is the event type used for new connections.
+	JoinType Type = "join"
+	// LeaveType is the event type used for disconnects.
+	LeaveType Type = "leave"
+	// ErrorType is the event type used for error reporting.
+	ErrorType Type = "err"
+	// MotdType is the event type used for the Message-of-the-Day (MOTD).
+	MotdType Type = "motd"
 )
 
 // Event represents a general protocol event.
 type Event struct {
 	// The event identifier/type.
 	Type Type `json:"t"`
-	// The event creation date (client-side, untrustworthy)
+	// The event creation date (client-side, untrustworthy).
 	CreatedAt int64 `json:"c"`
-	// The event reception date (server-side, trustworthy)
-	RecvAt int64 `json:"r,omitempty"`
+	// The event reception date (server-side, trustworthy).
+	RecvAt int64 `json:"r,omitempty"` // TODO:
 }
 
 // BaseEvent TODO
