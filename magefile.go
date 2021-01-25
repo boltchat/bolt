@@ -108,8 +108,8 @@ func (Build) ServerDarwinAmd64() error {
 // 	return build("darwin", "arm64", serverEntry, false)
 // }
 
-// Builds the server binary for use in a Docker container
-func (Build) ServerContainer() error {
+// Builds the static server binary for use in a Docker container
+func (Build) ServerStatic() error {
 	return build("linux", "amd64", serverEntry, BuildOptions{
 		Static: true,
 		Prefix: serverPrefix,

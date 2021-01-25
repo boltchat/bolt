@@ -11,7 +11,7 @@ WORKDIR /src
 COPY . .
 
 ## Compile the static server binary
-RUN mage build:serverContainer
+RUN mage build:serverStatic
 
 # Deploy stage
 FROM busybox:1.32.1
