@@ -17,6 +17,8 @@ HandleConnection handles a TCP connection
 during its entire lifespan.
 */
 func HandleConnection(pool *util.ConnPool, conn *net.TCPConn) {
+	var user *protocol.User
+
 	for {
 		// a := server.Listener{}
 		b := make([]byte, 4096)
@@ -26,7 +28,7 @@ func HandleConnection(pool *util.ConnPool, conn *net.TCPConn) {
 
 		if connErr != nil {
 			// Broadcast a disconnect message
-			evt := *events.NewLeaveEvent(&protocol.User{Nickname: "testuser"}) // TODO:
+			evt := *events.NewLeaveEvent(user) // TODO:
 			evtRaw, _ := json.Marshal(evt)
 			util.Broadcast(pool, evt) // TODO:
 			logging.LogEvent(string(evtRaw))
@@ -58,6 +60,7 @@ func HandleConnection(pool *util.ConnPool, conn *net.TCPConn) {
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
+			user = joinEvt.User
 
 			motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
 			if hasMotd == true {
