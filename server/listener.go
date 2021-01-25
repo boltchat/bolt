@@ -8,9 +8,14 @@ import (
 	"github.com/bolt-chat/util"
 )
 
+type Bind struct {
+	Address string
+	Proto   string
+}
+
 // Listener TODO
 type Listener struct {
-	Bind []string
+	Bind []Bind
 	Port int
 }
 
@@ -38,9 +43,9 @@ func (listener *Listener) Listen() error {
 	// The connection pool for this listener
 	connPool := make(util.ConnPool, 0, 5)
 
-	for _, ip := range listener.Bind {
-		l, err := net.ListenTCP("tcp", &net.TCPAddr{
-			IP:   net.ParseIP(ip),
+	for _, bind := range listener.Bind {
+		l, err := net.ListenTCP(bind.Proto, &net.TCPAddr{
+			IP:   net.ParseIP(bind.Address),
 			Port: listener.Port,
 		})
 
@@ -49,7 +54,7 @@ func (listener *Listener) Listen() error {
 		}
 
 		// TODO
-		logging.LogListener(ip, listener.Port)
+		logging.LogListener(bind.Address, listener.Port)
 
 		go handleListener(&connPool, l)
 	}
