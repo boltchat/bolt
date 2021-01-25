@@ -15,7 +15,7 @@ import (
 HandleConnection handles a TCP connection
 during its entire lifespan.
 */
-func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
+func HandleConnection(pool *util.ConnPool, conn *net.TCPConn) {
 	for {
 		// a := server.Listener{}
 		b := make([]byte, 4096)
@@ -27,7 +27,7 @@ func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
 			// Broadcast a disconnect message
 			evt := *events.NewLeaveEvent(&protocol.User{Nickname: "testuser"}) // TODO:
 			evtRaw, _ := json.Marshal(evt)
-			util.Broadcast(conns, evt) // TODO:
+			util.Broadcast(pool, evt) // TODO:
 			logging.LogEvent(string(evtRaw))
 			return
 		}
@@ -53,12 +53,12 @@ func HandleConnection(conns []*net.TCPConn, conn *net.TCPConn) {
 		case events.MessageType:
 			msgEvt := &events.MessageEvent{}
 			json.Unmarshal(b, msgEvt)
-			util.Broadcast(conns, msgEvt) // TODO: mutate and write
+			util.Broadcast(pool, msgEvt) // TODO: mutate and write
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
 			util.WriteJson(conn, *events.NewMotdEvent("This is the message of the day!")) // TODO
-			util.Broadcast(conns, joinEvt)
+			util.Broadcast(pool, joinEvt)
 		default:
 			// TODO: event not understood
 		}
