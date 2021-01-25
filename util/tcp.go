@@ -5,6 +5,12 @@ import (
 	"net"
 )
 
+type ConnPool []*net.TCPConn
+
+func (c *ConnPool) AddToPool(conn *net.TCPConn) {
+	*c = append(*c, conn)
+}
+
 func WriteJson(conn *net.TCPConn, data interface{}) {
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -14,8 +20,8 @@ func WriteJson(conn *net.TCPConn, data interface{}) {
 	conn.Write(b)
 }
 
-func Broadcast(conns []*net.TCPConn, data interface{}) {
-	for _, conn := range conns {
+func Broadcast(conns *ConnPool, data interface{}) {
+	for _, conn := range *conns {
 		WriteJson(conn, data)
 	}
 }
