@@ -32,6 +32,7 @@ func HandleConnection(pool *util.ConnPool, conn *net.TCPConn) {
 			evtRaw, _ := json.Marshal(evt)
 			util.Broadcast(pool, evt) // TODO:
 			logging.LogEvent(string(evtRaw))
+			pool.RemoveFromPool(conn)
 			return
 		}
 
