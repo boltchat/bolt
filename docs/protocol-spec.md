@@ -11,8 +11,18 @@ The most basic form of an event looks like this:
 {
   "e": {
     "t": "msg",
-    "c": 1611670138
+    "c": 1611670138,
+    "r": 1611670139
   },
   ...
 }
 ```
+
+| key | type        | desc                 | can send |
+|-----|-------------|----------------------|----------|
+| `e` | `EventMeta` | Event metadata       | both     |
+| `t` | `string`    | Type identifier      | both     |
+| `c` | `int64`     | Creation date (Unix) | both     |
+| `r` | `int64`     | Receipt date (Unix)  | server   |
+
+The `...` indicates additional data that is accompanied with the event.
