@@ -4,7 +4,10 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"path"
+	"path/filepath"
+	"strings"
 
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
@@ -146,6 +149,30 @@ func (Docker) Build() error {
 /*
 Misc
 */
+
+// Adds license headers to source files
+func License() {
+	paths := make([]string, 0)
+
+	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if strings.HasSuffix(path, ".go") {
+			paths = append(paths, path)
+		}
+		return nil
+	})
+
+	sh.Run(
+		"addlicense",
+		"-l", "gpl3",
+		"-p", "bolt.chat",
+		"-c", "Kees van Voorthuizen",
+		"client", "server", "protocol", "cmd", "util",
+	)
+}
 
 // Cleans up build directories
 func Clean() {
