@@ -1,0 +1,8 @@
+{
+  "emeraldwalk.runonsave": {
+    "commands": [{
+      "cmd": "mage license",
+      "match": ".go"
+    }]
+  }
+}
