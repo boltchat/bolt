@@ -19,13 +19,6 @@ in, say, Electron. (please don't, use [Tauri](https://github.com/tauri-apps/taur
 ## Roadmap
 The project boards for _bolt.chat_ can be found [here](https://github.com/bolt-chat/bolt.chat/projects).
 
-## Quick start
-### Server
-`// TODO`
-
-### Client
-`usage: boltchat <host> [identity]`
-
 ## Author
 [Kees van Voorthuizen (@keesvv)](https://github.com/keesvv)
 
