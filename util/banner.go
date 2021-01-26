@@ -14,46 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package main
+package util
 
 import (
 	"fmt"
-	"os"
-
-	"github.com/bolt-chat/server"
-	"github.com/bolt-chat/util"
+	"strings"
 )
 
-func main() {
-	// Print ASCII banner
-	util.PrintBanner()
+// PrintBanner prints a neat ASCII art banner to stdout
+func PrintBanner() {
+	ascii := strings.Join([]string{
+		" _           _ _              _           _   ",
+		"| |         | | |            | |         | |  ",
+		"| |__   ___ | | |_        ___| |__   __ _| |_ ",
+		"| '_ \\ / _ \\| | __|      / __| '_ \\ / _` | __|",
+		"| |_) | (_) | | |_   _  | (__| | | | (_| | |_ ",
+		"|_.__/ \\___/|_|\\__| (_)  \\___|_| |_|\\__,_|\\__|",
+	}, "\n")
 
-	ipv4Bind := os.Getenv("BIND_IPV4")
-	ipv6Bind := os.Getenv("BIND_IPV6")
-
-	if ipv4Bind == "" {
-		// Set default IPv4 bind to loopback address
-		ipv4Bind = "127.0.0.1"
-	}
-
-	if ipv6Bind == "" {
-		// Set default IPv6 bind to loopback address
-		ipv6Bind = "::1"
-	}
-
-	listener := server.Listener{
-		Bind: []server.Bind{
-			{Address: ipv4Bind, Proto: "tcp4"},
-			{Address: ipv6Bind, Proto: "tcp6"},
-		},
-		Port: 3300,
-	}
-
-	err := listener.Listen()
-	if err != nil {
-		panic(err)
-	}
-
-	// Exit on return
-	fmt.Scanln()
+	// Format & print the banner
+	fmt.Printf("\n%s\n\n\n", ascii)
 }
