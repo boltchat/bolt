@@ -53,6 +53,6 @@ func LogEvent(evt interface{}) {
 }
 
 // LogListener TODO
-func LogListener(ip string, port int) {
-	LogInfo(fmt.Sprintf("Server listening on %s:%v.", ip, port))
+func LogListener(addr string) {
+	LogInfo(fmt.Sprintf("Server listening on %s.", addr))
 }

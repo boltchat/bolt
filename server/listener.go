@@ -70,7 +70,7 @@ func (listener *Listener) Listen() error {
 		}
 
 		// TODO
-		logging.LogListener(bind.Address, listener.Port)
+		logging.LogListener(l.Addr().String())
 
 		go handleListener(&connPool, l)
 	}
