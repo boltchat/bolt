@@ -13,7 +13,7 @@ standards.
 
 Not only do I think it's a great fit for an IRC replacement; it might even be suitable for a replacement of
 present-day proprietary protocols and chat applications, such as Discord and Slack. _bolt.chat_ comes with
-a nifty text-base user interface, but since it uses its own protocol, it's possible to build a GUI client
+a nifty text-based user interface, but since it uses its own protocol, it's possible to build a GUI client
 in, say, Electron. (please don't, use [Tauri](https://github.com/tauri-apps/tauri))
 
 ## Roadmap
