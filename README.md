@@ -22,6 +22,7 @@ The project boards for _bolt.chat_ can be found [here](https://github.com/bolt-c
 ## References
 * [Installation guide](./docs/installation.md)
 * [Quick start guide](./docs/quick-start.md)
+* [Protocol Specification](./docs/protocol-spec.md)
 
 ## Author
 [Kees van Voorthuizen (@keesvv)](https://github.com/keesvv)
