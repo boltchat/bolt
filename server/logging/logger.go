@@ -35,6 +35,10 @@ func LogInfo(msg string) {
 	logBase(color.CyanString("INFO"), msg)
 }
 
+func LogError(msg string) {
+	logBase(color.HiRedString("ERROR"), msg)
+}
+
 func LogDebug(msg string, data interface{}) {
 	_, isDebug := os.LookupEnv("DEBUG")
 	if !isDebug {
