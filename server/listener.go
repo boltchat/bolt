@@ -21,7 +21,7 @@ import (
 
 	"github.com/bolt-chat/server/handlers"
 	"github.com/bolt-chat/server/logging"
-	"github.com/bolt-chat/util"
+	"github.com/bolt-chat/server/pools"
 )
 
 type Bind struct {
@@ -38,7 +38,7 @@ type Listener struct {
 /*
 handleListener handles an individual TCP listener.
 */
-func handleListener(pool *util.ConnPool, l *net.TCPListener) error {
+func handleListener(pool *pools.ConnPool, l *net.TCPListener) error {
 	for {
 		conn, err := l.AcceptTCP()
 		pool.AddToPool(conn)
@@ -57,7 +57,7 @@ Listen starts a new server/listener.
 */
 func (listener *Listener) Listen() error {
 	// The connection pool for this listener
-	connPool := make(util.ConnPool, 0, 5)
+	connPool := make(pools.ConnPool, 0, 5)
 
 	for _, bind := range listener.Bind {
 		l, err := net.ListenTCP(bind.Proto, &net.TCPAddr{

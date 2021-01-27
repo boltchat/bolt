@@ -21,7 +21,7 @@ import (
 	"os"
 
 	"github.com/bolt-chat/server"
-	"github.com/bolt-chat/util"
+	"github.com/bolt-chat/server/util"
 )
 
 func main() {
