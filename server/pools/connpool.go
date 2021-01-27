@@ -17,26 +17,23 @@
 package pools
 
 import (
-	"net"
-
 	"github.com/bolt-chat/server/logging"
-	"github.com/bolt-chat/util"
 )
 
 // ConnPool represents a group of connections.
-type ConnPool []*net.TCPConn
+type ConnPool []*Connection
 
 func (c *ConnPool) logPoolSize() {
 	logging.LogDebug("pool size:", len(*c))
 }
 
 // AddToPool adds a new connection to the current pool.
-func (c *ConnPool) AddToPool(conn *net.TCPConn) {
+func (c *ConnPool) AddToPool(conn *Connection) {
 	*c = append(*c, conn)
 
 	logging.LogDebug(
 		"connection added to pool:",
-		conn.RemoteAddr().String(),
+		conn.Conn.RemoteAddr().String(),
 	)
 
 	c.logPoolSize()
@@ -44,7 +41,7 @@ func (c *ConnPool) AddToPool(conn *net.TCPConn) {
 
 // RemoveFromPool removes an existing connection
 // from the current pool.
-func (c *ConnPool) RemoveFromPool(conn *net.TCPConn) {
+func (c *ConnPool) RemoveFromPool(conn *Connection) {
 	// Range through pool
 	for i, curConn := range *c {
 		// Target connection is found
@@ -66,7 +63,7 @@ func (c *ConnPool) RemoveFromPool(conn *net.TCPConn) {
 
 	logging.LogDebug(
 		"connection removed from pool:",
-		conn.RemoteAddr().String(),
+		conn.Conn.RemoteAddr().String(),
 	)
 
 	c.logPoolSize()
@@ -76,6 +73,6 @@ func (c *ConnPool) RemoveFromPool(conn *net.TCPConn) {
 // present in the pool.
 func (c *ConnPool) Broadcast(data interface{}) {
 	for _, conn := range *c {
-		util.WriteJson(conn, data)
+		conn.Send(data)
 	}
 }
