@@ -40,7 +40,10 @@ handleListener handles an individual TCP listener.
 */
 func handleListener(pool *pools.ConnPool, l *net.TCPListener) error {
 	for {
-		conn, err := l.AcceptTCP()
+		tcpConn, err := l.AcceptTCP()
+		conn := pools.NewConnection(tcpConn, nil)
+
+		// Add connection to pool
 		pool.AddToPool(conn)
 
 		if err != nil {
