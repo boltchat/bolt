@@ -18,9 +18,15 @@ package err
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fatih/color"
 )
+
+type SyntaxError struct {
+	Error error
+	Desc  string
+}
 
 /*
 Emerg displays a message to the user that something has
@@ -36,4 +42,13 @@ func Emerg(err error) {
 
 	// Immediately stop execution.
 	panic(err)
+}
+
+/*
+Syntax tells the user that they've made a syntax error
+and cleanly exits the program afterwards.
+*/
+func Syntax(err SyntaxError) {
+	fmt.Printf("Syntax error: %s\n", err.Desc)
+	os.Exit(1)
 }
