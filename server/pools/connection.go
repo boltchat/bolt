@@ -21,7 +21,6 @@ import (
 	"net"
 
 	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/server/logging"
 )
 
 // Connection TODO
@@ -37,7 +36,7 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 	enc := json.NewEncoder(conn)
 	dec := json.NewDecoder(conn)
 
-	dec.DisallowUnknownFields()
+	// dec.DisallowUnknownFields()
 
 	return &Connection{
 		Conn:    conn,
@@ -48,21 +47,15 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 }
 
 // Send TODO
-func (c *Connection) Send(data interface{}) {
+func (c *Connection) Send(data interface{}) error {
 	err := c.encoder.Encode(data)
-
-	if err != nil {
-		logging.LogError(err.Error())
-	}
+	return err
 }
 
-// Read TODO
-func (c *Connection) Read(data interface{}) {
+// Receive TODO
+func (c *Connection) Receive(data interface{}) error {
 	err := c.decoder.Decode(data)
-
-	if err != nil {
-		logging.LogError(err.Error())
-	}
+	return err
 }
 
 // IsIdentified TODO
