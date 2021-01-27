@@ -169,7 +169,7 @@ func License() {
 		"addlicense",
 		"-l", "gpl3",
 		"-p", "bolt.chat",
-		"-c", "Kees van Voorthuizen",
+		"-c", "The bolt.chat Authors",
 		"client", "server", "protocol", "cmd", "util",
 	)
 }
