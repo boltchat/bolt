@@ -21,6 +21,7 @@ import (
 	"net"
 
 	"github.com/bolt-chat/protocol"
+	"github.com/bolt-chat/server/logging"
 )
 
 // Connection TODO
@@ -46,6 +47,6 @@ func (c *Connection) Send(data interface{}) {
 	err := c.encoder.Encode(data)
 
 	if err != nil {
-		panic(err)
+		logging.LogError(err.Error())
 	}
 }
