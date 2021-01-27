@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package err
+package errs
 
 import (
 	"fmt"
@@ -40,7 +40,7 @@ func Emerg(err error) {
 			"if this is repetitive behaviour.\n",
 	))
 
-	// Immediately stop execution.
+	// Immediately stop execution
 	panic(err)
 }
 
@@ -50,5 +50,14 @@ and cleanly exits the program afterwards.
 */
 func Syntax(err SyntaxError) {
 	fmt.Printf("Syntax error: %s\n", err.Desc)
+	os.Exit(1)
+}
+
+/*
+Connect informs the user about an error that has occured while
+attempting to connect to the server.
+*/
+func Connect(err error) {
+	fmt.Printf("Connection error: %s\n", err.Error())
 	os.Exit(1)
 }

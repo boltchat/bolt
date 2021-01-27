@@ -21,6 +21,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/bolt-chat/client/errs"
 	"gopkg.in/yaml.v2"
 )
 
@@ -38,15 +39,15 @@ func getConfigLocation() string {
 	return path.Join(getConfigRoot(), "config.yml")
 }
 
-func parseConfig(raw []byte) *Config {
+func parseConfig(raw []byte) (*Config, error) {
 	config := &Config{}
 	err := yaml.Unmarshal(raw, config)
 
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return config
+	return config, nil
 }
 
 func readConfig() ([]byte, error) {
@@ -62,7 +63,7 @@ func readConfig() ([]byte, error) {
 		defaultConf, marshalErr := yaml.Marshal(*GetDefaultConfig())
 
 		if marshalErr != nil {
-			panic(marshalErr) // TODO
+			return nil, marshalErr
 		}
 
 		stat, statErr := os.Stat(configRoot)
@@ -72,7 +73,7 @@ func readConfig() ([]byte, error) {
 
 		writeErr := ioutil.WriteFile(configLocation, defaultConf, 0644)
 		if writeErr != nil {
-			panic(writeErr) // TODO
+			return nil, writeErr
 		}
 
 		configRaw = defaultConf
@@ -82,8 +83,17 @@ func readConfig() ([]byte, error) {
 }
 
 func LoadConfig() {
-	configRaw, _ := readConfig()
-	config = *parseConfig(configRaw)
+	configRaw, readErr := readConfig()
+	if readErr != nil {
+		errs.Emerg(readErr)
+	}
+
+	conf, parseErr := parseConfig(configRaw)
+	if parseErr != nil {
+		errs.Emerg(parseErr)
+	}
+
+	config = *conf
 }
 
 func GetConfig() *Config {

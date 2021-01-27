@@ -19,12 +19,14 @@ package config
 import (
 	"os"
 	"path"
+
+	"github.com/bolt-chat/client/errs"
 )
 
 func getConfigRoot() string {
 	root, err := os.UserConfigDir()
 	if err != nil {
-		panic(err)
+		errs.Emerg(err)
 	}
 
 	return path.Join(root, "bolt.chat")

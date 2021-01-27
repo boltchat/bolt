@@ -1,5 +1,5 @@
 // bolt.chat
-// Copyright (C) 2021  The bolt.chat Authors
+// Copyright (C) 2021  Kees van Voorthuizen
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@ import (
 	"strings"
 
 	"github.com/bolt-chat/client"
+	"github.com/bolt-chat/client/errs"
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 
@@ -39,12 +40,12 @@ func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 	s, err := tcell.NewScreen()
 
 	if err != nil {
-		panic(err)
+		errs.Emerg(err)
 	}
 
 	// Initialize the screen
 	if err := s.Init(); err != nil {
-		panic(err)
+		errs.Emerg(err)
 	}
 
 	// Set default style
@@ -77,7 +78,7 @@ func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 
 				err := conn.SendMessage(&msg)
 				if err != nil {
-					panic(err)
+					errs.Emerg(err)
 				}
 
 				input = []rune{}

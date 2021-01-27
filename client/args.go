@@ -23,6 +23,8 @@ import (
 	"strings"
 
 	"github.com/bolt-chat/client/config"
+	"github.com/bolt-chat/client/errs"
+	"github.com/fatih/color"
 )
 
 type Args struct {
@@ -59,7 +61,14 @@ func GetArgs() *Args {
 		parsedPort, parseErr := strconv.ParseInt(splitHost[1], 10, 32)
 
 		if parseErr != nil {
-			panic(parseErr)
+			errs.Syntax(errs.SyntaxError{
+				Error: parseErr,
+				Desc: fmt.Sprintf(
+					"You have entered an invalid host. Hosts "+
+						"must be in the following format: %s.",
+					color.HiCyanString("hostname|ip[:port]"),
+				),
+			})
 		}
 
 		port = int(parsedPort)

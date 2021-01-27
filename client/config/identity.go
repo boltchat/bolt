@@ -21,6 +21,7 @@ import (
 	"io/ioutil"
 	"path"
 
+	"github.com/bolt-chat/client/errs"
 	"gopkg.in/yaml.v2"
 )
 
@@ -43,7 +44,7 @@ func parseIdentityList(raw []byte) *IdentityList {
 	err := yaml.Unmarshal(raw, identityList)
 
 	if err != nil {
-		panic(err)
+		errs.Emerg(err)
 	}
 
 	return identityList
@@ -63,7 +64,7 @@ func LoadIdentityList() {
 	identityRaw, err := readIdentityList()
 
 	if err != nil {
-		panic(err)
+		errs.Emerg(err)
 	}
 
 	identityList = *parseIdentityList(identityRaw)

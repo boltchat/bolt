@@ -19,6 +19,7 @@ package main
 import (
 	"github.com/bolt-chat/client"
 	"github.com/bolt-chat/client/config"
+	"github.com/bolt-chat/client/errs"
 	"github.com/bolt-chat/client/tui"
 	"github.com/bolt-chat/protocol/events"
 )
@@ -33,7 +34,7 @@ func main() {
 	identity, identityErr := config.GetIdentity(args.Identity)
 
 	if identityErr != nil {
-		panic(identityErr)
+		errs.Emerg(identityErr)
 	}
 
 	conn, err := client.Connect(client.Options{
@@ -43,7 +44,7 @@ func main() {
 	})
 
 	if err != nil {
-		panic(err)
+		errs.Connect(err)
 	}
 
 	evts := make(chan *events.BaseEvent)
