@@ -26,6 +26,10 @@ import (
 // ConnPool represents a group of connections.
 type ConnPool []*net.TCPConn
 
+func (c *ConnPool) logPoolSize() {
+	logging.LogDebug("pool size:", len(*c))
+}
+
 // AddToPool adds a new connection to the current pool.
 func (c *ConnPool) AddToPool(conn *net.TCPConn) {
 	*c = append(*c, conn)
@@ -35,7 +39,7 @@ func (c *ConnPool) AddToPool(conn *net.TCPConn) {
 		conn.RemoteAddr().String(),
 	)
 
-	logging.LogDebug("pool size:", len(*c))
+	c.logPoolSize()
 }
 
 // RemoveFromPool removes an existing connection
@@ -56,9 +60,16 @@ func (c *ConnPool) RemoveFromPool(conn *net.TCPConn) {
 				starts from the index of the connection in question + 1.
 			*/
 			*c = append((*c)[:i], (*c)[i+1:]...)
-			return
+			break
 		}
 	}
+
+	logging.LogDebug(
+		"connection removed from pool:",
+		conn.RemoteAddr().String(),
+	)
+
+	c.logPoolSize()
 }
 
 // Broadcast emits data to all connections that are
