@@ -38,11 +38,13 @@ func main() {
 		errs.Emerg(identityErr)
 	}
 
-	c, err := client.Connect(client.Options{
+	c := client.NewClient(client.Options{
 		Hostname: args.Hostname,
 		Port:     args.Port,
 		Nickname: identity.Nickname,
 	})
+
+	err := c.Connect()
 
 	if err != nil {
 		errs.Connect(err)

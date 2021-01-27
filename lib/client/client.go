@@ -27,34 +27,37 @@ import (
 type Client struct {
 	Conn *net.TCPConn // TODO: make private
 	User protocol.User
+	Opts Options
 }
 
-// TODO: rename to `NewClient`, add separate `Connect` method
-func Connect(opts Options /*TODO*/) (*Client, error) {
-	ips, lookupErr := net.LookupIP(opts.Hostname)
+func NewClient(opts Options) *Client {
+	return &Client{
+		User: protocol.User{
+			Nickname: opts.Nickname,
+		},
+		Opts: opts,
+	}
+}
+
+func (c *Client) Connect() error {
+	ips, lookupErr := net.LookupIP(c.Opts.Hostname)
 	if lookupErr != nil {
-		return &Client{}, lookupErr
+		return lookupErr
 	}
 
 	ip := ips[0]
-
 	conn, err := net.DialTCP("tcp", nil, &net.TCPAddr{
 		IP:   ip,
-		Port: opts.Port,
+		Port: c.Opts.Port,
 	})
 
 	if err != nil {
-		return &Client{}, err
+		return err
 	}
 
-	user := &protocol.User{
-		Nickname: opts.Nickname,
-	}
+	// Set the connection
+	c.Conn = conn
 
-	util.WriteJson(conn, *events.NewJoinEvent(user))
-
-	return &Client{
-		Conn: conn,
-		User: *user,
-	}, nil
+	util.WriteJson(conn, *events.NewJoinEvent(&c.User))
+	return nil
 }
