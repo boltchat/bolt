@@ -29,22 +29,36 @@ type Connection struct {
 	Conn    *net.TCPConn
 	User    *protocol.User
 	encoder *json.Encoder
+	decoder *json.Decoder
 }
 
 // NewConnection TODO
 func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 	enc := json.NewEncoder(conn)
+	dec := json.NewDecoder(conn)
+
+	dec.DisallowUnknownFields()
 
 	return &Connection{
 		Conn:    conn,
 		User:    user,
 		encoder: enc,
+		decoder: dec,
 	}
 }
 
 // Send TODO
 func (c *Connection) Send(data interface{}) {
 	err := c.encoder.Encode(data)
+
+	if err != nil {
+		logging.LogError(err.Error())
+	}
+}
+
+// Read TODO
+func (c *Connection) Read(data interface{}) {
+	err := c.decoder.Decode(data)
 
 	if err != nil {
 		logging.LogError(err.Error())
