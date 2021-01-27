@@ -50,3 +50,8 @@ func (c *Connection) Send(data interface{}) {
 		logging.LogError(err.Error())
 	}
 }
+
+// IsIdentified TODO
+func (c *Connection) IsIdentified() bool {
+	return c.User != nil
+}
