@@ -20,6 +20,9 @@ import (
 	"github.com/bolt-chat/protocol"
 )
 
+// LeaveType is the event type used for disconnects.
+const LeaveType Type = "leave"
+
 type LeaveEvent struct {
 	BaseEvent
 	User *protocol.User `json:"user"`

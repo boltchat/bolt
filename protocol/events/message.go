@@ -18,6 +18,9 @@ package events
 
 import "github.com/bolt-chat/protocol"
 
+// MessageType is the event type used for messages.
+const MessageType Type = "msg"
+
 // MessageEvent TODO
 type MessageEvent struct {
 	BaseEvent

@@ -20,6 +20,9 @@ import (
 	"github.com/bolt-chat/protocol"
 )
 
+// JoinType is the event type used for new connections.
+const JoinType Type = "join"
+
 type JoinEvent struct {
 	BaseEvent
 	User *protocol.User `json:"user"`

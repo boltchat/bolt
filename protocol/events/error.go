@@ -16,6 +16,9 @@
 
 package events
 
+// ErrorType is the event type used for error reporting.
+const ErrorType Type = "err"
+
 // ErrorEvent TODO
 type ErrorEvent struct {
 	BaseEvent
