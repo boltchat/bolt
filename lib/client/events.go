@@ -17,13 +17,33 @@
 package client
 
 import (
-	"net"
+	"bytes"
+	"encoding/json"
 
-	"github.com/bolt-chat/protocol"
+	"github.com/bolt-chat/protocol/events"
 )
 
-// Connection TODO
-type Connection struct {
-	TCPConn *net.TCPConn
-	User    protocol.User
+func (c *Client) ReadEvents(evts chan *events.BaseEvent) error {
+	for {
+		b := make([]byte, 4096)
+		_, err := c.Conn.Read(b)
+
+		if err != nil {
+			return err
+		}
+
+		b = bytes.TrimRight(b, "\x00")
+		evt := &events.BaseEvent{}
+		jsonErr := json.Unmarshal(b, evt)
+
+		evt.Raw = &b
+
+		if jsonErr != nil {
+			return err
+		}
+
+		go func() {
+			evts <- evt
+		}()
+	}
 }

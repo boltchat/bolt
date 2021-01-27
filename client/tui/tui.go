@@ -19,8 +19,8 @@ package tui
 import (
 	"strings"
 
-	"github.com/bolt-chat/client"
 	"github.com/bolt-chat/client/errs"
+	"github.com/bolt-chat/lib/client"
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 
@@ -31,7 +31,7 @@ import (
 /*
 Display displays the TUI.
 */
-func Display(conn *client.Connection, evts chan *events.BaseEvent) {
+func Display(c *client.Client, evts chan *events.BaseEvent) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
 	mode := MessageMode
@@ -73,10 +73,10 @@ func Display(conn *client.Connection, evts chan *events.BaseEvent) {
 
 				msg := protocol.Message{
 					Content: string(input),
-					User:    &conn.User,
+					User:    &c.User,
 				}
 
-				err := conn.SendMessage(&msg)
+				err := c.SendMessage(&msg)
 				if err != nil {
 					errs.Emerg(err)
 				}

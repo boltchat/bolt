@@ -17,19 +17,44 @@
 package client
 
 import (
-	"time"
+	"net"
 
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/util"
 )
 
-/*
-SendMessage sends a message to an established
-TCP connection.
-*/
-func (c *Connection) SendMessage(m *protocol.Message) error {
-	m.SentAt = time.Now().Unix()
-	util.WriteJson(c.TCPConn, *events.NewMessageEvent(m))
-	return nil
+type Client struct {
+	Conn *net.TCPConn // TODO: make private
+	User protocol.User
+}
+
+// TODO: rename to `NewClient`, add separate `Connect` method
+func Connect(opts Options /*TODO*/) (*Client, error) {
+	ips, lookupErr := net.LookupIP(opts.Hostname)
+	if lookupErr != nil {
+		return &Client{}, lookupErr
+	}
+
+	ip := ips[0]
+
+	conn, err := net.DialTCP("tcp", nil, &net.TCPAddr{
+		IP:   ip,
+		Port: opts.Port,
+	})
+
+	if err != nil {
+		return &Client{}, err
+	}
+
+	user := &protocol.User{
+		Nickname: opts.Nickname,
+	}
+
+	util.WriteJson(conn, *events.NewJoinEvent(user))
+
+	return &Client{
+		Conn: conn,
+		User: *user,
+	}, nil
 }

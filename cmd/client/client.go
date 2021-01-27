@@ -17,10 +17,11 @@
 package main
 
 import (
-	"github.com/bolt-chat/client"
+	"github.com/bolt-chat/client/args"
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/errs"
 	"github.com/bolt-chat/client/tui"
+	"github.com/bolt-chat/lib/client"
 	"github.com/bolt-chat/protocol/events"
 )
 
@@ -29,7 +30,7 @@ func main() {
 	config.LoadConfig()
 	config.LoadIdentityList()
 
-	args := client.GetArgs()
+	args := args.GetArgs()
 
 	identity, identityErr := config.GetIdentity(args.Identity)
 
@@ -37,7 +38,7 @@ func main() {
 		errs.Emerg(identityErr)
 	}
 
-	conn, err := client.Connect(client.Options{
+	c, err := client.Connect(client.Options{
 		Hostname: args.Hostname,
 		Port:     args.Port,
 		Nickname: identity.Nickname,
@@ -49,6 +50,6 @@ func main() {
 
 	evts := make(chan *events.BaseEvent)
 
-	go conn.ReadEvents(evts)
-	tui.Display(conn, evts)
+	go c.ReadEvents(evts)
+	tui.Display(c, evts)
 }
