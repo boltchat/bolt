@@ -36,8 +36,6 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 	enc := json.NewEncoder(conn)
 	dec := json.NewDecoder(conn)
 
-	// dec.DisallowUnknownFields()
-
 	return &Connection{
 		Conn:    conn,
 		User:    user,
