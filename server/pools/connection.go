@@ -56,6 +56,11 @@ func (c *Connection) Receive(data interface{}) error {
 	return err
 }
 
+// Close closes the connection.
+func (c *Connection) Close() error {
+	return c.Conn.Close()
+}
+
 // IsIdentified TODO
 func (c *Connection) IsIdentified() bool {
 	return c.User != nil
