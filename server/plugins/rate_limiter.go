@@ -17,7 +17,7 @@
 package plugins
 
 import (
-	"fmt"
+	"errors"
 	"time"
 
 	"github.com/bolt-chat/protocol/events"
@@ -29,7 +29,7 @@ type RateLimiterPlugin struct {
 	Time   time.Duration
 }
 
-func (p RateLimiterPlugin) OnMessage(msg *events.MessageEvent, c *pools.Connection) {
+func (p RateLimiterPlugin) OnMessage(msg *events.MessageEvent, c *pools.Connection) error {
 	const amountKey string = "rate:a"
 	const timeKey string = "rate:t"
 
@@ -49,10 +49,12 @@ func (p RateLimiterPlugin) OnMessage(msg *events.MessageEvent, c *pools.Connecti
 		c.Data[timeKey] = now
 		c.Data[amountKey] = 0
 	} else if c.Data[amountKey].(int) >= p.Amount {
-		fmt.Println("too much messages")
+		return errors.New("too_many_messages")
 	} else {
 		c.Data[amountKey] = c.Data[amountKey].(int) + 1
 	}
+
+	return nil
 }
 
 func (RateLimiterPlugin) GetInfo() *PluginInfo {

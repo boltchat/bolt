@@ -22,7 +22,7 @@ import (
 )
 
 type Plugin interface {
-	OnMessage(msg *events.MessageEvent, c *pools.Connection)
+	OnMessage(msg *events.MessageEvent, c *pools.Connection) error
 	GetInfo() *PluginInfo
 }
 

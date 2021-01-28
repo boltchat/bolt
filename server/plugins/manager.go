@@ -35,10 +35,17 @@ func (p *PluginManager) GetInstalled() *[]Plugin {
 	return p.installedPlugins
 }
 
-func (p *PluginManager) HookMessage(msg *events.MessageEvent, conn *pools.Connection) {
-	for _, v := range *p.GetInstalled() {
-		v.OnMessage(msg, conn)
+func (p *PluginManager) HookMessage(msg *events.MessageEvent, conn *pools.Connection) error {
+	for _, plugin := range *p.GetInstalled() {
+		err := plugin.OnMessage(msg, conn)
+
+		// Fail fast if a plugin reports an error
+		if err != nil {
+			return err
+		}
 	}
+
+	return nil
 }
 
 func SetManager(mgr *PluginManager) {
