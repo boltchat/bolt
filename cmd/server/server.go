@@ -19,12 +19,27 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/bolt-chat/server"
+	"github.com/bolt-chat/server/plugins"
 	"github.com/bolt-chat/server/util"
 )
 
 func main() {
+	mgr := &plugins.PluginManager{}
+
+	// Install plugins
+	mgr.Install(
+		plugins.RateLimiterPlugin{
+			Amount: 5,
+			Time:   time.Second,
+		},
+	)
+
+	// Set the plugin manager
+	plugins.SetManager(mgr)
+
 	// Print ASCII banner
 	util.PrintBanner()
 

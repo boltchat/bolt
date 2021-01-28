@@ -27,6 +27,7 @@ import (
 type Connection struct {
 	Conn    *net.TCPConn
 	User    *protocol.User
+	Data    map[string]interface{}
 	encoder *json.Encoder
 	decoder *json.Decoder
 }
@@ -39,6 +40,7 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 	return &Connection{
 		Conn:    conn,
 		User:    user,
+		Data:    make(map[string]interface{}, 0),
 		encoder: enc,
 		decoder: dec,
 	}
