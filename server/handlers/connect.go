@@ -73,6 +73,7 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
+			conn.User = joinEvt.User
 
 			motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
 			if hasMotd == true {
