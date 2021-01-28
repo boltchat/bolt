@@ -23,4 +23,9 @@ import (
 
 type Plugin interface {
 	OnMessage(msg *events.MessageEvent, c *pools.Connection)
+	GetInfo() *PluginInfo
+}
+
+type PluginInfo struct {
+	Id string
 }
