@@ -62,8 +62,12 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 
 		if err != nil {
 			conn.Send(*events.NewErrorEvent("invalid_format"))
-			conn.Close() // TODO:
-			return
+			continue
+		}
+
+		if !conn.IsIdentified() && evt.Event.Type != events.JoinType {
+			conn.Send(*events.NewErrorEvent("unidentified"))
+			continue
 		}
 
 		switch evt.Event.Type {
@@ -74,7 +78,7 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 
 			if err != nil {
 				conn.Send(*events.NewErrorEvent(err.Error()))
-				break
+				continue
 			}
 
 			pool.Broadcast(msgEvt) // TODO: mutate and write
