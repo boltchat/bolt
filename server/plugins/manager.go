@@ -16,6 +16,11 @@
 
 package plugins
 
+import (
+	"github.com/bolt-chat/protocol/events"
+	"github.com/bolt-chat/server/pools"
+)
+
 var manager *PluginManager
 
 type PluginManager struct {
@@ -28,6 +33,12 @@ func (p *PluginManager) Install(plugins ...Plugin) {
 
 func (p *PluginManager) GetInstalled() *[]Plugin {
 	return p.installedPlugins
+}
+
+func (p *PluginManager) HookMessage(msg *events.MessageEvent, conn *pools.Connection) {
+	for _, v := range *p.GetInstalled() {
+		v.OnMessage(msg, conn)
+	}
 }
 
 func SetManager(mgr *PluginManager) {
