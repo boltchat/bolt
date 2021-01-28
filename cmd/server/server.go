@@ -19,6 +19,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/bolt-chat/server"
 	"github.com/bolt-chat/server/plugins"
@@ -30,7 +31,10 @@ func main() {
 
 	// Install plugins
 	mgr.Install(
-		plugins.RateLimiterPlugin{},
+		plugins.RateLimiterPlugin{
+			Amount: 5,
+			Time:   time.Second,
+		},
 	)
 
 	// Set the plugin manager
