@@ -70,7 +70,13 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 		case events.MessageType:
 			msgEvt := &events.MessageEvent{}
 			json.Unmarshal(b, msgEvt)
-			plugins.GetManager().HookMessage(msgEvt, conn)
+			err := plugins.GetManager().HookMessage(msgEvt, conn)
+
+			if err != nil {
+				conn.Send(*events.NewErrorEvent(err.Error()))
+				break
+			}
+
 			pool.Broadcast(msgEvt) // TODO: mutate and write
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
