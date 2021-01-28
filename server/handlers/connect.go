@@ -23,6 +23,7 @@ import (
 
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/logging"
+	"github.com/bolt-chat/server/plugins"
 	"github.com/bolt-chat/server/pools"
 )
 
@@ -69,6 +70,7 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 		case events.MessageType:
 			msgEvt := &events.MessageEvent{}
 			json.Unmarshal(b, msgEvt)
+			plugins.GetManager().HookMessage(msgEvt, conn)
 			pool.Broadcast(msgEvt) // TODO: mutate and write
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
