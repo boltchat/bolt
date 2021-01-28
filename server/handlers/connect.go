@@ -19,33 +19,28 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"net"
 	"os"
 
-	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/logging"
 	"github.com/bolt-chat/server/pools"
-	"github.com/bolt-chat/util"
 )
 
 /*
 HandleConnection handles a TCP connection
 during its entire lifespan.
 */
-func HandleConnection(pool *pools.ConnPool, conn *net.TCPConn) {
-	var user *protocol.User
-
+func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 	for {
 		// a := server.Listener{}
 		b := make([]byte, 4096)
 
 		// Wait for and receive incoming events
-		_, connErr := conn.Read(b)
+		_, connErr := conn.Conn.Read(b)
 
 		if connErr != nil {
 			// Broadcast a disconnect message
-			evt := *events.NewLeaveEvent(user) // TODO:
+			evt := *events.NewLeaveEvent(conn.User) // TODO:
 			evtRaw, _ := json.Marshal(evt)
 			pool.Broadcast(evt)
 			logging.LogEvent(string(evtRaw))
@@ -65,8 +60,8 @@ func HandleConnection(pool *pools.ConnPool, conn *net.TCPConn) {
 		err := json.Unmarshal(b, evt)
 
 		if err != nil {
-			util.WriteJson(conn, *events.NewErrorEvent("invalid_format"))
-			conn.Close()
+			conn.Send(*events.NewErrorEvent("invalid_format"))
+			conn.Close() // TODO:
 			return
 		}
 
@@ -78,17 +73,16 @@ func HandleConnection(pool *pools.ConnPool, conn *net.TCPConn) {
 		case events.JoinType:
 			joinEvt := &events.JoinEvent{}
 			json.Unmarshal(b, joinEvt)
-			user = joinEvt.User
 
 			motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
 			if hasMotd == true {
 				// Send MOTD if env var is declared
-				util.WriteJson(conn, *events.NewMotdEvent(motd))
+				conn.Send(*events.NewMotdEvent(motd))
 			}
 
 			pool.Broadcast(joinEvt)
 		default:
-			util.WriteJson(conn, *events.NewErrorEvent("invalid_event"))
+			conn.Send(*events.NewErrorEvent("invalid_event"))
 		}
 	}
 }
