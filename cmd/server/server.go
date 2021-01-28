@@ -21,10 +21,21 @@ import (
 	"os"
 
 	"github.com/bolt-chat/server"
+	"github.com/bolt-chat/server/plugins"
 	"github.com/bolt-chat/server/util"
 )
 
 func main() {
+	mgr := &plugins.PluginManager{}
+
+	// Install plugins
+	mgr.Install(
+		plugins.RateLimiterPlugin{},
+	)
+
+	// Set the plugin manager
+	plugins.SetManager(mgr)
+
 	// Print ASCII banner
 	util.PrintBanner()
 
