@@ -30,10 +30,6 @@ import (
 )
 
 func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
-	var evtStr string
-	var evtPrefix string
-	var evtContent string
-
 	// Convert event timestamp to `time.Time`
 	timestamp := time.Unix(evt.Event.CreatedAt, 0)
 
@@ -44,35 +40,32 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
 		color.HiBlackString("]"),
 	}, "")
 
-	// Calculate prefix length
+	/*
+		Calculate prefix length
+
+		TODO: refactor. This is a temporary workaround
+		because I have not yet found an optimal way of
+		extracting control characters/ANSI colors from
+		`timestampStr` and counting the length of that
+		instead.
+	*/
 	prefixLen := len(fmt.Sprintf(
 		"[%s] ",
 		timestamp.Format(time.Stamp),
 	))
 
-	if formatFunc, ok := format.FormatMap[evt.Event.Type]; ok {
-		// Format the event
-		evtContent = formatFunc(evt)
+	evtContent := format.Format(evt)
+	evtPrefix := timestampStr + " "
+	evtStr := evtPrefix + evtContent
 
-		// TODO: is this necessary?
-		// /*
-		//  Remove all control characters and non-printable
-		//  characters from the event
-		// */
-		// evtContent = strings.TrimFunc(formattedEvt, func(r rune) bool {
-		//  return unicode.IsControl(r) || !unicode.IsGraphic(r)
-		// })
-	} else {
-		// No such formatter was found
-		evtContent = fmt.Sprintf("unable to format event: %v", evt.Event.Type)
-	}
-
-	evtPrefix = timestampStr + " "
-	evtStr = evtPrefix + evtContent
-
-	// Split the event into an array of chunks
+	/*
+		Preallocate one chunk because we're certain
+		that there will always be at least one
+		chunk in the `chunks` array.
+	*/
 	chunks := make([]string, 0, 1)
 
+	// Split the event into an array of chunks
 	for _, line := range strings.Split(evtStr, "\n") {
 		chunks = append(chunks, splitChunks(line, w-prefixLen)...)
 	}
