@@ -36,7 +36,7 @@ var identityList IdentityList
 
 const DefaultIdentity string = "default"
 
-func getIdentityLocation() string {
+func GetIdentityLocation() string {
 	return path.Join(GetConfigRoot(), "identity.yml")
 }
 
@@ -53,7 +53,7 @@ func parseIdentityList(raw []byte) (*IdentityList, error) {
 
 // TODO: fix duplication
 func readIdentityList() ([]byte, error) {
-	raw, err := ioutil.ReadFile(getIdentityLocation())
+	raw, err := ioutil.ReadFile(GetIdentityLocation())
 
 	if err != nil && !os.IsNotExist(err) {
 		return nil, err
@@ -74,7 +74,7 @@ func readIdentityList() ([]byte, error) {
 			os.MkdirAll(configRoot, 0755)
 		}
 
-		writeErr := ioutil.WriteFile(getIdentityLocation(), defaultConf, 0644)
+		writeErr := ioutil.WriteFile(GetIdentityLocation(), defaultConf, 0644)
 		if writeErr != nil {
 			return nil, writeErr
 		}
