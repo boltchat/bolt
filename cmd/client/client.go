@@ -17,12 +17,15 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/bolt-chat/client/args"
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/errs"
 	"github.com/bolt-chat/client/tui"
 	"github.com/bolt-chat/lib/client"
 	"github.com/bolt-chat/protocol/events"
+	"github.com/fatih/color"
 )
 
 func main() {
@@ -33,9 +36,19 @@ func main() {
 	args := args.GetArgs()
 
 	identity, identityErr := config.GetIdentity(args.Identity)
-
 	if identityErr != nil {
 		errs.Emerg(identityErr)
+	}
+
+	if identity.Nickname == "" {
+		errs.General(
+			fmt.Sprintf(
+				"It looks like you haven't set your nickname "+
+					"yet.\nPlease do so by editing the %s field in %s.",
+				color.HiYellowString("nickname"),
+				config.GetIdentityLocation(),
+			),
+		)
 	}
 
 	c := client.NewClient(client.Options{
