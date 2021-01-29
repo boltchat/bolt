@@ -44,9 +44,8 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
 		color.HiBlackString("]"),
 	}, "")
 
-	// Calculate timestamp length
-	// TODO: refactor
-	timestampLen := len(fmt.Sprintf(
+	// Calculate prefix length
+	prefixLen := len(fmt.Sprintf(
 		"[%s] ",
 		timestamp.Format(time.Stamp),
 	))
@@ -75,12 +74,12 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
 	chunks := make([]string, 0, 1)
 
 	for _, line := range strings.Split(evtStr, "\n") {
-		chunks = append(chunks, splitChunks(line, w)...)
+		chunks = append(chunks, splitChunks(line, w-prefixLen)...)
 	}
 
 	for offset, line := range chunks {
 		if offset > 0 {
-			line = strings.Repeat(" ", timestampLen) + line
+			line = strings.Repeat(" ", prefixLen) + line
 		}
 
 		printLine(s, y+offset, line)
