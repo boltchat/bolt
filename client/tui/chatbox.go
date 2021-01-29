@@ -29,9 +29,22 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+func printLine(s tcell.Screen, y int, str string) {
+	/*
+		I do not like this workaround at all, but at this
+		point, I've given up on trying to find a better
+		solution. Feel free to create a Pull Request if
+		you're able to improve this.
+	*/
+	chars := []rune("\b\b" + str)
+
+	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
+}
+
 func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) {
 	var evtStr string
 	var evtPrefix string
+	var evtContent string
 
 	// Convert event timestamp to `time.Time`
 	timestamp := time.Unix(evt.Event.CreatedAt, 0)
@@ -43,25 +56,40 @@ func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) {
 		color.HiBlackString("]"),
 	}, "")
 
-	evtPrefix = timestampStr + " "
-	evtStr += evtPrefix
+	// Calculate timestamp length
+	// TODO: refactor
+	timestampLen := len(fmt.Sprintf(
+		"[%s] ",
+		timestamp.Format(time.Stamp),
+	))
 
 	if formatFunc, ok := format.FormatMap[evt.Event.Type]; ok {
-		evtStr += formatFunc(evt)
+		// Format the event
+		evtContent = formatFunc(evt)
+
+		// TODO: is this necessary?
+		// /*
+		//  Remove all control characters and non-printable
+		//  characters from the event
+		// */
+		// evtContent = strings.TrimFunc(formattedEvt, func(r rune) bool {
+		//  return unicode.IsControl(r) || !unicode.IsGraphic(r)
+		// })
 	} else {
 		// No such formatter was found
-		evtStr += fmt.Sprintf("unable to format event: %v", evt.Event.Type)
+		evtContent = fmt.Sprintf("unable to format event: %v", evt.Event.Type)
 	}
 
-	/*
-		I do not like this workaround at all, but at this
-		point, I've given up on trying to find a better
-		solution. Feel free to create a Pull Request if
-		you're able to improve this.
-	*/
-	chars := []rune("\b\b" + evtStr)
+	evtPrefix = timestampStr + " "
+	evtStr = evtPrefix + evtContent
 
-	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
+	for offset, line := range strings.Split(evtStr, "\n") {
+		if offset > 0 {
+			line = strings.Repeat(" ", timestampLen) + line
+		}
+
+		printLine(s, y+offset, line)
+	}
 }
 
 func clearLine(s tcell.Screen, y int, w int) {
