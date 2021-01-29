@@ -61,3 +61,11 @@ func Connect(err error) {
 	fmt.Printf("Connection error: %s\n", err.Error())
 	os.Exit(1)
 }
+
+/*
+General is used for general errors.
+*/
+func General(err string) {
+	fmt.Printf("General error: %s\n", err)
+	os.Exit(1)
+}
