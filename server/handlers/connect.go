@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/logging"
 	"github.com/bolt-chat/server/plugins"
@@ -61,12 +62,12 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 		err := json.Unmarshal(b, evt)
 
 		if err != nil {
-			conn.Send(*events.NewErrorEvent("invalid_format"))
+			conn.Send(*events.NewErrorEvent(errs.InvalidFormat))
 			continue
 		}
 
 		if !conn.IsIdentified() && evt.Event.Type != events.JoinType {
-			conn.Send(*events.NewErrorEvent("unidentified"))
+			conn.Send(*events.NewErrorEvent(errs.Unidentified))
 			continue
 		}
 
@@ -95,7 +96,7 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 
 			pool.Broadcast(joinEvt)
 		default:
-			conn.Send(*events.NewErrorEvent("invalid_event"))
+			conn.Send(*events.NewErrorEvent(errs.InvalidEvent))
 		}
 	}
 }

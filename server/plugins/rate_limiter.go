@@ -20,6 +20,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/pools"
 )
@@ -49,7 +50,7 @@ func (p RateLimiterPlugin) OnMessage(msg *events.MessageEvent, c *pools.Connecti
 		c.Data[timeKey] = now
 		c.Data[amountKey] = 0
 	} else if c.Data[amountKey].(int) >= p.Amount {
-		return errors.New("too_many_messages")
+		return errors.New(errs.TooManyMessages)
 	} else {
 		c.Data[amountKey] = c.Data[amountKey].(int) + 1
 	}
