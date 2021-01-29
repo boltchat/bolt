@@ -20,16 +20,31 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
 
 	"github.com/fatih/color"
 )
 
+var errorMap = map[string]string{
+	errs.InvalidEvent:    "This event type does not exist.",
+	errs.InvalidFormat:   "The format of your request could not be parsed.",
+	errs.TooManyMessages: "You're sending too many messages. Please slow down.",
+	errs.Unidentified:    "You need to identify yourself before you can interact with this server.",
+}
+
 func FormatError(e *events.BaseEvent) string {
 	errEvt := &events.ErrorEvent{}
 	json.Unmarshal(*e.Raw, errEvt)
 
+	err := errEvt.Error
+
+	// A formatter exists for this error
+	if format, ok := errorMap[errEvt.Error]; ok {
+		err = format
+	}
+
 	return color.HiRedString(
-		fmt.Sprintf("[!] %s", errEvt.Error),
+		fmt.Sprintf("[!] %s", err),
 	)
 }
