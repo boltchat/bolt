@@ -62,7 +62,9 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 		// 	displayPrompt(s)
 		// 	displayChatbox(s)
 		case *tcell.EventKey:
-			if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
+			if ev.Key() == tcell.KeyEscape ||
+				ev.Key() == tcell.KeyCtrlC ||
+				ev.Key() == tcell.KeyCtrlD {
 				// Exit TUI
 				s.Fini()
 				return
