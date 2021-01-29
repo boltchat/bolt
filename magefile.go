@@ -168,8 +168,8 @@ func License() {
 	sh.Run(
 		"addlicense",
 		"-l", "gpl3",
-		"-p", "bolt.chat",
-		"-c", "The bolt.chat Authors",
+		"-p", "boltchat",
+		"-c", "The boltchat Authors",
 		"client", "server", "protocol", "cmd", "util",
 	)
 }

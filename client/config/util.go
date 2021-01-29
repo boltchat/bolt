@@ -1,5 +1,5 @@
-// bolt.chat
-// Copyright (C) 2021  The bolt.chat Authors
+// boltchat
+// Copyright (C) 2021  The boltchat Authors
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -29,5 +29,5 @@ func getConfigRoot() string {
 		errs.Emerg(err)
 	}
 
-	return path.Join(root, "bolt.chat")
+	return path.Join(root, "boltchat")
 }

@@ -1,5 +1,5 @@
-// bolt.chat
-// Copyright (C) 2021  The bolt.chat Authors
+// boltchat
+// Copyright (C) 2021  The boltchat Authors
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ execution afterwards.
 func Emerg(err error) {
 	fmt.Printf(color.HiRedString(
 		"An unexpected error has occurred.\nPlease consider creating " +
-			"an issue at <https://github.com/bolt-chat/bolt.chat/issues> " +
+			"an issue at <https://github.com/bolt-chat/boltchat/issues> " +
 			"if this is repetitive behaviour.\n",
 	))
 
