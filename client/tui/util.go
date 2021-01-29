@@ -18,6 +18,26 @@ package tui
 
 import "github.com/gdamore/tcell/v2"
 
+func splitChunks(str string, n int) []string {
+	/*
+		Return one chunk containing the entire string
+		if the string does not exceed `n`.
+	*/
+	if len(str) < n {
+		return []string{str}
+	}
+
+	chunks := make([]string, 0)
+
+	for i := 0; i < len(str); i++ {
+		if i%n == 0 {
+			chunks = append(chunks, str[i:i*2])
+		}
+	}
+
+	return chunks
+}
+
 func printLine(s tcell.Screen, y int, str string) {
 	/*
 		I do not like this workaround at all, but at this
