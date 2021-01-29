@@ -29,18 +29,6 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func printLine(s tcell.Screen, y int, str string) {
-	/*
-		I do not like this workaround at all, but at this
-		point, I've given up on trying to find a better
-		solution. Feel free to create a Pull Request if
-		you're able to improve this.
-	*/
-	chars := []rune("\b\b" + str)
-
-	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
-}
-
 func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) int {
 	var evtStr string
 	var evtPrefix string
@@ -95,13 +83,6 @@ func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) int {
 	}
 
 	return len(evtSplit) - 1
-}
-
-func clearLine(s tcell.Screen, y int, w int) {
-	// Clear every cell to `w`
-	for x := 0; x < w; x++ {
-		s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
-	}
 }
 
 func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
