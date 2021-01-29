@@ -19,6 +19,7 @@ package config
 import (
 	"errors"
 	"io/ioutil"
+	"os"
 	"path"
 
 	"github.com/bolt-chat/client/errs"
@@ -39,35 +40,63 @@ func getIdentityLocation() string {
 	return path.Join(getConfigRoot(), "identity.yml")
 }
 
-func parseIdentityList(raw []byte) *IdentityList {
+func parseIdentityList(raw []byte) (*IdentityList, error) {
 	identityList := &IdentityList{}
 	err := yaml.Unmarshal(raw, identityList)
 
 	if err != nil {
-		errs.Emerg(err)
+		return nil, err
 	}
 
-	return identityList
+	return identityList, nil
 }
 
+// TODO: fix duplication
 func readIdentityList() ([]byte, error) {
 	raw, err := ioutil.ReadFile(getIdentityLocation())
 
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		return nil, err
+	}
+
+	if len(raw) == 0 {
+		configRoot := getConfigRoot()
+		defaultConf, marshalErr := yaml.Marshal(&IdentityList{
+			DefaultIdentity: Identity{},
+		})
+
+		if marshalErr != nil {
+			return nil, marshalErr
+		}
+
+		stat, statErr := os.Stat(configRoot)
+		if statErr != nil || !stat.IsDir() {
+			os.MkdirAll(configRoot, 0755)
+		}
+
+		writeErr := ioutil.WriteFile(getIdentityLocation(), defaultConf, 0644)
+		if writeErr != nil {
+			return nil, writeErr
+		}
+
+		raw = defaultConf
 	}
 
 	return raw, nil
 }
 
 func LoadIdentityList() {
-	identityRaw, err := readIdentityList()
-
-	if err != nil {
-		errs.Emerg(err)
+	identityRaw, readErr := readIdentityList()
+	if readErr != nil {
+		errs.Emerg(readErr)
 	}
 
-	identityList = *parseIdentityList(identityRaw)
+	identity, parseErr := parseIdentityList(identityRaw)
+	if parseErr != nil {
+		errs.Emerg(readErr)
+	}
+
+	identityList = *identity
 }
 
 func GetIdentityList() *IdentityList {

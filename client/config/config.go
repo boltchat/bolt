@@ -50,6 +50,7 @@ func parseConfig(raw []byte) (*Config, error) {
 	return config, nil
 }
 
+// TODO: fix duplication
 func readConfig() ([]byte, error) {
 	configLocation := getConfigLocation()
 	configRaw, err := ioutil.ReadFile(configLocation)
