@@ -29,7 +29,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) int {
+func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
 	var evtStr string
 	var evtPrefix string
 	var evtContent string
@@ -71,10 +71,14 @@ func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) int {
 	evtPrefix = timestampStr + " "
 	evtStr = evtPrefix + evtContent
 
-	// Split the event into an array of lines
-	evtSplit := strings.Split(evtStr, "\n")
+	// Split the event into an array of chunks
+	chunks := make([]string, 0, 1)
 
-	for offset, line := range evtSplit {
+	for _, line := range strings.Split(evtStr, "\n") {
+		chunks = append(chunks, splitChunks(line, w)...)
+	}
+
+	for offset, line := range chunks {
 		if offset > 0 {
 			line = strings.Repeat(" ", timestampLen) + line
 		}
@@ -82,7 +86,7 @@ func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) int {
 		printLine(s, y+offset, line)
 	}
 
-	return len(evtSplit) - 1
+	return len(chunks) - 1
 }
 
 func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
@@ -116,7 +120,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 
 		// Append all events to the chatbox buffer
 		for y, event := range buff {
-			yOffset += printEvent(s, y+yOffset, event)
+			yOffset += printEvent(s, w, y+yOffset, event)
 		}
 
 		/*

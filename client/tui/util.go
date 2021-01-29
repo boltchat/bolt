@@ -31,7 +31,13 @@ func splitChunks(str string, n int) []string {
 
 	for i := 0; i < len(str); i++ {
 		if i%n == 0 {
-			chunks = append(chunks, str[i:i*2])
+			end := i + n
+
+			if end > len(str) {
+				end = len(str)
+			}
+
+			chunks = append(chunks, str[i:end])
 		}
 	}
 
