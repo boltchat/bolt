@@ -17,21 +17,49 @@
 package tui
 
 import (
+	"fmt"
+	"strings"
+	"time"
+
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/format"
 	"github.com/bolt-chat/protocol/events"
+	"github.com/fatih/color"
 
 	"github.com/gdamore/tcell/v2"
 )
 
-func printEvent(s tcell.Screen, y int, evt string) {
+func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) {
+	var evtStr string
+	var evtPrefix string
+
+	// Convert event timestamp to `time.Time`
+	timestamp := time.Unix(evt.Event.CreatedAt, 0)
+
+	// Format the timestamp string
+	timestampStr := strings.Join([]string{
+		color.HiBlackString("["),
+		timestamp.Format(time.Stamp),
+		color.HiBlackString("]"),
+	}, "")
+
+	evtPrefix = timestampStr + " "
+	evtStr += evtPrefix
+
+	if formatFunc, ok := format.FormatMap[evt.Event.Type]; ok {
+		evtStr += formatFunc(evt)
+	} else {
+		// No such formatter was found
+		evtStr += fmt.Sprintf("unable to format event: %v", evt.Event.Type)
+	}
+
 	/*
 		I do not like this workaround at all, but at this
 		point, I've given up on trying to find a better
 		solution. Feel free to create a Pull Request if
 		you're able to improve this.
 	*/
-	chars := []rune("\b\b" + evt)
+	chars := []rune("\b\b" + evtStr)
 
 	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
 }
@@ -73,9 +101,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 
 		// Append all events to the chatbox buffer
 		for y, event := range buff {
-			if formatFunc, ok := format.FormatMap[event.Event.Type]; ok {
-				printEvent(s, y, formatFunc(event))
-			}
+			printEvent(s, y, event)
 		}
 
 		/*
