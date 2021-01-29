@@ -22,8 +22,11 @@ const clientPrefix string = "client"
 const serverEntry string = "cmd/server/server.go"
 const clientEntry string = "cmd/client/client.go"
 
-type Build mg.Namespace
-type Docker mg.Namespace
+type (
+	Build  mg.Namespace
+	Test   mg.Namespace
+	Docker mg.Namespace
+)
 
 type BuildOptions struct {
 	Static    bool
@@ -135,6 +138,15 @@ func (Build) ClientWindowsAmd64() error {
 // Builds the client binary for Darwin/macOS (amd64)
 func (Build) ClientDarwinAmd64() error {
 	return build("darwin", "amd64", clientEntry, BuildOptions{Prefix: clientPrefix})
+}
+
+/*
+Test
+*/
+
+// Runs all unit tests
+func (Test) Unit() error {
+	return sh.RunV("go", "test", "-v", "./...")
 }
 
 /*
