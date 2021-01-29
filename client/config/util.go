@@ -23,7 +23,7 @@ import (
 	"github.com/bolt-chat/client/errs"
 )
 
-func getConfigRoot() string {
+func GetConfigRoot() string {
 	root, err := os.UserConfigDir()
 	if err != nil {
 		errs.Emerg(err)

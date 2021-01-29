@@ -36,7 +36,7 @@ type Config struct {
 var config Config
 
 func getConfigLocation() string {
-	return path.Join(getConfigRoot(), "config.yml")
+	return path.Join(GetConfigRoot(), "config.yml")
 }
 
 func parseConfig(raw []byte) (*Config, error) {
@@ -60,7 +60,7 @@ func readConfig() ([]byte, error) {
 	}
 
 	if len(configRaw) == 0 {
-		configRoot := getConfigRoot()
+		configRoot := GetConfigRoot()
 		defaultConf, marshalErr := yaml.Marshal(*GetDefaultConfig())
 
 		if marshalErr != nil {

@@ -37,7 +37,7 @@ var identityList IdentityList
 const DefaultIdentity string = "default"
 
 func getIdentityLocation() string {
-	return path.Join(getConfigRoot(), "identity.yml")
+	return path.Join(GetConfigRoot(), "identity.yml")
 }
 
 func parseIdentityList(raw []byte) (*IdentityList, error) {
@@ -60,7 +60,7 @@ func readIdentityList() ([]byte, error) {
 	}
 
 	if len(raw) == 0 {
-		configRoot := getConfigRoot()
+		configRoot := GetConfigRoot()
 		defaultConf, marshalErr := yaml.Marshal(&IdentityList{
 			DefaultIdentity: Identity{},
 		})
