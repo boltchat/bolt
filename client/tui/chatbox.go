@@ -41,7 +41,7 @@ func printLine(s tcell.Screen, y int, str string) {
 	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
 }
 
-func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) {
+func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) int {
 	var evtStr string
 	var evtPrefix string
 	var evtContent string
@@ -83,13 +83,18 @@ func printEvent(s tcell.Screen, y int, evt *events.BaseEvent) {
 	evtPrefix = timestampStr + " "
 	evtStr = evtPrefix + evtContent
 
-	for offset, line := range strings.Split(evtStr, "\n") {
+	// Split the event into an array of lines
+	evtSplit := strings.Split(evtStr, "\n")
+
+	for offset, line := range evtSplit {
 		if offset > 0 {
 			line = strings.Repeat(" ", timestampLen) + line
 		}
 
 		printLine(s, y+offset, line)
 	}
+
+	return len(evtSplit) - 1
 }
 
 func clearLine(s tcell.Screen, y int, w int) {
@@ -110,6 +115,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 	for evt := range evtChannel {
 		w, h := s.Size()
 		hBuff := h - config.GetConfig().Prompt.HOffset
+		yOffset := 0
 
 		// Append event to the events slice
 		evts = append(evts, evt)
@@ -129,7 +135,7 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 
 		// Append all events to the chatbox buffer
 		for y, event := range buff {
-			printEvent(s, y, event)
+			yOffset += printEvent(s, y+yOffset, event)
 		}
 
 		/*
