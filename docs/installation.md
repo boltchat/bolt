@@ -3,8 +3,6 @@
 ### Binaries
 Please have a look at the [Releases](https://github.com/boltchat/bolt/releases) page for the most
 up-to-date client and server binaries.
-> Unfortunately, there are currently no binaries available for download. For the time being,
-> follow the steps as described in the subsection **From source**.
 
 ### Docker
 If you'd like to run the server in a Docker container, follow the compilation steps below and run `mage docker:build`.
