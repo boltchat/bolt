@@ -44,6 +44,6 @@ A message looks like this:
 
 | key       | type     | desc                     | can send |
 |-----------|----------|--------------------------|----------|
-| `sent` ⚠ | `int64`  | Sender date              | both     |
+| `sent`    | `int64`  | Sender date              | server   |
 | `body`    | `string` | Message content          | both     |
 | `user`    | `User`   | User sending the message | both ⚠  |
