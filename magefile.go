@@ -191,7 +191,7 @@ func License() {
 		"addlicense",
 		"-l", "apache",
 		"-c", "The boltchat Authors",
-		"client", "server", "protocol", "cmd", "util",
+		"client", "server", "protocol", "cmd", "util", "lib",
 	)
 }
 
