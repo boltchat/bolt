@@ -36,6 +36,7 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
 	mode := MessageMode
+	clear := make(chan bool)
 
 	// Create a screen
 	s, err := tcell.NewScreen()
@@ -54,8 +55,8 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 	s.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite))
 
 	// Display prompt and chatbox
-	displayPrompt(s, input, mode)
-	go displayChatbox(s, evts)
+	go displayPrompt(s, input, mode)
+	go displayChatbox(s, evts, clear)
 
 	for {
 		switch ev := s.PollEvent().(type) {
@@ -71,6 +72,8 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 				Quit()
 				os.Exit(0)
 				return
+			} else if ev.Key() == tcell.KeyCtrlL {
+				go func() { clear <- true }()
 			} else if ev.Key() == tcell.KeyEnter {
 				if len(strings.TrimSpace(string(input))) < 1 {
 					break

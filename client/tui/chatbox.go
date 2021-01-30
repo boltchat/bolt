@@ -79,7 +79,21 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
 	return len(chunks) - 1
 }
 
-func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
+func clearBuffer(s tcell.Screen) {
+	w, h := s.Size()
+	hBuff := h - config.GetConfig().Prompt.HOffset
+
+	// Clear the buffer
+	for y := 0; y < hBuff; y++ {
+		clearLine(s, y, w)
+	}
+}
+
+func displayChatbox(
+	s tcell.Screen,
+	evtChannel chan *events.BaseEvent,
+	clear chan bool,
+) {
 	/*
 		Preallocate a size of 50 for both the
 		events slice and the buffer slice.
@@ -87,36 +101,46 @@ func displayChatbox(s tcell.Screen, evtChannel chan *events.BaseEvent) {
 	evts := make([]*events.BaseEvent, 0, 50)
 	buff := make([]*events.BaseEvent, 0, 50)
 
-	for evt := range evtChannel {
-		w, h := s.Size()
-		hBuff := h - config.GetConfig().Prompt.HOffset
-		yOffset := 0
+	go func() {
+		for evt := range evtChannel {
+			w, h := s.Size()
+			hBuff := h - config.GetConfig().Prompt.HOffset
+			yOffset := 0
 
-		// Append event to the events slice
-		evts = append(evts, evt)
+			// Append event to the events slice
+			evts = append(evts, evt)
 
-		if len(buff) < hBuff {
-			// Append event to buffer
-			buff = append(buff, evt)
-		} else {
-			// Remove first event from buffer and append
-			buff = append(buff[1:], evt)
+			if len(buff) < hBuff {
+				// Append event to buffer
+				buff = append(buff, evt)
+			} else {
+				// Remove first event from buffer and append
+				buff = append(buff[1:], evt)
+			}
+
+			// Clear the buffer
+			clearBuffer(s)
+
+			// Append all events to the chatbox buffer
+			for y, event := range buff {
+				yOffset += printEvent(s, w, y+yOffset, event)
+			}
+
+			/*
+				FIXME: This is for the time being. See issue #2
+				for more information.
+			*/
+			s.Sync()
 		}
+	}()
 
-		// Clear the buffer
-		for y := 0; y < hBuff; y++ {
-			clearLine(s, y, w)
+	go func() {
+		for c := range clear {
+			if c {
+				buff = make([]*events.BaseEvent, 0, 50)
+				clearBuffer(s)
+				s.Sync()
+			}
 		}
-
-		// Append all events to the chatbox buffer
-		for y, event := range buff {
-			yOffset += printEvent(s, w, y+yOffset, event)
-		}
-
-		/*
-			FIXME: This is for the time being. See issue #2
-			for more information.
-		*/
-		s.Sync()
-	}
+	}()
 }
