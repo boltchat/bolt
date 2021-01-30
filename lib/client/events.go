@@ -20,26 +20,30 @@ import (
 	"bytes"
 	"encoding/json"
 
+	"github.com/bolt-chat/client/errs"
 	"github.com/bolt-chat/protocol/events"
 )
 
-func (c *Client) ReadEvents(evts chan *events.BaseEvent) error {
+func (c *Client) ReadEvents(evts chan *events.BaseEvent) {
 	for {
-		b := make([]byte, 4096)
+		// Allocate 64KB for the event
+		// TODO: automatically resize
+		b := make([]byte, 65536)
 		_, err := c.Conn.Read(b)
 
 		if err != nil {
-			return err
+			return
 		}
 
 		b = bytes.TrimRight(b, "\x00")
+
 		evt := &events.BaseEvent{}
 		jsonErr := json.Unmarshal(b, evt)
 
 		evt.Raw = &b
 
 		if jsonErr != nil {
-			return err
+			errs.Emerg(err)
 		}
 
 		go func() {

@@ -34,8 +34,9 @@ during its entire lifespan.
 */
 func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 	for {
-		// a := server.Listener{}
-		b := make([]byte, 4096)
+		// Allocate 64KB for the event
+		// TODO: automatically resize
+		b := make([]byte, 65536)
 
 		// Wait for and receive incoming events
 		_, connErr := conn.Conn.Read(b)
