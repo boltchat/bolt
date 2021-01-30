@@ -67,3 +67,11 @@ func General(err string) {
 	fmt.Printf("General error: %s\n", err)
 	os.Exit(1)
 }
+
+/*
+Identity is used for Identity-related errors.
+*/
+func Identity(err error) {
+	fmt.Printf("Identity error: %s\n", err)
+	os.Exit(1)
+}
