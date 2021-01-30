@@ -21,6 +21,7 @@ import (
 	"github.com/bolt-chat/client/args"
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/errs"
+	"github.com/bolt-chat/client/identity"
 	"github.com/bolt-chat/client/tui"
 	"github.com/bolt-chat/lib/client"
 	"github.com/bolt-chat/protocol/events"
@@ -34,12 +35,20 @@ func main() {
 
 	args := args.GetArgs()
 
-	identity, identityErr := config.GetIdentity(args.Identity)
-	if identityErr != nil {
+	// Attempt to read the identity
+	id, identityErr := config.GetIdentity(args.Identity)
+
+	if identityErr == config.ErrNoSuchIdentity {
+		if !identity.AskCreate(args.Identity) {
+			os.Exit(1)
+		}
+
+		id = identity.CreateIdentity(args.Identity)
+	} else if identityErr != nil {
 		errs.Identity(identityErr)
 	}
 
-	if identity.Nickname == "" {
+	if id.Nickname == "" {
 		errs.General(
 			fmt.Sprintf(
 				"It looks like you haven't set your nickname "+
@@ -53,7 +62,7 @@ func main() {
 	c := client.NewClient(client.Options{
 		Hostname: args.Hostname,
 		Port:     args.Port,
-		Nickname: identity.Nickname,
+		Nickname: id.Nickname,
 	})
 
 	err := c.Connect()
