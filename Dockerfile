@@ -16,7 +16,7 @@ RUN mage build:serverStatic
 # Deploy stage
 FROM busybox:1.32.1
 WORKDIR /app
-COPY --from=build /src/build/* ./server
+COPY --from=build /src/build/boltchat-server-linux-amd64 ./server
 COPY scripts/entrypoint.sh /entrypoint.sh
 
 ## Executable permissions
