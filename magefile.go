@@ -26,6 +26,7 @@ type (
 	Build  mg.Namespace
 	Test   mg.Namespace
 	Docker mg.Namespace
+	CI     mg.Namespace
 )
 
 type BuildOptions struct {
@@ -156,6 +157,15 @@ Docker
 // Builds a Docker image for the server
 func (Docker) Build() error {
 	return sh.RunV("docker", "build", ".", "-t", name)
+}
+
+/*
+CI/CD
+*/
+
+// Compresses all binaries into a single tarball
+func (CI) CompressBinaries() error {
+	return sh.Run("tar", "-cvzf", "binaries.tar.gz", "build")
 }
 
 /*
