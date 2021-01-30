@@ -23,10 +23,12 @@ type Mode int
 
 const (
 	MessageMode Mode = iota
+	CommandMode Mode = iota
 )
 
 var modes = map[Mode]string{
 	MessageMode: "Msg",
+	CommandMode: "Cmd",
 }
 
 func displayPrompt(s tcell.Screen, input []rune, mode Mode) {
