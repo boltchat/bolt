@@ -24,7 +24,7 @@ import (
 	"github.com/bolt-chat/protocol/events"
 )
 
-func (c *Client) ReadEvents(evts chan *events.BaseEvent) {
+func (c *Client) ReadEvents(evts chan *events.BaseEvent, closed chan bool) {
 	for {
 		// Allocate 64KB for the event
 		// TODO: automatically resize
@@ -32,6 +32,7 @@ func (c *Client) ReadEvents(evts chan *events.BaseEvent) {
 		_, err := c.Conn.Read(b)
 
 		if err != nil {
+			closed <- true
 			return
 		}
 
@@ -46,8 +47,6 @@ func (c *Client) ReadEvents(evts chan *events.BaseEvent) {
 			errs.Emerg(err)
 		}
 
-		go func() {
-			evts <- evt
-		}()
+		evts <- evt
 	}
 }
