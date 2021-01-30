@@ -36,7 +36,7 @@ func main() {
 
 	identity, identityErr := config.GetIdentity(args.Identity)
 	if identityErr != nil {
-		errs.Emerg(identityErr)
+		errs.Identity(identityErr)
 	}
 
 	if identity.Nickname == "" {
