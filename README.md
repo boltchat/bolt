@@ -34,4 +34,4 @@ The project boards for _Bolt_ can be found [here](https://github.com/boltchat/bo
 The lightning bolt used in the logo of this project is courtesy of [Icons8](https://icons8.com/icons/set/lightning-bolt--v1).
 
 ## License
-This project is licensed under the [GPLv3](./LICENSE).
+This project is licensed under the [Apache License 2.0](./LICENSE).
