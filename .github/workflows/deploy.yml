@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      assets_upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changelog:
+            - @@ TO BE FILLED OUT @@
+          draft: true
+          prerelease: true
+
+  build-binaries:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set up the environment for Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.15.6'
+    - name: Install dependencies
+      run: |
+        go get github.com/magefile/mage
+        go install github.com/magefile/mage
+    - name: Compile binaries
+      run: mage build:all
+    - name: Compress binaries
+      run: mage ci:compressBinaries
+    - name: Save binaries as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: binaries
+        path: binaries.tar.gz
+
+  upload-assets:
+    runs-on: ubuntu-latest
+    needs: [create-release, build-binaries]
+    steps:
+    - name: Download binary artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: binaries
+    - name: Extract artifacts
+      run: tar xvf binaries.tar.gz
+    - name: Upload Linux/AMD64 binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.assets_upload_url }}
+        asset_path: build/boltchat-client-linux-amd64
+        asset_name: Client (Linux/AMD64)
+        asset_content_type: application/octet-stream
