@@ -1,6 +1,9 @@
 ![boltchat](./assets/banner/boltchat-banner.jpg)
-
 > ⚡ A fast, lightweight, and secure chat protocol, client and server, written in Go.
+
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/boltchat/bolt/Deploy?label=deploy)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/boltchat/bolt/Test?label=test)
+![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/boltchat/bolt/develop)
 
 ## About
 > ⚠ IMPORTANT: This project is still a work-in-progress. I strongly discourage installing this on a
