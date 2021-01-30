@@ -17,6 +17,7 @@
 package tui
 
 import (
+	"os"
 	"strings"
 
 	"github.com/bolt-chat/client/errs"
@@ -28,6 +29,8 @@ import (
 	"github.com/gdamore/tcell/v2/encoding"
 )
 
+var screen tcell.Screen
+
 /*
 Display displays the TUI.
 */
@@ -38,6 +41,7 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 
 	// Create a screen
 	s, err := tcell.NewScreen()
+	screen = s
 
 	if err != nil {
 		errs.Emerg(err)
@@ -66,7 +70,8 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 				ev.Key() == tcell.KeyCtrlC ||
 				ev.Key() == tcell.KeyCtrlD {
 				// Exit TUI
-				s.Fini()
+				Quit()
+				os.Exit(0)
 				return
 			} else if ev.Key() == tcell.KeyEnter {
 				if len(strings.TrimSpace(string(input))) < 1 {
@@ -105,4 +110,8 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 			displayPrompt(s, input, mode)
 		}
 	}
+}
+
+func Quit() {
+	screen.Fini()
 }
