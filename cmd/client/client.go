@@ -18,6 +18,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/bolt-chat/client/args"
 	"github.com/bolt-chat/client/config"
@@ -65,6 +66,13 @@ func main() {
 
 	evts := make(chan *events.BaseEvent)
 
-	go c.ReadEvents(evts)
-	tui.Display(c, evts)
+	serverClosed := make(chan bool)
+	go c.ReadEvents(evts, serverClosed)
+	go tui.Display(c, evts)
+
+	// Quit when the server closes
+	<-serverClosed
+	tui.Quit()
+	fmt.Println("The server closed.")
+	os.Exit(0)
 }
