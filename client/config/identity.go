@@ -24,6 +24,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var ErrNoSuchIdentity = errors.New("identity not found")
+
 type Identity struct {
 	Nickname string `yaml:"nickname"`
 }
@@ -59,9 +61,7 @@ func readIdentityList() ([]byte, error) {
 
 	if len(raw) == 0 {
 		configRoot := GetConfigRoot()
-		defaultConf, marshalErr := yaml.Marshal(&IdentityList{
-			DefaultIdentity: Identity{},
-		})
+		defaultConf, marshalErr := yaml.Marshal(&IdentityList{})
 
 		if marshalErr != nil {
 			return nil, marshalErr
@@ -106,5 +106,5 @@ func GetIdentity(id string) (*Identity, error) {
 		return &identity, nil
 	}
 
-	return nil, errors.New("identity not found")
+	return nil, ErrNoSuchIdentity
 }
