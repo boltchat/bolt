@@ -60,12 +60,63 @@ jobs:
         name: binaries
     - name: Extract artifacts
       run: tar xvf binaries.tar.gz
-    - name: Upload Linux/AMD64 binary
+
+    - name: Upload Linux/AMD64 client binary
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ needs.create-release.outputs.assets_upload_url }}
         asset_path: build/boltchat-client-linux-amd64
-        asset_name: Client (Linux/AMD64)
+        asset_name: boltchat-client-linux-amd64
+        asset_content_type: application/octet-stream
+
+    - name: Upload Windows/AMD64 client binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.assets_upload_url }}
+        asset_path: build/boltchat-client-windows-amd64.exe
+        asset_name: boltchat-client-windows-amd64.exe
+        asset_content_type: application/octet-stream
+
+    - name: Upload Darwin/AMD64 client binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.assets_upload_url }}
+        asset_path: build/boltchat-client-darwin-amd64
+        asset_name: boltchat-client-darwin-amd64
+        asset_content_type: application/octet-stream
+
+    - name: Upload Linux/AMD64 server binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.assets_upload_url }}
+        asset_path: build/boltchat-server-linux-amd64
+        asset_name: boltchat-server-linux-amd64
+        asset_content_type: application/octet-stream
+
+    - name: Upload Windows/AMD64 server binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.assets_upload_url }}
+        asset_path: build/boltchat-server-windows-amd64.exe
+        asset_name: boltchat-server-windows-amd64.exe
+        asset_content_type: application/octet-stream
+
+    - name: Upload Darwin/AMD64 server binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.assets_upload_url }}
+        asset_path: build/boltchat-server-darwin-amd64
+        asset_name: boltchat-server-darwin-amd64
         asset_content_type: application/octet-stream
