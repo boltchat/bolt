@@ -45,7 +45,7 @@ func main() {
 				"It looks like you haven't set your nickname "+
 					"yet.\nPlease do so by editing the %s field in %s.",
 				color.HiYellowString("nickname"),
-				config.GetIdentityLocation(),
+				config.IdentityFile.GetLocation(),
 			),
 		)
 	}
