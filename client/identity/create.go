@@ -25,15 +25,22 @@ import (
 func CreateIdentity(identityID string) *config.Identity {
 	nickname := ""
 
-	for nickname == "" {
+	for strings.TrimSpace(nickname) == "" {
 		fmt.Printf("Nickname: ")
 		fmt.Scanln(&nickname)
 	}
 
-	// TODO: write to disk
-	return &config.Identity{
+	identity := &config.Identity{
 		Nickname: nickname,
 	}
+
+	identityList := *config.GetIdentityList()
+	identityList[identityID] = *identity
+
+	// Write changes to disk
+	config.IdentityFile.Write(identityList)
+
+	return identity
 }
 
 // AskCreate will prompt the user if they'd like to create
