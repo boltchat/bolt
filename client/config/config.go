@@ -29,7 +29,7 @@ type Config struct {
 
 var config Config
 
-var configFile = &File{
+var ConfigFile = &File{
 	Filename: "config.yml",
 	Default:  *GetDefaultConfig(),
 }
@@ -46,7 +46,7 @@ func parseConfig(raw []byte) (*Config, error) {
 }
 
 func LoadConfig() {
-	configRaw, readErr := configFile.Read()
+	configRaw, readErr := ConfigFile.Read()
 	if readErr != nil {
 		errs.Emerg(readErr)
 	}

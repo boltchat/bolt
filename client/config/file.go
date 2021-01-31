@@ -29,10 +29,9 @@ type File struct {
 	Default  interface{}
 }
 
-// GetConfigRoot returns the base folder where all
+// getConfigRoot returns the base folder where all
 // config files reside.
-// TODO: make private
-func GetConfigRoot() string {
+func getConfigRoot() string {
 	root, err := os.UserConfigDir()
 	if err != nil {
 		errs.Emerg(err)
@@ -41,17 +40,12 @@ func GetConfigRoot() string {
 	return path.Join(root, "boltchat")
 }
 
-// TODO: remove
-func getConfigLocation(filename string) string {
-	return path.Join(GetConfigRoot(), filename)
-}
-
-func (f *File) getConfigLocation() string {
-	return path.Join(GetConfigRoot(), f.Filename)
+func (f *File) GetLocation() string {
+	return path.Join(getConfigRoot(), f.Filename)
 }
 
 func (f *File) Read() ([]byte, error) {
-	configLocation := f.getConfigLocation()
+	configLocation := f.GetLocation()
 	configRaw, err := ioutil.ReadFile(configLocation)
 
 	if err != nil && !os.IsNotExist(err) {
@@ -71,8 +65,8 @@ func (f *File) Read() ([]byte, error) {
 }
 
 func (f *File) Write(data interface{}) ([]byte, error) {
-	configRoot := GetConfigRoot()
-	configLocation := f.getConfigLocation()
+	configRoot := getConfigRoot()
+	configLocation := f.GetLocation()
 	conf, marshalErr := yaml.Marshal(data)
 
 	if marshalErr != nil {
