@@ -84,6 +84,8 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 					User:    &c.User,
 				}
 
+				c.SignMessage(nil, &msg)
+
 				err := c.SendMessage(&msg)
 				if err != nil {
 					errs.Emerg(err)
