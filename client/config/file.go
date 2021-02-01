@@ -29,9 +29,9 @@ type File struct {
 	Default  interface{}
 }
 
-// getConfigRoot returns the base folder where all
+// GetConfigRoot returns the base folder where all
 // config files reside.
-func getConfigRoot() string {
+func GetConfigRoot() string {
 	root, err := os.UserConfigDir()
 	if err != nil {
 		errs.Emerg(err)
@@ -41,7 +41,7 @@ func getConfigRoot() string {
 }
 
 func (f *File) GetLocation() string {
-	return path.Join(getConfigRoot(), f.Filename)
+	return path.Join(GetConfigRoot(), f.Filename)
 }
 
 func (f *File) Read() ([]byte, error) {
@@ -65,7 +65,7 @@ func (f *File) Read() ([]byte, error) {
 }
 
 func (f *File) Write(data interface{}) ([]byte, error) {
-	configRoot := getConfigRoot()
+	configRoot := GetConfigRoot()
 	configLocation := f.GetLocation()
 	conf, marshalErr := yaml.Marshal(data)
 
