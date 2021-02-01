@@ -19,7 +19,7 @@ import (
 	"strings"
 
 	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/lib/identity"
+	"github.com/bolt-chat/client/identity"
 )
 
 // CreateIdentity creates a new Identity.

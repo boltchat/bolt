@@ -24,7 +24,7 @@ import (
 	"golang.org/x/crypto/openpgp/packet"
 )
 
-func GetEntityLocation(username string) string {
+func getEntityLocation(username string) string {
 	return path.Join(
 		config.GetConfigRoot(),
 		"entities",
@@ -34,7 +34,7 @@ func GetEntityLocation(username string) string {
 
 func writePGPEntity(username string, entity *openpgp.Entity) error {
 	// Create entity file
-	f, fileErr := os.Create(GetEntityLocation(username))
+	f, fileErr := os.Create(getEntityLocation(username))
 	defer f.Close()
 
 	// Only the current user may access this file
