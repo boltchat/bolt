@@ -19,9 +19,9 @@ import (
 	"os"
 
 	"github.com/bolt-chat/client/args"
+	"github.com/bolt-chat/client/cli/identity"
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/errs"
-	"github.com/bolt-chat/client/identity"
 	"github.com/bolt-chat/client/tui"
 	"github.com/bolt-chat/lib/client"
 	"github.com/bolt-chat/protocol/events"

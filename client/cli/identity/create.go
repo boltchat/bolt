@@ -19,6 +19,7 @@ import (
 	"strings"
 
 	"github.com/bolt-chat/client/config"
+	"github.com/bolt-chat/lib/identity"
 )
 
 // CreateIdentity creates a new Identity.
@@ -30,25 +31,13 @@ func CreateIdentity(identityID string) (*config.Identity, error) {
 		fmt.Scanln(&nickname)
 	}
 
-	_, createErr := CreatePGPEntity(nickname)
+	entity, createErr := identity.CreatePGPEntity(nickname)
 	if createErr != nil {
 		return nil, createErr
 	}
 
-	identity := &config.Identity{
-		Nickname: nickname,
-	}
-
-	identityList := *config.GetIdentityList()
-	identityList[identityID] = *identity
-
-	// Write changes to disk
-	_, writeErr := config.IdentityFile.Write(identityList)
-	if writeErr != nil {
-		return nil, writeErr
-	}
-
-	return identity, nil
+	identity, err := identity.CreateIdentity(entity, nickname, identityID)
+	return identity, err
 }
 
 // AskCreate will prompt the user if they'd like to create
