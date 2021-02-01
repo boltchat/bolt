@@ -24,15 +24,25 @@ import (
 	"golang.org/x/crypto/openpgp/packet"
 )
 
-func getEntityLocation(username string) string {
+func getEntitiesRoot() string {
 	return path.Join(
 		config.GetConfigRoot(),
 		"entities",
+	)
+}
+
+func getEntityLocation(username string) string {
+	return path.Join(
+		getEntitiesRoot(),
 		fmt.Sprintf("%s.pgp", username),
 	)
 }
 
 func writePGPEntity(username string, entity *openpgp.Entity) error {
+	if _, statErr := os.Stat(getEntitiesRoot()); os.IsNotExist(statErr) {
+		os.Mkdir(getEntitiesRoot(), 0700)
+	}
+
 	// Create entity file
 	f, fileErr := os.Create(getEntityLocation(username))
 	defer f.Close()
