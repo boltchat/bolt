@@ -22,12 +22,17 @@ import (
 )
 
 // CreateIdentity creates a new Identity.
-func CreateIdentity(identityID string) *config.Identity {
+func CreateIdentity(identityID string) (*config.Identity, error) {
 	nickname := ""
 
 	for strings.TrimSpace(nickname) == "" {
 		fmt.Printf("Nickname: ")
 		fmt.Scanln(&nickname)
+	}
+
+	_, createErr := CreatePGPEntity(nickname)
+	if createErr != nil {
+		return nil, createErr
 	}
 
 	identity := &config.Identity{
@@ -38,9 +43,12 @@ func CreateIdentity(identityID string) *config.Identity {
 	identityList[identityID] = *identity
 
 	// Write changes to disk
-	config.IdentityFile.Write(identityList)
+	_, writeErr := config.IdentityFile.Write(identityList)
+	if writeErr != nil {
+		return nil, writeErr
+	}
 
-	return identity
+	return identity, nil
 }
 
 // AskCreate will prompt the user if they'd like to create
