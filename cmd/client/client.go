@@ -43,7 +43,12 @@ func main() {
 			os.Exit(1)
 		}
 
-		id = identity.CreateIdentity(args.Identity)
+		var createErr error
+		id, createErr = identity.CreateIdentity(args.Identity)
+
+		if createErr != nil {
+			errs.Identity(createErr)
+		}
 	} else if identityErr != nil {
 		errs.Identity(identityErr)
 	}
