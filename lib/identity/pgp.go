@@ -15,6 +15,7 @@
 package identity
 
 import (
+	"fmt"
 	"os"
 	"path"
 
@@ -23,9 +24,17 @@ import (
 	"golang.org/x/crypto/openpgp/packet"
 )
 
-func writePGPEntity(entity *openpgp.Entity) error {
-	// Create
-	f, fileErr := os.Create(path.Join(config.GetConfigRoot(), "entity"))
+func GetEntityLocation(username string) string {
+	return path.Join(
+		config.GetConfigRoot(),
+		"entities",
+		fmt.Sprintf("%s.pgp", username),
+	)
+}
+
+func writePGPEntity(username string, entity *openpgp.Entity) error {
+	// Create entity file
+	f, fileErr := os.Create(GetEntityLocation(username))
 	defer f.Close()
 
 	// Only the current user may access this file
@@ -53,7 +62,10 @@ func CreatePGPEntity(username string) (*openpgp.Entity, error) {
 	}
 
 	// Write the entity to disk
-	writePGPEntity(entity)
+	writeErr := writePGPEntity(username, entity)
+	if writeErr != nil {
+		return nil, writeErr
+	}
 
 	return entity, nil
 }
