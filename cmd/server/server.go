@@ -15,8 +15,9 @@
 package main
 
 import (
-	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/bolt-chat/server"
@@ -67,6 +68,8 @@ func main() {
 		panic(err)
 	}
 
-	// Exit on return
-	fmt.Scanln()
+	// Exit on syscall
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	<-sigs
 }
