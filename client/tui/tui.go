@@ -86,11 +86,14 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 					},
 				}
 
-				c.SignMessage(&msg)
+				signErr := c.SignMessage(&msg)
+				if signErr != nil {
+					errs.Emerg(signErr)
+				}
 
-				err := c.SendMessage(&msg)
-				if err != nil {
-					errs.Emerg(err)
+				sendErr := c.SendMessage(&msg)
+				if sendErr != nil {
+					errs.Emerg(sendErr)
 				}
 
 				input = []rune{}

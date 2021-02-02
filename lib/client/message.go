@@ -36,11 +36,15 @@ func (c *Client) SendMessage(m *protocol.Message) error {
 
 // SignMessage replaces the contents of a message with
 // an Identity signature with the original contents embedded.
-func (c *Client) SignMessage(m *protocol.Message) {
+func (c *Client) SignMessage(m *protocol.Message) error {
 	r := strings.NewReader(m.Content)
 	buff := new(bytes.Buffer)
 
-	// TODO: do not write to stdout
-	openpgp.ArmoredDetachSignText(buff, c.Identity.Entity, r, &packet.Config{})
+	err := openpgp.ArmoredDetachSignText(buff, c.Identity.Entity, r, &packet.Config{})
+	if err != nil {
+		return err
+	}
+
 	m.Signature = buff.String()
+	return nil
 }
