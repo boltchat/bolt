@@ -24,7 +24,8 @@ import (
 var ErrNoSuchIdentity = errors.New("identity not found")
 
 type Identity struct {
-	Nickname string `yaml:"nickname"`
+	Nickname   string `yaml:"nickname"`
+	EntityPath string `yaml:"entity_path,omitempty"`
 }
 
 type IdentityList map[string]Identity
