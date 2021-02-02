@@ -68,7 +68,7 @@ func GetIdentityList() *IdentityList {
 	return &identityList
 }
 
-func GetIdentity(id string) (*Identity, error) {
+func GetIdentityEntry(id string) (*Identity, error) {
 	if identity, ok := identityList[id]; ok {
 		return &identity, nil
 	}

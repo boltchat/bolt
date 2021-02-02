@@ -19,9 +19,10 @@ import (
 	"os"
 
 	"github.com/bolt-chat/client/args"
-	"github.com/bolt-chat/client/cli/identity"
+	cliIdentity "github.com/bolt-chat/client/cli/identity"
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/errs"
+	"github.com/bolt-chat/client/identity"
 	"github.com/bolt-chat/client/tui"
 	"github.com/bolt-chat/lib/client"
 	"github.com/bolt-chat/protocol/events"
@@ -36,15 +37,16 @@ func main() {
 	args := args.GetArgs()
 
 	// Attempt to read the identity
-	id, identityErr := config.GetIdentity(args.Identity)
+	_, identityErr := config.GetIdentityEntry(args.Identity)
+	var id *identity.Identity
 
 	if identityErr == config.ErrNoSuchIdentity {
-		if !identity.AskCreate(args.Identity) {
+		if !cliIdentity.AskCreate(args.Identity) {
 			os.Exit(1)
 		}
 
 		var createErr error
-		id, createErr = identity.CreateIdentity(args.Identity)
+		id, createErr = cliIdentity.CreateIdentity(args.Identity)
 
 		if createErr != nil {
 			errs.Identity(createErr)
