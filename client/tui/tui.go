@@ -81,10 +81,12 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 
 				msg := protocol.Message{
 					Content: string(input),
-					User:    &c.User,
+					User: &protocol.User{
+						Nickname: c.Identity.Nickname, // TODO
+					},
 				}
 
-				c.SignMessage(nil, &msg)
+				c.SignMessage(&msg)
 
 				err := c.SendMessage(&msg)
 				if err != nil {

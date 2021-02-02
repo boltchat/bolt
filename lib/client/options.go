@@ -14,9 +14,11 @@
 
 package client
 
+import "github.com/bolt-chat/client/identity"
+
 // Options TODO
 type Options struct {
 	Hostname string
 	Port     int
-	Nickname string
+	Identity *identity.Identity
 }

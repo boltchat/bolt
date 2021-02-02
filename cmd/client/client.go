@@ -77,7 +77,7 @@ func main() {
 	c := client.NewClient(client.Options{
 		Hostname: args.Hostname,
 		Port:     args.Port,
-		Nickname: id.Nickname,
+		Identity: id,
 	})
 
 	err := c.Connect()
