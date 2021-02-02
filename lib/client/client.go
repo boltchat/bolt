@@ -77,7 +77,8 @@ func (c *Client) Connect() error {
 	c.Conn = conn
 
 	util.WriteJson(conn, *events.NewJoinEvent(&protocol.User{
-		Nickname: c.Identity.Nickname, // TODO:
+		Nickname:  c.Identity.Nickname, // TODO:
+		PublicKey: identity.ArmorPublicKey(c.Identity.Entity),
 	}))
 	return nil
 }
