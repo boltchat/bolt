@@ -15,23 +15,27 @@
 package handlers
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"strings"
 
 	"github.com/bolt-chat/protocol/events"
+	"github.com/bolt-chat/server/logging"
 	"github.com/bolt-chat/server/plugins"
 	"github.com/bolt-chat/server/pools"
 	"golang.org/x/crypto/openpgp/armor"
 	"golang.org/x/crypto/openpgp/packet"
 )
 
+var publicKeyHex string = `// TODO`
+
 func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
 	msgEvt := &events.MessageEvent{}
 	json.Unmarshal(*e.Raw, msgEvt)
-	hexDecodeErr := plugins.GetManager().HookMessage(msgEvt, c)
+	err := plugins.GetManager().HookMessage(msgEvt, c)
 
-	if hexDecodeErr != nil {
-		c.Send(*events.NewErrorEvent(hexDecodeErr.Error()))
+	if err != nil {
+		c.Send(*events.NewErrorEvent(err.Error()))
 		return
 	}
 
@@ -50,33 +54,50 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 		return
 	}
 
-	_, ok := pack.(*packet.Signature)
+	sig, ok := pack.(*packet.Signature)
 	if !ok {
 		c.Send(*events.NewErrorEvent("invalid_signature")) // TODO
 		return
 	}
 
-	// pubKeyBin, hexDecodeErr := hex.DecodeString(fprint)
-	// if hexDecodeErr != nil {
-	// 	c.Send(*events.NewErrorEvent(hexDecodeErr.Error())) // TODO
-	// 	return
-	// }
+	pubKeyRead := strings.NewReader(publicKeyHex)
+	pubKeyDecode, pubKeyDecodeErr := armor.Decode(pubKeyRead)
 
-	// pubKeyReader := bytes.NewReader(pubKeyBin)
+	if pubKeyDecodeErr != nil {
+		c.Send(*events.NewErrorEvent(pubKeyDecodeErr.Error())) // TODO
+		return
+	}
 
-	// pubKeyPack, pubKeyPackErr := packet.Read(pubKeyReader)
-	// if pubKeyPackErr != nil {
-	// 	c.Send(*events.NewErrorEvent(pubKeyPackErr.Error())) // TODO
-	// 	return
-	// }
+	pubKeyPack, pubKeyPackErr := packet.Read(pubKeyDecode.Body)
 
-	// pubKey, ok := pubKeyPack.(*packet.PublicKey)
-	// if !ok {
-	// 	c.Send(*events.NewErrorEvent("invalid_pubkey")) // TODO
-	// 	return
-	// }
+	if pubKeyPackErr != nil {
+		c.Send(*events.NewErrorEvent(pubKeyPackErr.Error())) // TODO
+		return
+	}
 
-	// pubKey.VerifySignature()
+	pubKey, ok := pubKeyPack.(*packet.PublicKey)
+	if !ok {
+		c.Send(*events.NewErrorEvent("invalid_pubkey")) // TODO
+		return
+	}
 
+	hash := sig.Hash.New()
+	_, hashErr := hash.Write([]byte(msgEvt.Message.Content))
+
+	if hashErr != nil {
+		c.Send(*events.NewErrorEvent(hashErr.Error())) // TODO
+		return
+	}
+
+	verifyErr := pubKey.VerifySignature(hash, sig)
+
+	if verifyErr != nil {
+		logging.LogDebug("Signature does not match.", nil)
+		c.Send(*events.NewErrorEvent("sig_verification_failed")) // TODO
+		return
+	}
+
+	logging.LogDebug("Signature matches.", nil)
+	msgEvt.Message.Fingerprint = hex.EncodeToString(pubKey.Fingerprint[:])
 	p.Broadcast(msgEvt)
 }
