@@ -19,4 +19,5 @@ const (
 	InvalidFormat   string = "invalid_format"
 	Unidentified    string = "unidentified"
 	TooManyMessages string = "too_many_messages"
+	SigVerifyFailed string = "sig_verification_failed"
 )

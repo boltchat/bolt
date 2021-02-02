@@ -18,6 +18,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
+	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/logging"
 	"github.com/bolt-chat/server/pgp"
@@ -34,6 +35,7 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 		c.Send(*events.NewErrorEvent(err.Error()))
 		return
 	}
+
 	pubKey, verifyErr := pgp.VerifyMessageSignature(
 		msgEvt.Message.Signature,
 		c.User.PublicKey,
@@ -42,7 +44,7 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 
 	if verifyErr != nil {
 		logging.LogDebug("Signature does not match.", nil)
-		c.Send(*events.NewErrorEvent("sig_verification_failed")) // TODO
+		c.Send(*events.NewErrorEvent(errs.SigVerifyFailed)) // TODO
 		return
 	}
 
