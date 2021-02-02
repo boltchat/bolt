@@ -26,7 +26,7 @@ func CreateIdentity(identity *config.Identity, identityID string) (*config.Ident
 	if identity.EntityPath == "" {
 		// Create new PGP entity if no custom entity
 		// path was specified.
-		_, createErr := CreatePGPEntity(identity.Nickname)
+		_, createErr := createPGPEntity(identity.Nickname)
 		if createErr != nil {
 			return nil, createErr
 		}
