@@ -15,7 +15,7 @@
 package client
 
 import (
-	"os"
+	"bytes"
 	"strings"
 
 	"github.com/bolt-chat/protocol"
@@ -38,7 +38,9 @@ func (c *Client) SendMessage(m *protocol.Message) error {
 // an Identity signature with the original contents embedded.
 func (c *Client) SignMessage(m *protocol.Message) {
 	r := strings.NewReader(m.Content)
+	buff := new(bytes.Buffer)
 
 	// TODO: do not write to stdout
-	openpgp.ArmoredDetachSignText(os.Stdout, c.Identity.Entity, r, &packet.Config{})
+	openpgp.ArmoredDetachSignText(buff, c.Identity.Entity, r, &packet.Config{})
+	m.Content = buff.String()
 }
