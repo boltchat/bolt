@@ -79,3 +79,17 @@ func CreatePGPEntity(username string) (*openpgp.Entity, error) {
 
 	return entity, nil
 }
+
+// LoadPGPEntity TODO
+func LoadPGPEntity(username string) (*openpgp.Entity, error) {
+	f, openErr := os.Open(getEntityLocation(username))
+	defer f.Close()
+
+	if openErr != nil {
+		return nil, openErr
+	}
+
+	pReader := packet.NewReader(f)
+	entity, err := openpgp.ReadEntity(pReader)
+	return entity, err
+}
