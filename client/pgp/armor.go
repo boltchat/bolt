@@ -12,27 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package identity
+package pgp
 
 import (
-	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/pgp"
+	"bytes"
+	"fmt"
+
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/armor"
 )
 
-func LoadIdentity(identity *config.Identity) (*Identity, error) {
-	entityPath := identity.EntityPath
+func ArmorPublicKey(entity *openpgp.Entity) string {
+	armorBuf := new(bytes.Buffer)
+	armorWriter, err := armor.Encode(armorBuf, openpgp.PublicKeyType, nil)
 
-	if entityPath == "" {
-		entityPath = pgp.GetEntityLocation(identity.Nickname)
-	}
-
-	entity, err := pgp.LoadPGPEntity(entityPath)
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
 	}
 
-	return &Identity{
-		Nickname: identity.Nickname,
-		Entity:   entity,
-	}, nil
+	err = entity.Serialize(armorWriter)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	armorWriter.Close()
+
+	return armorBuf.String()
 }

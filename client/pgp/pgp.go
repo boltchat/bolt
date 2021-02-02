@@ -12,27 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package identity
+package pgp
 
 import (
+	"fmt"
+	"path"
+
 	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/pgp"
 )
 
-func LoadIdentity(identity *config.Identity) (*Identity, error) {
-	entityPath := identity.EntityPath
+func GetEntitiesRoot() string {
+	return path.Join(
+		config.GetConfigRoot(),
+		"entities",
+	)
+}
 
-	if entityPath == "" {
-		entityPath = pgp.GetEntityLocation(identity.Nickname)
-	}
-
-	entity, err := pgp.LoadPGPEntity(entityPath)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Identity{
-		Nickname: identity.Nickname,
-		Entity:   entity,
-	}, nil
+func GetEntityLocation(username string) string {
+	return path.Join(
+		GetEntitiesRoot(),
+		fmt.Sprintf("%s.pgp", username),
+	)
 }

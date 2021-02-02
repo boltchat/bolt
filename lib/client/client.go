@@ -18,6 +18,7 @@ import (
 	"net"
 
 	"github.com/bolt-chat/client/identity"
+	"github.com/bolt-chat/client/pgp"
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/util"
@@ -78,7 +79,7 @@ func (c *Client) Connect() error {
 
 	util.WriteJson(conn, *events.NewJoinEvent(&protocol.User{
 		Nickname:  c.Identity.Nickname, // TODO:
-		PublicKey: identity.ArmorPublicKey(c.Identity.Entity),
+		PublicKey: pgp.ArmorPublicKey(c.Identity.Entity),
 	}))
 	return nil
 }

@@ -14,7 +14,9 @@
 
 package identity
 
-import "golang.org/x/crypto/openpgp"
+import (
+	"golang.org/x/crypto/openpgp"
+)
 
 type Identity struct {
 	Nickname string

@@ -16,6 +16,7 @@ package identity
 
 import (
 	"github.com/bolt-chat/client/config"
+	"github.com/bolt-chat/client/pgp"
 	"golang.org/x/crypto/openpgp"
 )
 
@@ -30,7 +31,7 @@ func CreateIdentity(identity *config.Identity, identityID string) (*Identity, er
 		// Create new PGP entity if no custom entity
 		// path was specified.
 		var createErr error
-		entity, createErr = createPGPEntity(identity.Nickname)
+		entity, createErr = pgp.CreatePGPEntity(identity.Nickname)
 
 		if createErr != nil {
 			return nil, createErr
@@ -38,7 +39,7 @@ func CreateIdentity(identity *config.Identity, identityID string) (*Identity, er
 	} else {
 		// Load custom PGP entity path.
 		var loadErr error
-		entity, loadErr = loadPGPEntity(identity.EntityPath)
+		entity, loadErr = pgp.LoadPGPEntity(identity.EntityPath)
 
 		if loadErr != nil {
 			return nil, loadErr
