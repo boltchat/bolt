@@ -23,7 +23,7 @@ import (
 )
 
 // CreateIdentity creates a new Identity.
-func CreateIdentity(identityID string) (*config.Identity, error) {
+func CreateIdentity(identityID string) (*identity.Identity, error) {
 	nickname := ""
 
 	for strings.TrimSpace(nickname) == "" {
@@ -31,10 +31,9 @@ func CreateIdentity(identityID string) (*config.Identity, error) {
 		fmt.Scanln(&nickname)
 	}
 
-	identity, err := identity.CreateIdentity(&config.Identity{
+	return identity.CreateIdentity(&config.Identity{
 		Nickname: nickname,
 	}, identityID)
-	return identity, err
 }
 
 // AskCreate will prompt the user if they'd like to create
