@@ -17,12 +17,10 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"os"
 
 	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/logging"
-	"github.com/bolt-chat/server/plugins"
 	"github.com/bolt-chat/server/pools"
 )
 
@@ -60,6 +58,9 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 		// Decode the event
 		err := json.Unmarshal(b, evt)
 
+		// Set raw byte value
+		evt.Raw = &b
+
 		if err != nil {
 			conn.Send(*events.NewErrorEvent(errs.InvalidFormat))
 			continue
@@ -70,32 +71,8 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 			continue
 		}
 
-		switch evt.Event.Type {
-		case events.MessageType:
-			msgEvt := &events.MessageEvent{}
-			json.Unmarshal(b, msgEvt)
-			err := plugins.GetManager().HookMessage(msgEvt, conn)
-
-			if err != nil {
-				conn.Send(*events.NewErrorEvent(err.Error()))
-				continue
-			}
-
-			pool.Broadcast(msgEvt) // TODO: mutate and write
-		case events.JoinType:
-			joinEvt := &events.JoinEvent{}
-			json.Unmarshal(b, joinEvt)
-			conn.User = joinEvt.User
-
-			motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
-			if hasMotd == true {
-				// Send MOTD if env var is declared
-				conn.Send(*events.NewMotdEvent(motd))
-			}
-
-			pool.Broadcast(joinEvt)
-		default:
-			conn.Send(*events.NewErrorEvent(errs.InvalidEvent))
-		}
+		// Get and execute the corresponding event handler
+		evtHandler := GetHandler(evt.Event.Type)
+		evtHandler(pool, conn, evt)
 	}
 }
