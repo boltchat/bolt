@@ -15,9 +15,12 @@
 package handlers
 
 import (
+	"encoding/hex"
 	"encoding/json"
 
 	"github.com/bolt-chat/protocol/events"
+	"github.com/bolt-chat/server/logging"
+	"github.com/bolt-chat/server/pgp"
 	"github.com/bolt-chat/server/plugins"
 	"github.com/bolt-chat/server/pools"
 )
@@ -31,6 +34,19 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 		c.Send(*events.NewErrorEvent(err.Error()))
 		return
 	}
+	pubKey, verifyErr := pgp.VerifyMessageSignature(
+		msgEvt.Message.Signature,
+		c.User.PublicKey,
+		msgEvt.Message.Content,
+	)
 
+	if verifyErr != nil {
+		logging.LogDebug("Signature does not match.", nil)
+		c.Send(*events.NewErrorEvent("sig_verification_failed")) // TODO
+		return
+	}
+
+	logging.LogDebug("Signature matches.", nil)
+	msgEvt.Message.Fingerprint = hex.EncodeToString(pubKey.Fingerprint[:])
 	p.Broadcast(msgEvt)
 }

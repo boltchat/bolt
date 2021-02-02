@@ -17,17 +17,26 @@ package format
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/bolt-chat/protocol/events"
+	"github.com/fatih/color"
 )
 
 func FormatMessage(e *events.BaseEvent) string {
 	msgEvt := &events.MessageEvent{}
 	json.Unmarshal(*e.Raw, msgEvt)
 
+	fprint := msgEvt.Message.Fingerprint
+
+	// Use the last four characters of the fingerprint
+	// for the user tag.
+	tag := fprint[len(fprint)-4:]
+
 	return fmt.Sprintf(
-		"<%s> %s",
+		"<%s#%s> %s",
 		msgEvt.Message.User.Nickname,
+		color.HiYellowString(strings.ToUpper(tag)),
 		msgEvt.Message.Content,
 	)
 }

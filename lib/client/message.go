@@ -15,9 +15,14 @@
 package client
 
 import (
+	"bytes"
+	"strings"
+
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/util"
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/packet"
 )
 
 /*
@@ -27,4 +32,15 @@ TCP connection.
 func (c *Client) SendMessage(m *protocol.Message) error {
 	util.WriteJson(c.Conn, *events.NewMessageEvent(m))
 	return nil
+}
+
+// SignMessage replaces the contents of a message with
+// an Identity signature with the original contents embedded.
+func (c *Client) SignMessage(m *protocol.Message) {
+	r := strings.NewReader(m.Content)
+	buff := new(bytes.Buffer)
+
+	// TODO: do not write to stdout
+	openpgp.ArmoredDetachSignText(buff, c.Identity.Entity, r, &packet.Config{})
+	m.Signature = buff.String()
 }

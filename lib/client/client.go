@@ -17,23 +17,22 @@ package client
 import (
 	"net"
 
+	"github.com/bolt-chat/client/identity"
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/util"
 )
 
 type Client struct {
-	Conn *net.TCPConn // TODO: make private
-	User protocol.User
-	Opts Options
+	Conn     *net.TCPConn // TODO: make private
+	Identity *identity.Identity
+	Opts     Options
 }
 
 func NewClient(opts Options) *Client {
 	return &Client{
-		User: protocol.User{
-			Nickname: opts.Nickname,
-		},
-		Opts: opts,
+		Identity: opts.Identity,
+		Opts:     opts,
 	}
 }
 
@@ -77,6 +76,9 @@ func (c *Client) Connect() error {
 	// Set the connection
 	c.Conn = conn
 
-	util.WriteJson(conn, *events.NewJoinEvent(&c.User))
+	util.WriteJson(conn, *events.NewJoinEvent(&protocol.User{
+		Nickname:  c.Identity.Nickname, // TODO:
+		PublicKey: identity.ArmorPublicKey(c.Identity.Entity),
+	}))
 	return nil
 }

@@ -12,9 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package protocol
+package identity
 
-type User struct {
-	Nickname  string `json:"nick"`
-	PublicKey string `json:"pubkey,omitempty"`
+import "github.com/bolt-chat/client/config"
+
+func LoadIdentity(identity *config.Identity) (*Identity, error) {
+	entityPath := identity.EntityPath
+
+	if entityPath == "" {
+		entityPath = getEntityLocation(identity.Nickname)
+	}
+
+	entity, err := loadPGPEntity(entityPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Identity{
+		Nickname: identity.Nickname,
+		Entity:   entity,
+	}, nil
 }

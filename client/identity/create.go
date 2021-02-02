@@ -15,44 +15,44 @@
 package identity
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/bolt-chat/client/config"
+	"golang.org/x/crypto/openpgp"
 )
 
 // CreateIdentity creates a new Identity.
-func CreateIdentity(identityID string) *config.Identity {
-	nickname := ""
-
-	for strings.TrimSpace(nickname) == "" {
-		fmt.Printf("Nickname: ")
-		fmt.Scanln(&nickname)
-	}
-
-	identity := &config.Identity{
-		Nickname: nickname,
-	}
-
+func CreateIdentity(identity *config.Identity, identityID string) (*Identity, error) {
 	identityList := *config.GetIdentityList()
 	identityList[identityID] = *identity
 
+	var entity *openpgp.Entity
+
+	if identity.EntityPath == "" {
+		// Create new PGP entity if no custom entity
+		// path was specified.
+		var createErr error
+		entity, createErr = createPGPEntity(identity.Nickname)
+
+		if createErr != nil {
+			return nil, createErr
+		}
+	} else {
+		// Load custom PGP entity path.
+		var loadErr error
+		entity, loadErr = loadPGPEntity(identity.EntityPath)
+
+		if loadErr != nil {
+			return nil, loadErr
+		}
+	}
+
 	// Write changes to disk
-	config.IdentityFile.Write(identityList)
+	_, writeErr := config.IdentityFile.Write(identityList)
+	if writeErr != nil {
+		return nil, writeErr
+	}
 
-	return identity
-}
-
-// AskCreate will prompt the user if they'd like to create
-// the missing identity.
-func AskCreate(identityID string) bool {
-	fmt.Printf(
-		"Identity '%s' does not exist.\nWould you like to create it now? [Y/n] ",
-		identityID,
-	)
-
-	answer := ""
-	fmt.Scanln(&answer)
-
-	return strings.ToLower(answer) == "y" || answer == ""
+	return &Identity{
+		Nickname: identity.Nickname,
+		Entity:   entity,
+	}, nil
 }

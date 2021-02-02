@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package protocol
+package identity
 
-type User struct {
-	Nickname  string `json:"nick"`
-	PublicKey string `json:"pubkey,omitempty"`
+import "golang.org/x/crypto/openpgp"
+
+type Identity struct {
+	Nickname string
+	Entity   *openpgp.Entity
 }

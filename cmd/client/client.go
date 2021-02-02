@@ -19,6 +19,7 @@ import (
 	"os"
 
 	"github.com/bolt-chat/client/args"
+	cliIdentity "github.com/bolt-chat/client/cli/identity"
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/errs"
 	"github.com/bolt-chat/client/identity"
@@ -36,16 +37,30 @@ func main() {
 	args := args.GetArgs()
 
 	// Attempt to read the identity
-	id, identityErr := config.GetIdentity(args.Identity)
+	idEntry, identityErr := config.GetIdentityEntry(args.Identity)
+	var id *identity.Identity
 
+	// TODO: refactor
 	if identityErr == config.ErrNoSuchIdentity {
-		if !identity.AskCreate(args.Identity) {
+		if !cliIdentity.AskCreate(args.Identity) {
 			os.Exit(1)
 		}
 
-		id = identity.CreateIdentity(args.Identity)
+		var createErr error
+		id, createErr = cliIdentity.CreateIdentity(args.Identity)
+
+		if createErr != nil {
+			errs.Identity(createErr)
+		}
 	} else if identityErr != nil {
 		errs.Identity(identityErr)
+	} else {
+		var loadErr error
+		id, loadErr = identity.LoadIdentity(idEntry)
+
+		if loadErr != nil {
+			errs.Identity(loadErr)
+		}
 	}
 
 	if id.Nickname == "" {
@@ -62,7 +77,7 @@ func main() {
 	c := client.NewClient(client.Options{
 		Hostname: args.Hostname,
 		Port:     args.Port,
-		Nickname: id.Nickname,
+		Identity: id,
 	})
 
 	err := c.Connect()
