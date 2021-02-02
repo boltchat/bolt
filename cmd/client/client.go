@@ -37,9 +37,10 @@ func main() {
 	args := args.GetArgs()
 
 	// Attempt to read the identity
-	_, identityErr := config.GetIdentityEntry(args.Identity)
+	idEntry, identityErr := config.GetIdentityEntry(args.Identity)
 	var id *identity.Identity
 
+	// TODO: refactor
 	if identityErr == config.ErrNoSuchIdentity {
 		if !cliIdentity.AskCreate(args.Identity) {
 			os.Exit(1)
@@ -53,6 +54,13 @@ func main() {
 		}
 	} else if identityErr != nil {
 		errs.Identity(identityErr)
+	} else {
+		var loadErr error
+		id, loadErr = identity.LoadIdentity(idEntry)
+
+		if loadErr != nil {
+			errs.Identity(loadErr)
+		}
 	}
 
 	if id.Nickname == "" {
