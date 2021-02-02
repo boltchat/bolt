@@ -42,5 +42,5 @@ func (c *Client) SignMessage(m *protocol.Message) {
 
 	// TODO: do not write to stdout
 	openpgp.ArmoredDetachSignText(buff, c.Identity.Entity, r, &packet.Config{})
-	m.Content = buff.String()
+	m.Signature = buff.String()
 }
