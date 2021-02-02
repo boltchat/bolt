@@ -79,8 +79,8 @@ func createPGPEntity(username string) (*openpgp.Entity, error) {
 	return entity, nil
 }
 
-func loadPGPEntity(username string) (*openpgp.Entity, error) {
-	f, openErr := os.Open(getEntityLocation(username))
+func loadPGPEntity(path string) (*openpgp.Entity, error) {
+	f, openErr := os.Open(path)
 	defer f.Close()
 
 	if openErr != nil {
