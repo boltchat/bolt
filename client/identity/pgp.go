@@ -15,12 +15,14 @@
 package identity
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path"
 
 	"github.com/bolt-chat/client/config"
 	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/armor"
 	"golang.org/x/crypto/openpgp/packet"
 )
 
@@ -90,4 +92,23 @@ func loadPGPEntity(path string) (*openpgp.Entity, error) {
 	pReader := packet.NewReader(f)
 	entity, err := openpgp.ReadEntity(pReader)
 	return entity, err
+}
+
+func ArmorPublicKey(entity *openpgp.Entity) string {
+	armorBuf := new(bytes.Buffer)
+	armorWriter, err := armor.Encode(armorBuf, openpgp.PublicKeyType, nil)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	err = entity.Serialize(armorWriter)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	armorWriter.Close()
+
+	return armorBuf.String()
 }
