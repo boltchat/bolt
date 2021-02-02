@@ -56,21 +56,3 @@ func CreateIdentity(identity *config.Identity, identityID string) (*Identity, er
 		Entity:   entity,
 	}, nil
 }
-
-func LoadIdentity(identity *config.Identity) (*Identity, error) {
-	entityPath := identity.EntityPath
-
-	if entityPath == "" {
-		entityPath = getEntityLocation(identity.Nickname)
-	}
-
-	entity, err := loadPGPEntity(entityPath)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Identity{
-		Nickname: identity.Nickname,
-		Entity:   entity,
-	}, nil
-}
