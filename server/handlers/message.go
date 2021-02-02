@@ -25,8 +25,6 @@ import (
 	"github.com/bolt-chat/server/pools"
 )
 
-var publicKeyHex string = `// TODO`
-
 func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
 	msgEvt := &events.MessageEvent{}
 	json.Unmarshal(*e.Raw, msgEvt)
@@ -39,7 +37,7 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 
 	pubKey, verifyErr := pgp.VerifyMessageSignature(
 		msgEvt.Message.Signature,
-		"//PUBLIC KEY GOES HERE//",
+		c.User.PublicKey,
 		msgEvt.Message.Content,
 	)
 
