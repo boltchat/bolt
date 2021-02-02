@@ -16,17 +16,21 @@ package identity
 
 import (
 	"github.com/bolt-chat/client/config"
-	"golang.org/x/crypto/openpgp"
 )
 
 // CreateIdentity creates a new Identity.
-func CreateIdentity(entity *openpgp.Entity, nickname string, identityID string) (*config.Identity, error) {
-	identity := &config.Identity{
-		Nickname: nickname,
-	}
-
+func CreateIdentity(identity *config.Identity, identityID string) (*config.Identity, error) {
 	identityList := *config.GetIdentityList()
 	identityList[identityID] = *identity
+
+	if identity.EntityPath == "" {
+		// Create new PGP entity if no custom entity
+		// path was specified.
+		_, createErr := CreatePGPEntity(identity.Nickname)
+		if createErr != nil {
+			return nil, createErr
+		}
+	}
 
 	// Write changes to disk
 	_, writeErr := config.IdentityFile.Write(identityList)

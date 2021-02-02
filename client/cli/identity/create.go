@@ -31,12 +31,9 @@ func CreateIdentity(identityID string) (*config.Identity, error) {
 		fmt.Scanln(&nickname)
 	}
 
-	entity, createErr := identity.CreatePGPEntity(nickname)
-	if createErr != nil {
-		return nil, createErr
-	}
-
-	identity, err := identity.CreateIdentity(entity, nickname, identityID)
+	identity, err := identity.CreateIdentity(&config.Identity{
+		Nickname: nickname,
+	}, identityID)
 	return identity, err
 }
 
