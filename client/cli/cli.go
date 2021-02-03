@@ -17,10 +17,12 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/bolt-chat/client/cli/cmd"
 	"github.com/bolt-chat/client/cli/connect"
+	"github.com/fatih/color"
 )
 
 var ErrTooFewArgs = errors.New("too few arguments")
@@ -77,4 +79,10 @@ func ParseCommand(args []string) (*cmd.Command, error) {
 
 	subcmd.Args = args[2:]
 	return subcmd, nil
+}
+
+func HandleCommandError(cmdErr error) {
+	fmt.Printf(color.RedString("Command error: %s\n\n", cmdErr))
+	PrintUsage()
+	os.Exit(1)
 }
