@@ -22,3 +22,7 @@ type Command struct {
 	Subcommands []*Command
 	Handler     Handler
 }
+
+func (c *Command) Execute(args []string) {
+	c.Handler(args)
+}
