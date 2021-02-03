@@ -16,16 +16,18 @@ package version
 
 import (
 	"fmt"
-	"strings"
 )
 
-func FormatVersion(version *Version) string {
-	return fmt.Sprintf(
-		strings.Join([]string{
-			"Copyright (c) 2021 The boltchat Authors",
-			"%s version %s",
-		}, "\n"),
-		version.Type,
-		version.VersionString,
-	)
+func FormatVersion(versions []*Version) string {
+	str := "Copyright (c) 2021 The boltchat Authors\n"
+
+	for i, v := range versions {
+		str += fmt.Sprintf("%s version %s", v.Type, v.VersionString)
+
+		if i < len(versions)-1 {
+			str += "\n"
+		}
+	}
+
+	return str
 }
