@@ -22,6 +22,7 @@ import (
 
 	"github.com/bolt-chat/client/cli/cmd"
 	"github.com/bolt-chat/client/cli/cmd/connect"
+	"github.com/bolt-chat/client/cli/cmd/identity"
 	"github.com/fatih/color"
 )
 
@@ -31,15 +32,27 @@ var ErrSubCmdNotFound = errors.New("subcommand not found")
 
 var commands = []*cmd.Command{
 	connect.ConnectCommand,
+	identity.IdentityCommand,
+}
+
+func formatCmd(cmd *cmd.Command) string {
+	return fmt.Sprintf("%s %s\t%s", cmd.Name, cmd.Usage, cmd.Desc)
 }
 
 func PrintUsage() {
 	fmt.Printf("usage: boltchat <command> [subcommand] [args...]\ncommands:\n")
 
 	for _, cmd := range commands {
-		fmt.Println("\t", cmd.Name, cmd.Usage, "\t", cmd.Desc)
+		// Print command details
+		fmt.Printf("\t%s\n", formatCmd(cmd))
 
-		if len(cmd.Subcommands) == 0 {
+		if len(cmd.Subcommands) > 0 {
+			for _, subcmd := range cmd.Subcommands {
+				// Print subcommand details
+				fmt.Printf("\t%s %s\n", cmd.Name, formatCmd(subcmd))
+			}
+		} else {
+			// Print blank line after each group of subcommands
 			fmt.Println()
 		}
 	}
@@ -69,6 +82,10 @@ func ParseCommand(args []string) (*cmd.Command, error) {
 	if len(cmd.Subcommands) == 0 {
 		cmd.Args = args[1:]
 		return cmd, nil
+	}
+
+	if len(args) < 2 {
+		return nil, ErrTooFewArgs
 	}
 
 	// Get the subcommand from the second argument
