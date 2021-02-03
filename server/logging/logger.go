@@ -22,11 +22,18 @@ import (
 	"github.com/fatih/color"
 )
 
+type EventType int
+
+const (
+	RecvType EventType = iota
+	SendType EventType = iota
+)
+
 func logBase(
 	level string,
 	msg string,
 ) {
-	fmt.Printf("%s [%s] %s\n", color.HiBlackString(time.Now().Format("15:04:05")), level, msg)
+	fmt.Printf("%s %s %s\n", color.HiBlackString(time.Now().Format("15:04:05")), level, msg)
 }
 
 func LogInfo(msg string) {
@@ -50,8 +57,17 @@ func LogDebug(msg string, data interface{}) {
 	logBase(color.HiYellowString("DEBUG"), msg)
 }
 
-func LogEvent(evt interface{}) {
-	LogDebug("event:", evt)
+func LogEvent(evtType EventType, evt interface{}) {
+	typeMap := map[EventType]string{
+		RecvType: color.HiCyanString("<--"),
+		SendType: color.HiRedString("-->"),
+	}
+
+	logBase(color.HiMagentaString("EVENT"), fmt.Sprintf(
+		"%s %v",
+		typeMap[evtType],
+		evt,
+	))
 }
 
 // LogListener TODO

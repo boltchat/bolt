@@ -20,6 +20,7 @@ import (
 
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
+	"github.com/bolt-chat/server/logging"
 )
 
 // Connection TODO
@@ -46,20 +47,39 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 }
 
 // Send TODO
+// TODO: use Decode() for delimiting
 func (c *Connection) Send(data interface{}) error {
 	err := c.encoder.Encode(data)
-	return err
+	if err != nil {
+		return err
+	}
+
+	// FIXME: temporarily marshalling twice, this is because I've
+	// not yet found a way to properly cast `data` to a BaseEvent
+	// without errors. This *is* a performance issue.
+	b, _ := json.Marshal(data)
+
+	// Log the incoming event
+	logging.LogEvent(logging.SendType, string(b))
+
+	return nil
+}
+
+func (c *Connection) Read(out []byte) error {
+	_, err := c.Conn.Read(out)
+	if err != nil {
+		return err
+	}
+
+	// Log the incoming event
+	logging.LogEvent(logging.RecvType, string(out))
+
+	return nil
 }
 
 // SendError TODO
 func (c *Connection) SendError(err string) error {
 	return c.Send(*events.NewErrorEvent(err))
-}
-
-// Receive TODO
-func (c *Connection) Receive(data interface{}) error {
-	err := c.decoder.Decode(data)
-	return err
 }
 
 // Close closes the connection.

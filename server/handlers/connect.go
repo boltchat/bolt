@@ -20,7 +20,6 @@ import (
 
 	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/logging"
 	"github.com/bolt-chat/server/pools"
 )
 
@@ -35,23 +34,17 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 		b := make([]byte, 65536)
 
 		// Wait for and receive incoming events
-		_, connErr := conn.Conn.Read(b)
+		connErr := conn.Read(b)
 
 		if connErr != nil {
 			// Broadcast a disconnect message
-			evt := *events.NewLeaveEvent(conn.User) // TODO:
-			evtRaw, _ := json.Marshal(evt)
-			pool.Broadcast(evt)
-			logging.LogEvent(string(evtRaw))
+			pool.Broadcast(*events.NewLeaveEvent(conn.User))
 			pool.RemoveFromPool(conn)
 			return
 		}
 
 		// Trim empty bytes at the end
 		b = bytes.TrimRight(b, "\x00")
-
-		// Log raw events in debug mode
-		logging.LogEvent(string(b))
 
 		evt := &events.BaseEvent{}
 
