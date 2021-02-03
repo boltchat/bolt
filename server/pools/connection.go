@@ -19,6 +19,7 @@ import (
 	"net"
 
 	"github.com/bolt-chat/protocol"
+	"github.com/bolt-chat/protocol/events"
 )
 
 // Connection TODO
@@ -48,6 +49,11 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 func (c *Connection) Send(data interface{}) error {
 	err := c.encoder.Encode(data)
 	return err
+}
+
+// SendError TODO
+func (c *Connection) SendError(err string) error {
+	return c.Send(*events.NewErrorEvent(err))
 }
 
 // Receive TODO

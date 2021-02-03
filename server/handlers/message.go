@@ -32,7 +32,7 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 	err := plugins.GetManager().HookMessage(msgEvt, c)
 
 	if err != nil {
-		c.Send(*events.NewErrorEvent(err.Error()))
+		c.SendError(err.Error())
 		return
 	}
 
@@ -44,7 +44,7 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 
 	if verifyErr != nil {
 		logging.LogDebug("Signature does not match.", nil)
-		c.Send(*events.NewErrorEvent(errs.SigVerifyFailed)) // TODO
+		c.SendError(errs.SigVerifyFailed)
 		return
 	}
 

@@ -62,12 +62,12 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 		evt.Raw = &b
 
 		if err != nil {
-			conn.Send(*events.NewErrorEvent(errs.InvalidFormat))
+			conn.SendError(errs.InvalidFormat)
 			continue
 		}
 
 		if !conn.IsIdentified() && evt.Event.Type != events.JoinType {
-			conn.Send(*events.NewErrorEvent(errs.Unidentified))
+			conn.SendError(errs.Unidentified)
 			continue
 		}
 

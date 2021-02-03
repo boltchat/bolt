@@ -21,5 +21,5 @@ import (
 )
 
 func HandleDefault(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
-	c.Send(*events.NewErrorEvent(errs.InvalidEvent))
+	c.SendError(errs.InvalidEvent)
 }
