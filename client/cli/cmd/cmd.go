@@ -19,6 +19,7 @@ type Handler func(args []string)
 type Command struct {
 	Name        string
 	Desc        string
+	Usage       string
 	Args        []string
 	Subcommands []*Command
 	Handler     Handler

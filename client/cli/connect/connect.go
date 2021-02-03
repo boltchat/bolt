@@ -23,6 +23,7 @@ import (
 var ConnectCommand = &cmd.Command{
 	Name:    "connect",
 	Desc:    "Connects to a Bolt instance.",
+	Usage:   "<host> [identity]",
 	Handler: connectHandler,
 }
 

@@ -35,7 +35,7 @@ func PrintUsage() {
 	fmt.Printf("usage: boltchat <command> [subcommand] [args...]\ncommands:\n")
 
 	for _, cmd := range commands {
-		fmt.Println("\t", cmd.Name, "\t", cmd.Desc)
+		fmt.Println("\t", cmd.Name, cmd.Usage, "\t", cmd.Desc)
 
 		if len(cmd.Subcommands) == 0 {
 			fmt.Println()
