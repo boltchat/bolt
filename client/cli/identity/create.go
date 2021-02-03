@@ -26,6 +26,12 @@ import (
 func CreateIdentity(identityID string) (*identity.Identity, error) {
 	nickname := ""
 
+	// TODO: show explanation
+	for strings.TrimSpace(identityID) == "" {
+		fmt.Printf("Identifier: ")
+		fmt.Scanln(&identityID)
+	}
+
 	for strings.TrimSpace(nickname) == "" {
 		fmt.Printf("Nickname: ")
 		fmt.Scanln(&nickname)
