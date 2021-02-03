@@ -12,13 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package cli
 
-type Handler func(args []string)
+import (
+	"fmt"
 
-type Command struct {
-	Name        string
-	Desc        string
-	Subcommands []*Command
-	Handler     Handler
+	"github.com/bolt-chat/client/cli/cmd"
+	"github.com/bolt-chat/client/cli/connect"
+)
+
+var commands = []*cmd.Command{
+	connect.ConnectCommand,
+}
+
+func PrintUsage() {
+	fmt.Printf("usage: boltchat <command> [subcommand] [args...]\ncommands:\n")
+
+	for _, cmd := range commands {
+		fmt.Println("\t", cmd.Name, "\t", cmd.Desc)
+
+		if len(cmd.Subcommands) == 0 {
+			fmt.Println()
+		}
+	}
 }
