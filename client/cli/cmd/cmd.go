@@ -14,7 +14,7 @@
 
 package cmd
 
-type Handler func(args []string)
+type Handler func(args []string) error
 
 type Command struct {
 	Name        string
@@ -25,6 +25,6 @@ type Command struct {
 	Handler     Handler
 }
 
-func (c *Command) Execute() {
-	c.Handler(c.Args)
+func (c *Command) Execute() error {
+	return c.Handler(c.Args)
 }
