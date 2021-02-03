@@ -20,15 +20,20 @@ import (
 
 	"github.com/bolt-chat/client/config"
 	"github.com/bolt-chat/client/identity"
+	"github.com/fatih/color"
 )
 
 // CreateIdentity creates a new Identity.
 func CreateIdentity(identityID string) (*identity.Identity, error) {
 	nickname := ""
 
-	// TODO: show explanation
 	for strings.TrimSpace(identityID) == "" {
-		fmt.Printf("Identifier: ")
+		fmt.Printf(
+			color.HiCyanString("The Identity ID is used for referencing this Identity later on. An example would be %s or %s.\n"),
+			color.HiYellowString("my_alt"),
+			color.HiYellowString("very_very_secret"),
+		)
+		fmt.Printf("Identity ID: ")
 		fmt.Scanln(&identityID)
 	}
 
