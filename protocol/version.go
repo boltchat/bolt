@@ -12,27 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package version
+package protocol
 
-import (
-	"fmt"
+import "github.com/bolt-chat/util/version"
 
-	"github.com/bolt-chat/client"
-	"github.com/bolt-chat/client/cli/cmd"
-	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/util/version"
-)
-
-var VersionCommand = &cmd.Command{
-	Name:    "version",
-	Desc:    "Displays version information.",
-	Handler: versionHandler,
-}
-
-func versionHandler(args []string) error {
-	fmt.Println(version.FormatVersion([]*version.Version{
-		client.Version,
-		protocol.Version,
-	}))
-	return nil
+var Version = &version.Version{
+	Type:          version.ProtocolType,
+	VersionString: "0.1.0-alpha",
 }
