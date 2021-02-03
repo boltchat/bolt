@@ -15,11 +15,17 @@
 package cli
 
 import (
+	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/bolt-chat/client/cli/cmd"
 	"github.com/bolt-chat/client/cli/connect"
 )
+
+var ErrTooFewArgs = errors.New("too few arguments")
+var ErrCmdNotFound = errors.New("command not found")
+var ErrSubCmdNotFound = errors.New("subcommand not found")
 
 var commands = []*cmd.Command{
 	connect.ConnectCommand,
@@ -35,4 +41,38 @@ func PrintUsage() {
 			fmt.Println()
 		}
 	}
+}
+
+func getCmd(cmds []*cmd.Command, rawCmd string) *cmd.Command {
+	for _, cmd := range cmds {
+		if cmd.Name == strings.ToLower(rawCmd) {
+			return cmd
+		}
+	}
+
+	return nil
+}
+
+func ParseCommand(args []string) (*cmd.Command, error) {
+	if len(args) == 0 {
+		return nil, ErrTooFewArgs
+	}
+
+	// Get the command from the first argument
+	cmd := getCmd(commands, args[0])
+	if cmd == nil {
+		return nil, ErrCmdNotFound
+	}
+
+	if len(cmd.Subcommands) == 0 {
+		return cmd, nil
+	}
+
+	// Get the subcommand from the second argument
+	subcmd := getCmd(cmd.Subcommands, args[1])
+	if subcmd == nil {
+		return nil, ErrSubCmdNotFound
+	}
+
+	return subcmd, nil
 }
