@@ -21,7 +21,7 @@ import (
 	"strings"
 
 	"github.com/bolt-chat/client/cli/cmd"
-	"github.com/bolt-chat/client/cli/connect"
+	"github.com/bolt-chat/client/cli/cmd/connect"
 	"github.com/fatih/color"
 )
 
