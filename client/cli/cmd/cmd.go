@@ -19,10 +19,11 @@ type Handler func(args []string)
 type Command struct {
 	Name        string
 	Desc        string
+	Args        []string
 	Subcommands []*Command
 	Handler     Handler
 }
 
-func (c *Command) Execute(args []string) {
-	c.Handler(args)
+func (c *Command) Execute() {
+	c.Handler(c.Args)
 }

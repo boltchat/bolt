@@ -65,6 +65,7 @@ func ParseCommand(args []string) (*cmd.Command, error) {
 	}
 
 	if len(cmd.Subcommands) == 0 {
+		cmd.Args = args[1:]
 		return cmd, nil
 	}
 
@@ -74,5 +75,6 @@ func ParseCommand(args []string) (*cmd.Command, error) {
 		return nil, ErrSubCmdNotFound
 	}
 
+	subcmd.Args = args[2:]
 	return subcmd, nil
 }

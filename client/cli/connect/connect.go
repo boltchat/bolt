@@ -27,5 +27,5 @@ var ConnectCommand = &cmd.Command{
 }
 
 func connectHandler(args []string) {
-	fmt.Println("Hello, world!")
+	fmt.Println("Hello, world!", args)
 }
