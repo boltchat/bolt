@@ -23,6 +23,7 @@ import (
 	"github.com/bolt-chat/client/cli/cmd"
 	"github.com/bolt-chat/client/cli/cmd/connect"
 	"github.com/bolt-chat/client/cli/cmd/identity"
+	"github.com/bolt-chat/client/cli/cmd/version"
 	"github.com/fatih/color"
 )
 
@@ -31,6 +32,7 @@ var ErrCmdNotFound = errors.New("command not found")
 var ErrSubCmdNotFound = errors.New("subcommand not found")
 
 var commands = []*cmd.Command{
+	version.VersionCommand,
 	connect.ConnectCommand,
 	identity.IdentityCommand,
 }
