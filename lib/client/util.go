@@ -14,6 +14,6 @@
 
 package client
 
-func (c *Client) Send(data interface{}) error {
+func (c *Client) SendRaw(data interface{}) error {
 	return c.enc.Encode(data)
 }

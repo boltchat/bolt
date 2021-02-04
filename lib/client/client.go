@@ -22,7 +22,6 @@ import (
 	"github.com/bolt-chat/client/pgp"
 	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/util"
 )
 
 type Client struct {
@@ -82,7 +81,7 @@ func (c *Client) Connect() error {
 	c.enc = json.NewEncoder(conn)
 	c.dec = json.NewDecoder(conn)
 
-	util.WriteJson(conn, *events.NewJoinEvent(&protocol.User{
+	c.SendRaw(*events.NewJoinEvent(&protocol.User{
 		Nickname:  c.Identity.Nickname, // TODO:
 		PublicKey: pgp.ArmorPublicKey(c.Identity.Entity),
 	}))
