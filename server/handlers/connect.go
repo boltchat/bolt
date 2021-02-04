@@ -59,13 +59,13 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 			continue
 		}
 
-		if !conn.IsIdentified() && evt.Event.Type != events.JoinType {
+		if !conn.IsIdentified() && evt.Meta.Type != events.JoinType {
 			conn.SendError(errs.Unidentified)
 			continue
 		}
 
 		// Get and execute the corresponding event handler
-		evtHandler := GetHandler(evt.Event.Type)
+		evtHandler := GetHandler(evt.Meta.Type)
 		evtHandler(pool, conn, evt)
 	}
 }

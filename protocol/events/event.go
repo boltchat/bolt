@@ -19,8 +19,9 @@ import "time"
 // Type represents an event type identifier.
 type Type string
 
-// Event represents a general protocol event.
-type Event struct {
+// EventMeta represents the metadata that is
+// accompanied with each event.
+type EventMeta struct {
 	// The event identifier/type.
 	Type Type `json:"t"`
 	// The event creation date (client-side, untrustworthy).
@@ -32,14 +33,14 @@ type Event struct {
 // BaseEvent represents a bare event without
 // additional provided data.
 type BaseEvent struct {
-	Event *Event  `json:"e"`
-	Raw   *[]byte `json:"-"`
+	Meta *EventMeta `json:"e"`
+	Raw  *[]byte    `json:"-"`
 }
 
 // NewBaseEvent TODO
 func NewBaseEvent(t Type) *BaseEvent {
 	return &BaseEvent{
-		Event: &Event{
+		Meta: &EventMeta{
 			Type:      t,
 			CreatedAt: time.Now().Unix(),
 		},

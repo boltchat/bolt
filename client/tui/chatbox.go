@@ -29,7 +29,7 @@ import (
 
 func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
 	// Convert event timestamp to `time.Time`
-	timestamp := time.Unix(evt.Event.CreatedAt, 0)
+	timestamp := time.Unix(evt.Meta.CreatedAt, 0)
 
 	// Format the timestamp string
 	timestampStr := strings.Join([]string{
