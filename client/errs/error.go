@@ -34,7 +34,7 @@ execution afterwards.
 func Emerg(err error) {
 	fmt.Printf(color.HiRedString(
 		"An unexpected error has occurred.\nPlease consider creating " +
-			"an issue at <https://github.com/bolt-chat/boltchat/issues> " +
+			"an issue at <https://github.com/boltchat/bolt/issues> " +
 			"if this is repetitive behaviour.\n",
 	))
 
