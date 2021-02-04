@@ -15,6 +15,6 @@
 package protocol
 
 type User struct {
-	Nickname  string `json:"nick"`
-	PublicKey string `json:"pubkey,omitempty"`
+	Nickname  string `json:"nick" mapstructure:"nick"`
+	PublicKey string `json:"pubkey,omitempty" mapstructure:"pubkey"`
 }

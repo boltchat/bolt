@@ -22,7 +22,7 @@ import (
 const LeaveType Type = "leave"
 
 type LeaveData struct {
-	User *protocol.User `json:"user"`
+	User *protocol.User `json:"user" mapstructure:"user"`
 }
 
 func NewLeaveEvent(user *protocol.User) *BaseEvent {

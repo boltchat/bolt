@@ -18,7 +18,7 @@ package events
 const ErrorType Type = "err"
 
 type ErrorData struct {
-	Error string `json:"err"`
+	Error string `json:"err" mapstructure:"err"`
 }
 
 // NewErrorEvent TODO

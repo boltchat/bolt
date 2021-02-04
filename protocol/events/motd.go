@@ -18,7 +18,7 @@ package events
 const MotdType Type = "motd"
 
 type MotdData struct {
-	Motd string
+	Motd string `json:"motd" mapstructure:"motd"`
 }
 
 // NewMotdEvent constructs a new MotdEvent
