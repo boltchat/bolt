@@ -15,9 +15,6 @@
 package handlers
 
 import (
-	"bytes"
-	"encoding/json"
-
 	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/pools"
@@ -29,12 +26,10 @@ during its entire lifespan.
 */
 func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 	for {
-		// Allocate 64KB for the event
-		// TODO: automatically resize
-		b := make([]byte, 65536)
+		evt := &events.BaseEvent{}
 
 		// Wait for and receive incoming events
-		connErr := conn.Read(b)
+		connErr := conn.Read(evt)
 
 		if connErr != nil {
 			// Broadcast a disconnect message
@@ -43,21 +38,11 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 			return
 		}
 
-		// Trim empty bytes at the end
-		b = bytes.TrimRight(b, "\x00")
-
-		evt := &events.BaseEvent{}
-
-		// Decode the event
-		err := json.Unmarshal(b, evt)
-
-		// Set raw byte value
-		evt.Raw = &b
-
-		if err != nil {
-			conn.SendError(errs.InvalidFormat)
-			continue
-		}
+		// TODO:
+		// if err != nil {
+		// 	conn.SendError(errs.InvalidFormat)
+		// 	continue
+		// }
 
 		if !conn.IsIdentified() && evt.Meta.Type != events.JoinType {
 			conn.SendError(errs.Unidentified)

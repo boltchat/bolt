@@ -47,32 +47,26 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 }
 
 // Send TODO
-// TODO: use Decode() for delimiting
 func (c *Connection) Send(data interface{}) error {
 	err := c.encoder.Encode(data)
 	if err != nil {
 		return err
 	}
 
-	// FIXME: temporarily marshalling twice, this is because I've
-	// not yet found a way to properly cast `data` to a BaseEvent
-	// without errors. This *is* a performance issue.
-	b, _ := json.Marshal(data)
-
 	// Log the incoming event
-	logging.LogEvent(logging.SendType, string(b))
+	logging.LogEvent(logging.SendType, data)
 
 	return nil
 }
 
-func (c *Connection) Read(out []byte) error {
-	_, err := c.Conn.Read(out)
+func (c *Connection) Read(out interface{}) error {
+	err := c.decoder.Decode(out)
 	if err != nil {
 		return err
 	}
 
 	// Log the incoming event
-	logging.LogEvent(logging.RecvType, string(out))
+	logging.LogEvent(logging.RecvType, out)
 
 	return nil
 }
