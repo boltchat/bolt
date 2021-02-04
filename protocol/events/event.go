@@ -26,8 +26,6 @@ type EventMeta struct {
 	Type Type `json:"t"`
 	// The event creation date (client-side, untrustworthy).
 	CreatedAt int64 `json:"c"`
-	// The event receipt date (server-side, trustworthy).
-	RecvAt int64 `json:"r,omitempty"` // TODO:
 }
 
 // Event represents a server event.

@@ -19,7 +19,6 @@ Message represents a message that is
 either transmitted or stored locally.
 */
 type Message struct {
-	SentAt      int64  `json:"sent" mapstructure:"sent"`
 	Content     string `json:"body" mapstructure:"body"`
 	Signature   string `json:"sig,omitempty" mapstructure:"sig"`
 	Fingerprint string `json:"fprint,omitempty" mapstructure:"fprint"`
