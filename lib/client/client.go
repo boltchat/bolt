@@ -15,6 +15,7 @@
 package client
 
 import (
+	"encoding/json"
 	"net"
 
 	"github.com/bolt-chat/client/identity"
@@ -28,6 +29,8 @@ type Client struct {
 	Conn     *net.TCPConn // TODO: make private
 	Identity *identity.Identity
 	Opts     Options
+	enc      *json.Encoder
+	dec      *json.Decoder
 }
 
 func NewClient(opts Options) *Client {
@@ -74,8 +77,10 @@ func (c *Client) Connect() error {
 		return dialErr
 	}
 
-	// Set the connection
+	// Set the connection & decoders
 	c.Conn = conn
+	c.enc = json.NewEncoder(conn)
+	c.dec = json.NewDecoder(conn)
 
 	util.WriteJson(conn, *events.NewJoinEvent(&protocol.User{
 		Nickname:  c.Identity.Nickname, // TODO:
