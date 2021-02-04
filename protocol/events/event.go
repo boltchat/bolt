@@ -33,8 +33,9 @@ type EventMeta struct {
 // BaseEvent represents a bare event without
 // additional provided data.
 type BaseEvent struct {
-	Meta *EventMeta `json:"e"`
-	Raw  *[]byte    `json:"-"`
+	Meta *EventMeta  `json:"e"`
+	Raw  *[]byte     `json:"-"`
+	Data interface{} `json:"d"`
 }
 
 // NewBaseEvent TODO
