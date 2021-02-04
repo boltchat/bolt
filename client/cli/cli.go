@@ -47,17 +47,17 @@ func PrintUsage() {
 	fmt.Printf("usage: boltchat <command> [subcommand] [args...]\ncommands:\n")
 
 	for _, cmd := range commands {
+		if len(cmd.Subcommands) > 0 {
+			// Print blank line after each group of subcommands
+			fmt.Println()
+		}
+
 		// Print command details
 		fmt.Printf("\t%s\n", formatCmd(cmd))
 
-		if len(cmd.Subcommands) > 0 {
-			for _, subcmd := range cmd.Subcommands {
-				// Print subcommand details
-				fmt.Printf("\t%s %s\n", cmd.Name, formatCmd(subcmd))
-			}
-		} else {
-			// Print blank line after each group of subcommands
-			fmt.Println()
+		for _, subcmd := range cmd.Subcommands {
+			// Print subcommand details
+			fmt.Printf("\t%s %s\n", cmd.Name, formatCmd(subcmd))
 		}
 	}
 }
