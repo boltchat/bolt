@@ -15,7 +15,7 @@
 package help
 
 import (
-	"github.com/bolt-chat/client/cli/cmd"
+	"github.com/boltchat/client/cli/cmd"
 )
 
 var HelpCommand = &cmd.Command{

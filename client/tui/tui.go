@@ -18,10 +18,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/bolt-chat/client/errs"
-	"github.com/bolt-chat/lib/client"
-	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/client/errs"
+	"github.com/boltchat/lib/client"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/protocol/events"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/gdamore/tcell/v2/encoding"

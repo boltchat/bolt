@@ -15,8 +15,8 @@
 package identity
 
 import (
-	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/pgp"
+	"github.com/boltchat/client/config"
+	"github.com/boltchat/client/pgp"
 )
 
 func LoadIdentity(identity *config.Identity) (*Identity, error) {

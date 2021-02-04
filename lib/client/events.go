@@ -15,7 +15,7 @@
 package client
 
 import (
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/events"
 )
 
 func (c *Client) ReadEvents(evts chan *events.Event, closed chan bool) {

@@ -17,12 +17,12 @@ package handlers
 import (
 	"encoding/hex"
 
-	"github.com/bolt-chat/protocol/errs"
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/logging"
-	"github.com/bolt-chat/server/pgp"
-	"github.com/bolt-chat/server/plugins"
-	"github.com/bolt-chat/server/pools"
+	"github.com/boltchat/protocol/errs"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/logging"
+	"github.com/boltchat/server/pgp"
+	"github.com/boltchat/server/plugins"
+	"github.com/boltchat/server/pools"
 	"github.com/mitchellh/mapstructure"
 )
 

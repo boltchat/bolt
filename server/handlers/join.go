@@ -17,8 +17,8 @@ package handlers
 import (
 	"os"
 
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/pools"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/pools"
 	"github.com/mitchellh/mapstructure"
 )
 

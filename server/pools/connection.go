@@ -18,9 +18,9 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/logging"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/logging"
 )
 
 // Connection TODO

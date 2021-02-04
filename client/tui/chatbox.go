@@ -19,9 +19,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/format"
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/client/config"
+	"github.com/boltchat/client/format"
+	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
 
 	"github.com/gdamore/tcell/v2"

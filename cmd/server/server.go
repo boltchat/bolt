@@ -20,9 +20,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/bolt-chat/server"
-	"github.com/bolt-chat/server/plugins"
-	"github.com/bolt-chat/server/util"
+	"github.com/boltchat/server"
+	"github.com/boltchat/server/plugins"
+	"github.com/boltchat/server/util"
 )
 
 func main() {

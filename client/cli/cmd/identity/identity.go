@@ -14,7 +14,7 @@
 
 package identity
 
-import "github.com/bolt-chat/client/cli/cmd"
+import "github.com/boltchat/client/cli/cmd"
 
 var IdentityCommand = &cmd.Command{
 	Name: "identity",

@@ -17,7 +17,7 @@ package format
 import (
 	"fmt"
 
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/events"
 )
 
 type formatHandler = func(e *events.Event) string

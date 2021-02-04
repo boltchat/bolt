@@ -18,10 +18,10 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/bolt-chat/client/identity"
-	"github.com/bolt-chat/client/pgp"
-	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/client/identity"
+	"github.com/boltchat/client/pgp"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/protocol/events"
 )
 
 type Client struct {

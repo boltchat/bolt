@@ -17,8 +17,8 @@ package main
 import (
 	"os"
 
-	"github.com/bolt-chat/client/cli"
-	"github.com/bolt-chat/client/config"
+	"github.com/boltchat/client/cli"
+	"github.com/boltchat/client/config"
 )
 
 func main() {

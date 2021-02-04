@@ -14,7 +14,7 @@
 
 package client
 
-import "github.com/bolt-chat/util/version"
+import "github.com/boltchat/util/version"
 
 var Version = &version.Version{
 	Type:          version.ClientType,

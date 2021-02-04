@@ -14,7 +14,7 @@
 
 package events
 
-import "github.com/bolt-chat/protocol"
+import "github.com/boltchat/protocol"
 
 // MessageType is the event type used for messages.
 const MessageType Type = "msg"

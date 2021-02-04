@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"path"
 
-	"github.com/bolt-chat/client/config"
+	"github.com/boltchat/client/config"
 )
 
 func GetEntitiesRoot() string {

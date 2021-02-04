@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
 	"github.com/mitchellh/mapstructure"
 )

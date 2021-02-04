@@ -14,7 +14,7 @@
 
 package client
 
-import "github.com/bolt-chat/client/identity"
+import "github.com/boltchat/client/identity"
 
 // Options TODO
 type Options struct {

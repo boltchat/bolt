@@ -17,10 +17,10 @@ package version
 import (
 	"fmt"
 
-	"github.com/bolt-chat/client"
-	"github.com/bolt-chat/client/cli/cmd"
-	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/util/version"
+	"github.com/boltchat/client"
+	"github.com/boltchat/client/cli/cmd"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/util/version"
 )
 
 var VersionCommand = &cmd.Command{

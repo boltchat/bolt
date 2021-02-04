@@ -19,8 +19,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
 )
 

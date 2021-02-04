@@ -15,9 +15,9 @@
 package handlers
 
 import (
-	"github.com/bolt-chat/protocol/errs"
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/pools"
+	"github.com/boltchat/protocol/errs"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/pools"
 )
 
 func HandleDefault(p *pools.ConnPool, c *pools.Connection, e *events.Event) {

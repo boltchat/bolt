@@ -15,8 +15,8 @@
 package pools
 
 import (
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/logging"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/logging"
 )
 
 // ConnPool represents a group of connections.

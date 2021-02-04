@@ -20,8 +20,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/errs"
+	"github.com/boltchat/client/config"
+	"github.com/boltchat/client/errs"
 	"github.com/fatih/color"
 )
 

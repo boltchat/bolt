@@ -15,7 +15,7 @@
 package config
 
 import (
-	"github.com/bolt-chat/client/errs"
+	"github.com/boltchat/client/errs"
 	"gopkg.in/yaml.v2"
 )
 

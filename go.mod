@@ -1,4 +1,4 @@
-module github.com/bolt-chat
+module github.com/boltchat
 
 go 1.15
 

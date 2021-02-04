@@ -20,11 +20,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/bolt-chat/client/cli/cmd"
-	"github.com/bolt-chat/client/cli/cmd/connect"
-	"github.com/bolt-chat/client/cli/cmd/help"
-	"github.com/bolt-chat/client/cli/cmd/identity"
-	"github.com/bolt-chat/client/cli/cmd/version"
+	"github.com/boltchat/client/cli/cmd"
+	"github.com/boltchat/client/cli/cmd/connect"
+	"github.com/boltchat/client/cli/cmd/help"
+	"github.com/boltchat/client/cli/cmd/identity"
+	"github.com/boltchat/client/cli/cmd/version"
 	"github.com/fatih/color"
 )
 

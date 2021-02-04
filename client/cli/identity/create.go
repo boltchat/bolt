@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/identity"
+	"github.com/boltchat/client/config"
+	"github.com/boltchat/client/identity"
 	"github.com/fatih/color"
 )
 

@@ -15,7 +15,7 @@
 package events
 
 import (
-	"github.com/bolt-chat/protocol"
+	"github.com/boltchat/protocol"
 )
 
 // JoinType is the event type used for new connections.

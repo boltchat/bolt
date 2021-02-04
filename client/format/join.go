@@ -17,7 +17,7 @@ package format
 import (
 	"fmt"
 
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
 	"github.com/gdamore/tcell/v2"
 	"github.com/mitchellh/mapstructure"

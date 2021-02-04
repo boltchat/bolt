@@ -15,8 +15,8 @@
 package identity
 
 import (
-	"github.com/bolt-chat/client/cli/cmd"
-	"github.com/bolt-chat/client/cli/identity"
+	"github.com/boltchat/client/cli/cmd"
+	"github.com/boltchat/client/cli/identity"
 )
 
 var CreateCommand = &cmd.Command{

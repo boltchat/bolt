@@ -15,7 +15,7 @@
 package format
 
 import (
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/events"
 	"github.com/mitchellh/mapstructure"
 
 	"github.com/fatih/color"

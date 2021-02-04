@@ -21,14 +21,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bolt-chat/client/cli/cmd"
-	cliIdentity "github.com/bolt-chat/client/cli/identity"
-	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/errs"
-	"github.com/bolt-chat/client/identity"
-	"github.com/bolt-chat/client/tui"
-	"github.com/bolt-chat/lib/client"
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/client/cli/cmd"
+	cliIdentity "github.com/boltchat/client/cli/identity"
+	"github.com/boltchat/client/config"
+	"github.com/boltchat/client/errs"
+	"github.com/boltchat/client/identity"
+	"github.com/boltchat/client/tui"
+	"github.com/boltchat/lib/client"
+	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
 )
 
