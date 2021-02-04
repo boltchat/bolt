@@ -48,18 +48,23 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 
 // Send TODO
 func (c *Connection) Send(data interface{}) error {
-	err := c.encoder.Encode(data)
+	return c.encoder.Encode(data)
+}
+
+// SendEvent TODO
+func (c *Connection) SendEvent(evt *events.BaseEvent) error {
+	err := c.Send(evt)
 	if err != nil {
 		return err
 	}
 
 	// Log the incoming event
-	logging.LogEvent(logging.SendType, data)
+	logging.LogEvent(logging.SendType, evt)
 
 	return nil
 }
 
-func (c *Connection) Read(out interface{}) error {
+func (c *Connection) Read(out *events.BaseEvent) error {
 	err := c.decoder.Decode(out)
 	if err != nil {
 		return err
@@ -73,7 +78,7 @@ func (c *Connection) Read(out interface{}) error {
 
 // SendError TODO
 func (c *Connection) SendError(err string) error {
-	return c.Send(*events.NewErrorEvent(err))
+	return c.SendEvent(events.NewErrorEvent(err))
 }
 
 // Close closes the connection.

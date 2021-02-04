@@ -50,5 +50,5 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 
 	logging.LogDebug("Signature matches.", nil)
 	msgData.Message.Fingerprint = hex.EncodeToString(pubKey.Fingerprint[:])
-	p.Broadcast(events.NewMessageEvent(msgData.Message))
+	p.BroadcastEvent(events.NewMessageEvent(msgData.Message))
 }

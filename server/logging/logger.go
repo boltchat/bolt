@@ -19,6 +19,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/bolt-chat/protocol/events"
 	"github.com/fatih/color"
 )
 
@@ -57,7 +58,7 @@ func LogDebug(msg string, data interface{}) {
 	logBase(color.HiYellowString("DEBUG"), msg)
 }
 
-func LogEvent(evtType EventType, evt interface{}) {
+func LogEvent(evtType EventType, evt *events.BaseEvent) {
 	typeMap := map[EventType]string{
 		RecvType: color.HiCyanString("<--"),
 		SendType: color.HiRedString("-->"),

@@ -30,8 +30,8 @@ func HandleJoin(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
 	motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
 	if hasMotd {
 		// Send MOTD if env var is declared
-		c.Send(*events.NewMotdEvent(motd))
+		c.SendEvent(events.NewMotdEvent(motd))
 	}
 
-	p.Broadcast(events.NewJoinEvent(joinData.User))
+	p.BroadcastEvent(events.NewJoinEvent(joinData.User))
 }

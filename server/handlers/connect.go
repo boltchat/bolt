@@ -33,7 +33,7 @@ func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 
 		if connErr != nil {
 			// Broadcast a disconnect message
-			pool.Broadcast(*events.NewLeaveEvent(conn.User))
+			pool.BroadcastEvent(events.NewLeaveEvent(conn.User))
 			pool.RemoveFromPool(conn)
 			return
 		}
