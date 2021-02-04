@@ -17,3 +17,7 @@ package client
 func (c *Client) SendRaw(data interface{}) error {
 	return c.enc.Encode(data)
 }
+
+func (c *Client) ReceiveRaw(out interface{}) error {
+	return c.dec.Decode(out)
+}
