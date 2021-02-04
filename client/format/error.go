@@ -31,7 +31,7 @@ var errorMap = map[string]string{
 	errs.Unidentified:    "You need to identify yourself before you can interact with this server.",
 }
 
-func FormatError(e *events.BaseEvent) string {
+func FormatError(e *events.Event) string {
 	errData := events.ErrorData{}
 	mapstructure.Decode(e.Data, &errData)
 

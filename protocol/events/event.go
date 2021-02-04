@@ -30,16 +30,15 @@ type EventMeta struct {
 	RecvAt int64 `json:"r,omitempty"` // TODO:
 }
 
-// BaseEvent represents a bare event without
-// additional provided data.
-type BaseEvent struct {
+// Event represents a server event.
+type Event struct {
 	Meta *EventMeta  `json:"e"`
 	Data interface{} `json:"d"`
 }
 
-// NewBaseEvent TODO
-func NewBaseEvent(t Type, data interface{}) *BaseEvent {
-	return &BaseEvent{
+// NewEvent TODO
+func NewEvent(t Type, data interface{}) *Event {
+	return &Event{
 		Meta: &EventMeta{
 			Type:      t,
 			CreatedAt: time.Now().Unix(),

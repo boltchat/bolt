@@ -25,8 +25,8 @@ type LeaveData struct {
 	User *protocol.User `json:"user" mapstructure:"user"`
 }
 
-func NewLeaveEvent(user *protocol.User) *BaseEvent {
-	return NewBaseEvent(LeaveType, LeaveData{
+func NewLeaveEvent(user *protocol.User) *Event {
+	return NewEvent(LeaveType, LeaveData{
 		User: user,
 	})
 }

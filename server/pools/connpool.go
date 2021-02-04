@@ -78,7 +78,7 @@ func (c *ConnPool) Broadcast(data interface{}) {
 
 // BroadcastEvent emits an event to all connections that are
 // present in the pool.
-func (c *ConnPool) BroadcastEvent(evt *events.BaseEvent) {
+func (c *ConnPool) BroadcastEvent(evt *events.Event) {
 	for _, conn := range *c {
 		conn.SendEvent(evt)
 	}

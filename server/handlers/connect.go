@@ -26,7 +26,7 @@ during its entire lifespan.
 */
 func HandleConnection(pool *pools.ConnPool, conn *pools.Connection) {
 	for {
-		evt := &events.BaseEvent{}
+		evt := &events.Event{}
 
 		// Wait for and receive incoming events
 		connErr := conn.Read(evt)

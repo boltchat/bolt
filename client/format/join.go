@@ -23,7 +23,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-func FormatJoin(e *events.BaseEvent) string {
+func FormatJoin(e *events.Event) string {
 	joinData := events.JoinData{}
 	mapstructure.Decode(e.Data, &joinData)
 

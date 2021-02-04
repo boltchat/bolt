@@ -23,7 +23,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-func FormatMessage(e *events.BaseEvent) string {
+func FormatMessage(e *events.Event) string {
 	msgData := events.MessageData{}
 	mapstructure.Decode(e.Data, &msgData)
 

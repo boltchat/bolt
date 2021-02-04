@@ -21,7 +21,7 @@ import (
 	"github.com/fatih/color"
 )
 
-func FormatMotd(e *events.BaseEvent) string {
+func FormatMotd(e *events.Event) string {
 	motdData := events.MotdData{}
 	mapstructure.Decode(e.Data, &motdData)
 

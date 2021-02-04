@@ -27,7 +27,7 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
-func printEvent(s tcell.Screen, w int, y int, evt *events.BaseEvent) int {
+func printEvent(s tcell.Screen, w int, y int, evt *events.Event) int {
 	// Convert event timestamp to `time.Time`
 	timestamp := time.Unix(evt.Meta.CreatedAt, 0)
 
@@ -91,15 +91,15 @@ func clearBuffer(s tcell.Screen) {
 
 func displayChatbox(
 	s tcell.Screen,
-	evtChannel chan *events.BaseEvent,
+	evtChannel chan *events.Event,
 	clear chan bool,
 ) {
 	/*
 		Preallocate a size of 50 for both the
 		events slice and the buffer slice.
 	*/
-	evts := make([]*events.BaseEvent, 0, 50)
-	buff := make([]*events.BaseEvent, 0, 50)
+	evts := make([]*events.Event, 0, 50)
+	buff := make([]*events.Event, 0, 50)
 
 	go func() {
 		for evt := range evtChannel {
@@ -137,7 +137,7 @@ func displayChatbox(
 	go func() {
 		for c := range clear {
 			if c {
-				buff = make([]*events.BaseEvent, 0, 50)
+				buff = make([]*events.Event, 0, 50)
 				clearBuffer(s)
 				s.Sync()
 			}

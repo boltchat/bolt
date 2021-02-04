@@ -24,8 +24,8 @@ type MessageData struct {
 }
 
 // NewMessageEvent TODO
-func NewMessageEvent(msg *protocol.Message) *BaseEvent {
-	return NewBaseEvent(MessageType, MessageData{
+func NewMessageEvent(msg *protocol.Message) *Event {
+	return NewEvent(MessageType, MessageData{
 		Message: msg,
 	})
 }

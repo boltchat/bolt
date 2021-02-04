@@ -22,8 +22,8 @@ type MotdData struct {
 }
 
 // NewMotdEvent constructs a new MotdEvent
-func NewMotdEvent(motd string) *BaseEvent {
-	return NewBaseEvent(MotdType, MotdData{
+func NewMotdEvent(motd string) *Event {
+	return NewEvent(MotdType, MotdData{
 		Motd: motd,
 	})
 }

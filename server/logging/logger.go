@@ -58,7 +58,7 @@ func LogDebug(msg string, data interface{}) {
 	logBase(color.HiYellowString("DEBUG"), msg)
 }
 
-func LogEvent(evtType EventType, evt *events.BaseEvent) {
+func LogEvent(evtType EventType, evt *events.Event) {
 	typeMap := map[EventType]string{
 		RecvType: color.HiCyanString("<--"),
 		SendType: color.HiRedString("-->"),

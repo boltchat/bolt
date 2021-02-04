@@ -32,7 +32,7 @@ var screen tcell.Screen
 /*
 Display displays the TUI.
 */
-func Display(c *client.Client, evts chan *events.BaseEvent) {
+func Display(c *client.Client, evts chan *events.Event) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
 	mode := MessageMode

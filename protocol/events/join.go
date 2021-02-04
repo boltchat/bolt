@@ -25,8 +25,8 @@ type JoinData struct {
 	User *protocol.User `json:"user" mapstructure:"user"`
 }
 
-func NewJoinEvent(user *protocol.User) *BaseEvent {
-	return NewBaseEvent(JoinType, JoinData{
+func NewJoinEvent(user *protocol.User) *Event {
+	return NewEvent(JoinType, JoinData{
 		User: user,
 	})
 }

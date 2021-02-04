@@ -52,7 +52,7 @@ func (c *Connection) Send(data interface{}) error {
 }
 
 // SendEvent TODO
-func (c *Connection) SendEvent(evt *events.BaseEvent) error {
+func (c *Connection) SendEvent(evt *events.Event) error {
 	err := c.Send(evt)
 	if err != nil {
 		return err
@@ -64,7 +64,7 @@ func (c *Connection) SendEvent(evt *events.BaseEvent) error {
 	return nil
 }
 
-func (c *Connection) Read(out *events.BaseEvent) error {
+func (c *Connection) Read(out *events.Event) error {
 	err := c.decoder.Decode(out)
 	if err != nil {
 		return err

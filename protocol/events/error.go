@@ -22,8 +22,8 @@ type ErrorData struct {
 }
 
 // NewErrorEvent TODO
-func NewErrorEvent(err string) *BaseEvent {
-	return NewBaseEvent(ErrorType, ErrorData{
+func NewErrorEvent(err string) *Event {
+	return NewEvent(ErrorType, ErrorData{
 		Error: err,
 	})
 }

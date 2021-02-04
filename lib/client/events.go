@@ -18,9 +18,9 @@ import (
 	"github.com/bolt-chat/protocol/events"
 )
 
-func (c *Client) ReadEvents(evts chan *events.BaseEvent, closed chan bool) {
+func (c *Client) ReadEvents(evts chan *events.Event, closed chan bool) {
 	for {
-		evt := &events.BaseEvent{}
+		evt := &events.Event{}
 		err := c.ReceiveRaw(evt)
 
 		if err != nil {

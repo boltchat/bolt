@@ -19,7 +19,7 @@ import (
 	"github.com/bolt-chat/server/pools"
 )
 
-type handler = func(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent)
+type handler = func(p *pools.ConnPool, c *pools.Connection, e *events.Event)
 
 var handlerMap = map[events.Type]handler{
 	events.MessageType: HandleMessage,

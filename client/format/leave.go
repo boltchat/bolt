@@ -23,7 +23,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-func FormatLeave(e *events.BaseEvent) string {
+func FormatLeave(e *events.Event) string {
 	leaveData := events.LeaveData{}
 	mapstructure.Decode(e.Data, &leaveData)
 

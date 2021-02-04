@@ -22,7 +22,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-func HandleJoin(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
+func HandleJoin(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
 	joinData := events.JoinData{}
 	mapstructure.Decode(e.Data, &joinData)
 	c.User = joinData.User

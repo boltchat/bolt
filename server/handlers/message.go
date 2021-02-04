@@ -26,7 +26,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
+func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
 	msgData := events.MessageData{}
 	mapstructure.Decode(e.Data, &msgData)
 	err := plugins.GetManager().HookMessage(&msgData, c)

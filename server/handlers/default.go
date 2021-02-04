@@ -20,6 +20,6 @@ import (
 	"github.com/bolt-chat/server/pools"
 )
 
-func HandleDefault(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
+func HandleDefault(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
 	c.SendError(errs.InvalidEvent)
 }

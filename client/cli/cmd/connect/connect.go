@@ -138,7 +138,7 @@ func connectHandler(args []string) error {
 		errs.Connect(err)
 	}
 
-	evts := make(chan *events.BaseEvent)
+	evts := make(chan *events.Event)
 
 	serverClosed := make(chan bool)
 	go c.ReadEvents(evts, serverClosed)
