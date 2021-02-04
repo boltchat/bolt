@@ -42,7 +42,7 @@ func (c *Client) ReadEvents(evts chan *events.BaseEvent, closed chan bool) {
 		evt.Raw = &b
 
 		if jsonErr != nil {
-			errs.Emerg(err)
+			errs.Emerg(jsonErr)
 		}
 
 		evts <- evt
