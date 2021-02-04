@@ -15,16 +15,15 @@
 package format
 
 import (
-	"encoding/json"
-
 	"github.com/bolt-chat/protocol/events"
+	"github.com/mitchellh/mapstructure"
 
 	"github.com/fatih/color"
 )
 
 func FormatMotd(e *events.BaseEvent) string {
-	motdEvt := &events.MotdEvent{}
-	json.Unmarshal(*e.Raw, motdEvt)
+	motdData := events.MotdData{}
+	mapstructure.Decode(e.Data, &motdData)
 
-	return color.HiCyanString(motdEvt.Motd)
+	return color.HiCyanString(motdData.Motd)
 }

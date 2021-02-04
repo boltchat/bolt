@@ -15,19 +15,19 @@
 package format
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/bolt-chat/protocol/events"
 	"github.com/fatih/color"
 	"github.com/gdamore/tcell/v2"
+	"github.com/mitchellh/mapstructure"
 )
 
 func FormatJoin(e *events.BaseEvent) string {
-	joinEvt := &events.JoinEvent{}
-	json.Unmarshal(*e.Raw, joinEvt)
+	joinData := events.JoinData{}
+	mapstructure.Decode(e.Data, &joinData)
 
 	return color.HiMagentaString(
-		fmt.Sprintf("%s %s joined the room.", string(tcell.RuneDiamond), joinEvt.User.Nickname),
+		fmt.Sprintf("%s %s joined the room.", string(tcell.RuneDiamond), joinData.User.Nickname),
 	)
 }

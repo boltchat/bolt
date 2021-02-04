@@ -15,19 +15,19 @@
 package format
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 
 	"github.com/bolt-chat/protocol/events"
 	"github.com/fatih/color"
+	"github.com/mitchellh/mapstructure"
 )
 
 func FormatMessage(e *events.BaseEvent) string {
-	msgEvt := &events.MessageEvent{}
-	json.Unmarshal(*e.Raw, msgEvt)
+	msgData := events.MessageData{}
+	mapstructure.Decode(e.Data, &msgData)
 
-	fprint := msgEvt.Message.Fingerprint
+	fprint := msgData.Message.Fingerprint
 
 	// Use the last four characters of the fingerprint
 	// for the user tag.
@@ -35,8 +35,8 @@ func FormatMessage(e *events.BaseEvent) string {
 
 	return fmt.Sprintf(
 		"<%s#%s> %s",
-		msgEvt.Message.User.Nickname,
+		msgData.Message.User.Nickname,
 		color.HiYellowString(strings.ToUpper(tag)),
-		msgEvt.Message.Content,
+		msgData.Message.Content,
 	)
 }
