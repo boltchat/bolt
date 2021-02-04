@@ -22,7 +22,7 @@ import (
 const JoinType Type = "join"
 
 type JoinData struct {
-	User *protocol.User `json:"user"`
+	User *protocol.User `json:"user" mapstructure:"user"`
 }
 
 func NewJoinEvent(user *protocol.User) *BaseEvent {

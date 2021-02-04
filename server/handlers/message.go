@@ -16,7 +16,6 @@ package handlers
 
 import (
 	"encoding/hex"
-	"encoding/json"
 
 	"github.com/bolt-chat/protocol/errs"
 	"github.com/bolt-chat/protocol/events"
@@ -24,12 +23,13 @@ import (
 	"github.com/bolt-chat/server/pgp"
 	"github.com/bolt-chat/server/plugins"
 	"github.com/bolt-chat/server/pools"
+	"github.com/mitchellh/mapstructure"
 )
 
 func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
-	msgEvt := &events.MessageEvent{}
-	json.Unmarshal(*e.Raw, msgEvt)
-	err := plugins.GetManager().HookMessage(msgEvt, c)
+	msgData := events.MessageData{}
+	mapstructure.Decode(e.Data, &msgData)
+	err := plugins.GetManager().HookMessage(&msgData, c)
 
 	if err != nil {
 		c.SendError(err.Error())
@@ -37,9 +37,9 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 	}
 
 	pubKey, verifyErr := pgp.VerifyMessageSignature(
-		msgEvt.Message.Signature,
+		msgData.Message.Signature,
 		c.User.PublicKey,
-		msgEvt.Message.Content,
+		msgData.Message.Content,
 	)
 
 	if verifyErr != nil {
@@ -49,6 +49,6 @@ func HandleMessage(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) 
 	}
 
 	logging.LogDebug("Signature matches.", nil)
-	msgEvt.Message.Fingerprint = hex.EncodeToString(pubKey.Fingerprint[:])
-	p.Broadcast(msgEvt)
+	msgData.Message.Fingerprint = hex.EncodeToString(pubKey.Fingerprint[:])
+	p.Broadcast(events.NewMessageEvent(msgData.Message))
 }

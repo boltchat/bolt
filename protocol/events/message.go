@@ -20,7 +20,7 @@ import "github.com/bolt-chat/protocol"
 const MessageType Type = "msg"
 
 type MessageData struct {
-	Message *protocol.Message `json:"msg"`
+	Message *protocol.Message `json:"msg" mapstructure:"msg"`
 }
 
 // NewMessageEvent TODO

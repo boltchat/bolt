@@ -15,17 +15,17 @@
 package handlers
 
 import (
-	"encoding/json"
 	"os"
 
 	"github.com/bolt-chat/protocol/events"
 	"github.com/bolt-chat/server/pools"
+	"github.com/mitchellh/mapstructure"
 )
 
 func HandleJoin(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
-	joinEvt := &events.JoinEvent{}
-	json.Unmarshal(*e.Raw, joinEvt)
-	c.User = joinEvt.User
+	joinData := events.JoinData{}
+	mapstructure.Decode(e.Data, &joinData)
+	c.User = joinData.User
 
 	motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
 	if hasMotd {
@@ -33,5 +33,5 @@ func HandleJoin(p *pools.ConnPool, c *pools.Connection, e *events.BaseEvent) {
 		c.Send(*events.NewMotdEvent(motd))
 	}
 
-	p.Broadcast(joinEvt)
+	p.Broadcast(events.NewJoinEvent(joinData.User))
 }
