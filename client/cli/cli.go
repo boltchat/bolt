@@ -22,6 +22,7 @@ import (
 
 	"github.com/bolt-chat/client/cli/cmd"
 	"github.com/bolt-chat/client/cli/cmd/connect"
+	"github.com/bolt-chat/client/cli/cmd/help"
 	"github.com/bolt-chat/client/cli/cmd/identity"
 	"github.com/bolt-chat/client/cli/cmd/version"
 	"github.com/fatih/color"
@@ -32,6 +33,7 @@ var ErrCmdNotFound = errors.New("command not found")
 var ErrSubCmdNotFound = errors.New("subcommand not found")
 
 var commands = []*cmd.Command{
+	help.HelpCommand,
 	version.VersionCommand,
 	connect.ConnectCommand,
 	identity.IdentityCommand,
@@ -71,6 +73,7 @@ func getCmd(cmds []*cmd.Command, rawCmd string) *cmd.Command {
 }
 
 func ParseCommand(args []string) (*cmd.Command, error) {
+	// No command was given
 	if len(args) == 0 {
 		return nil, ErrTooFewArgs
 	}
@@ -81,11 +84,27 @@ func ParseCommand(args []string) (*cmd.Command, error) {
 		return nil, ErrCmdNotFound
 	}
 
+	/*
+		Print usage when issuing the 'help' command.
+		This has to be handled here, because the
+		`commands` array can not reference itself.
+	*/
+	if cmd == help.HelpCommand {
+		cmd.Handler = func(args []string) error {
+			PrintUsage()
+			return nil
+		}
+		return cmd, nil
+	}
+
+	// Return the command itself if it doesn't
+	// have any subcommands
 	if len(cmd.Subcommands) == 0 {
 		cmd.Args = args[1:]
 		return cmd, nil
 	}
 
+	// No subcommand was given
 	if len(args) < 2 {
 		return nil, ErrTooFewArgs
 	}
