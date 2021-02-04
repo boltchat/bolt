@@ -17,16 +17,13 @@ package events
 // ErrorType is the event type used for error reporting.
 const ErrorType Type = "err"
 
-// ErrorEvent TODO
-type ErrorEvent struct {
-	BaseEvent
+type ErrorData struct {
 	Error string `json:"err"`
 }
 
 // NewErrorEvent TODO
-func NewErrorEvent(err string) *ErrorEvent {
-	return &ErrorEvent{
-		BaseEvent: *NewBaseEvent(ErrorType),
-		Error:     err,
-	}
+func NewErrorEvent(err string) *BaseEvent {
+	return NewBaseEvent(ErrorType, ErrorData{
+		Error: err,
+	})
 }

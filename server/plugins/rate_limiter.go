@@ -28,7 +28,7 @@ type RateLimiterPlugin struct {
 	Time   time.Duration
 }
 
-func (p RateLimiterPlugin) OnMessage(msg *events.MessageEvent, c *pools.Connection) error {
+func (p RateLimiterPlugin) OnMessage(msg *events.MessageData, c *pools.Connection) error {
 	const amountKey string = "rate:a"
 	const timeKey string = "rate:t"
 

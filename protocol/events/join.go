@@ -21,14 +21,12 @@ import (
 // JoinType is the event type used for new connections.
 const JoinType Type = "join"
 
-type JoinEvent struct {
-	BaseEvent
+type JoinData struct {
 	User *protocol.User `json:"user"`
 }
 
-func NewJoinEvent(user *protocol.User) *JoinEvent {
-	return &JoinEvent{
-		BaseEvent: *NewBaseEvent(JoinType),
-		User:      user,
-	}
+func NewJoinEvent(user *protocol.User) *BaseEvent {
+	return NewBaseEvent(JoinType, JoinData{
+		User: user,
+	})
 }

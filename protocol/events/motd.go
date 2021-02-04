@@ -17,16 +17,13 @@ package events
 // MotdType is the event type used for the Message-of-the-Day (MOTD).
 const MotdType Type = "motd"
 
-// MotdEvent is the event used for the Message-of-the-Day (MOTD).
-type MotdEvent struct {
-	BaseEvent
+type MotdData struct {
 	Motd string
 }
 
 // NewMotdEvent constructs a new MotdEvent
-func NewMotdEvent(motd string) *MotdEvent {
-	return &MotdEvent{
-		BaseEvent: *NewBaseEvent(MotdType),
-		Motd:      motd,
-	}
+func NewMotdEvent(motd string) *BaseEvent {
+	return NewBaseEvent(MotdType, MotdData{
+		Motd: motd,
+	})
 }

@@ -19,16 +19,13 @@ import "github.com/bolt-chat/protocol"
 // MessageType is the event type used for messages.
 const MessageType Type = "msg"
 
-// MessageEvent TODO
-type MessageEvent struct {
-	BaseEvent
+type MessageData struct {
 	Message *protocol.Message `json:"msg"`
 }
 
 // NewMessageEvent TODO
-func NewMessageEvent(msg *protocol.Message) *MessageEvent {
-	return &MessageEvent{
-		BaseEvent: *NewBaseEvent(MessageType),
-		Message:   msg,
-	}
+func NewMessageEvent(msg *protocol.Message) *BaseEvent {
+	return NewBaseEvent(MessageType, MessageData{
+		Message: msg,
+	})
 }

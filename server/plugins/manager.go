@@ -33,7 +33,7 @@ func (p *PluginManager) GetInstalled() *[]Plugin {
 	return p.installedPlugins
 }
 
-func (p *PluginManager) HookMessage(msg *events.MessageEvent, conn *pools.Connection) error {
+func (p *PluginManager) HookMessage(msg *events.MessageData, conn *pools.Connection) error {
 	for _, plugin := range *p.GetInstalled() {
 		err := plugin.OnMessage(msg, conn)
 

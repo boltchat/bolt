@@ -21,14 +21,12 @@ import (
 // LeaveType is the event type used for disconnects.
 const LeaveType Type = "leave"
 
-type LeaveEvent struct {
-	BaseEvent
+type LeaveData struct {
 	User *protocol.User `json:"user"`
 }
 
-func NewLeaveEvent(user *protocol.User) *LeaveEvent {
-	return &LeaveEvent{
-		BaseEvent: *NewBaseEvent(LeaveType),
-		User:      user,
-	}
+func NewLeaveEvent(user *protocol.User) *BaseEvent {
+	return NewBaseEvent(LeaveType, LeaveData{
+		User: user,
+	})
 }

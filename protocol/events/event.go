@@ -39,11 +39,12 @@ type BaseEvent struct {
 }
 
 // NewBaseEvent TODO
-func NewBaseEvent(t Type) *BaseEvent {
+func NewBaseEvent(t Type, data interface{}) *BaseEvent {
 	return &BaseEvent{
 		Meta: &EventMeta{
 			Type:      t,
 			CreatedAt: time.Now().Unix(),
 		},
+		Data: data,
 	}
 }
