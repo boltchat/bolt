@@ -19,6 +19,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/bolt-chat/protocol"
 	"github.com/bolt-chat/protocol/events"
 	"github.com/fatih/color"
 )
@@ -58,16 +59,24 @@ func LogDebug(msg string, data interface{}) {
 	logBase(color.HiYellowString("DEBUG"), msg)
 }
 
-func LogEvent(evtType EventType, evt *events.Event) {
+func LogEvent(evtType EventType, user *protocol.User, evt *events.Event) {
 	typeMap := map[EventType]string{
 		RecvType: color.HiCyanString("<--"),
 		SendType: color.HiRedString("-->"),
 	}
 
+	nickname := "unknown"
+
+	if user != nil {
+		nickname = color.HiYellowString(user.Nickname)
+	}
+
 	logBase(color.HiMagentaString("EVENT"), fmt.Sprintf(
-		"%s %v",
+		"%s %s | %s | %s",
 		typeMap[evtType],
-		evt,
+		color.HiCyanString("%s", evt.Meta.Type),
+		color.HiBlackString("user: %s", nickname),
+		color.HiBlackString("data:\n")+fmt.Sprintf("%v", evt.Data),
 	))
 }
 

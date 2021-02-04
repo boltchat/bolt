@@ -59,7 +59,7 @@ func (c *Connection) SendEvent(evt *events.Event) error {
 	}
 
 	// Log the incoming event
-	logging.LogEvent(logging.SendType, evt)
+	logging.LogEvent(logging.SendType, c.User, evt)
 
 	return nil
 }
@@ -71,7 +71,7 @@ func (c *Connection) Read(out *events.Event) error {
 	}
 
 	// Log the incoming event
-	logging.LogEvent(logging.RecvType, out)
+	logging.LogEvent(logging.RecvType, c.User, out)
 
 	return nil
 }
