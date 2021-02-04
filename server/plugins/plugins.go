@@ -21,6 +21,7 @@ import (
 
 type Plugin interface {
 	OnMessage(msg *events.MessageData, c *pools.Connection) error
+	OnIdentify(data *events.JoinData, c *pools.Connection) error
 	GetInfo() *PluginInfo
 }
 

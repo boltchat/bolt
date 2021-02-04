@@ -46,6 +46,19 @@ func (p *PluginManager) HookMessage(msg *events.MessageData, conn *pools.Connect
 	return nil
 }
 
+func (p *PluginManager) HookIdentify(data *events.JoinData, conn *pools.Connection) error {
+	for _, plugin := range *p.GetInstalled() {
+		err := plugin.OnIdentify(data, conn)
+
+		// Fail fast if a plugin reports an error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func SetManager(mgr *PluginManager) {
 	manager = mgr
 }

@@ -34,6 +34,10 @@ func main() {
 			Amount: 5,
 			Time:   time.Second,
 		},
+		plugins.NicknameValidationPlugin{
+			MinChars: 2,
+			MaxChars: 24,
+		},
 	)
 
 	// Set the plugin manager

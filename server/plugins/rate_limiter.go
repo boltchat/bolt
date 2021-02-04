@@ -28,6 +28,12 @@ type RateLimiterPlugin struct {
 	Time   time.Duration
 }
 
+func (RateLimiterPlugin) GetInfo() *PluginInfo {
+	return &PluginInfo{
+		Id: "rate-limiter",
+	}
+}
+
 func (p RateLimiterPlugin) OnMessage(msg *events.MessageData, c *pools.Connection) error {
 	const amountKey string = "rate:a"
 	const timeKey string = "rate:t"
@@ -56,8 +62,6 @@ func (p RateLimiterPlugin) OnMessage(msg *events.MessageData, c *pools.Connectio
 	return nil
 }
 
-func (RateLimiterPlugin) GetInfo() *PluginInfo {
-	return &PluginInfo{
-		Id: "rate-limiter",
-	}
+func (p RateLimiterPlugin) OnIdentify(data *events.JoinData, c *pools.Connection) error {
+	return nil
 }

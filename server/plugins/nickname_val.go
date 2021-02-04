@@ -12,34 +12,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package handlers
+package plugins
 
 import (
-	"os"
+	"errors"
 
 	"github.com/boltchat/protocol/events"
-	"github.com/boltchat/server/plugins"
 	"github.com/boltchat/server/pools"
-	"github.com/mitchellh/mapstructure"
 )
 
-func HandleJoin(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
-	joinData := events.JoinData{}
-	mapstructure.Decode(e.Data, &joinData)
+type NicknameValidationPlugin struct {
+	MinChars int
+	MaxChars int
+}
 
-	err := plugins.GetManager().HookIdentify(&joinData, c)
-	if err != nil {
-		c.SendError(err.Error())
-		return
+func (NicknameValidationPlugin) GetInfo() *PluginInfo {
+	return &PluginInfo{
+		Id: "nickname-validation",
+	}
+}
+
+var ErrNicknameTooShort = errors.New("nickname too short")
+var ErrNicknameTooLong = errors.New("nickname too long")
+
+func (p NicknameValidationPlugin) OnMessage(msg *events.MessageData, c *pools.Connection) error {
+	return nil
+}
+
+func (p NicknameValidationPlugin) OnIdentify(data *events.JoinData, c *pools.Connection) error {
+	if len(data.User.Nickname) < p.MinChars {
+		return ErrNicknameTooShort
 	}
 
-	c.User = joinData.User
-
-	motd, hasMotd := os.LookupEnv("MOTD") // Get MOTD env
-	if hasMotd {
-		// Send MOTD if env var is declared
-		c.SendEvent(events.NewMotdEvent(motd))
+	if len(data.User.Nickname) > p.MaxChars {
+		return ErrNicknameTooLong
 	}
 
-	p.BroadcastEvent(events.NewJoinEvent(joinData.User))
+	return nil
 }
