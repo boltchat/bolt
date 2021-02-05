@@ -28,9 +28,9 @@ func GetEntityRoot() string {
 	)
 }
 
-func GetEntityLocation(username string) string {
+func GetEntityLocation(identityID string) string {
 	return path.Join(
 		GetEntityRoot(),
-		fmt.Sprintf("%s.pgp", username),
+		fmt.Sprintf("%s.pgp", identityID),
 	)
 }

@@ -40,7 +40,7 @@ func CreateIdentity(identity *config.Identity, identityID string) (*Identity, er
 	}
 
 	// Write the PGP entity to disk
-	writePGPErr := pgp.WritePGPEntity(GetEntityLocation(identity.Nickname), entity)
+	writePGPErr := pgp.WritePGPEntity(GetEntityLocation(identityID), entity)
 	if writePGPErr != nil {
 		return nil, writePGPErr
 	}

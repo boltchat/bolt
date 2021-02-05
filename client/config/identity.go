@@ -24,6 +24,7 @@ import (
 var ErrNoSuchIdentity = errors.New("identity not found")
 
 type Identity struct {
+	ID       string `yaml:"-"`
 	Nickname string `yaml:"nickname"`
 }
 
@@ -69,6 +70,7 @@ func GetIdentityList() *IdentityList {
 
 func GetIdentityEntry(id string) (*Identity, error) {
 	if identity, ok := identityList[id]; ok {
+		identity.ID = id
 		return &identity, nil
 	}
 
