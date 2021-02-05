@@ -20,13 +20,9 @@ import (
 )
 
 func LoadIdentity(identity *config.Identity) (*Identity, error) {
-	entityPath := identity.EntityPath
-
-	if entityPath == "" {
-		entityPath = pgp.GetEntityLocation(identity.Nickname)
-	}
-
+	entityPath := pgp.GetEntityLocation(identity.Nickname)
 	entity, err := pgp.LoadPGPEntity(entityPath)
+
 	if err != nil {
 		return nil, err
 	}
