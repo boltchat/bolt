@@ -57,11 +57,12 @@ A message looks like this:
 {
   "body": "This is a message.",
   "sig": "-----BEGIN PGP SIGNATURE----- (...)",
-  "user": { // ⚠
+  "user": {
     "nick": "keesvv"
   }
 }
 ```
+> ⚠ `user` will soon be removed from message events emitted by clients.
 
 `<--`
 ```json
