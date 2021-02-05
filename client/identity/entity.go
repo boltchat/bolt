@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package pgp
+package identity
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ import (
 	"github.com/boltchat/client/config"
 )
 
-func GetEntitiesRoot() string {
+func GetEntityRoot() string {
 	return path.Join(
 		config.GetConfigRoot(),
 		"entities",
@@ -30,7 +30,7 @@ func GetEntitiesRoot() string {
 
 func GetEntityLocation(username string) string {
 	return path.Join(
-		GetEntitiesRoot(),
+		GetEntityRoot(),
 		fmt.Sprintf("%s.pgp", username),
 	)
 }

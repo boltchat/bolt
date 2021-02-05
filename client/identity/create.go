@@ -18,7 +18,7 @@ import (
 	"os"
 
 	"github.com/boltchat/client/config"
-	"github.com/boltchat/client/pgp"
+	"github.com/boltchat/lib/pgp"
 )
 
 // CreateIdentity creates a new Identity.
@@ -33,14 +33,14 @@ func CreateIdentity(identity *config.Identity, identityID string) (*Identity, er
 		return nil, createErr
 	}
 
-	if _, statErr := os.Stat(pgp.GetEntitiesRoot()); os.IsNotExist(statErr) {
-		os.Mkdir(pgp.GetEntitiesRoot(), 0700)
+	if _, statErr := os.Stat(GetEntityRoot()); os.IsNotExist(statErr) {
+		os.Mkdir(GetEntityRoot(), 0700)
 	} else if statErr != nil {
 		return nil, statErr
 	}
 
 	// Write the PGP entity to disk
-	writePGPErr := pgp.WritePGPEntity(pgp.GetEntityLocation(identity.Nickname), entity)
+	writePGPErr := pgp.WritePGPEntity(GetEntityLocation(identity.Nickname), entity)
 	if writePGPErr != nil {
 		return nil, writePGPErr
 	}

@@ -19,7 +19,7 @@ import (
 	"net"
 
 	"github.com/boltchat/client/identity"
-	"github.com/boltchat/client/pgp"
+	"github.com/boltchat/lib/pgp"
 	"github.com/boltchat/protocol"
 	"github.com/boltchat/protocol/events"
 )

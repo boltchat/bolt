@@ -16,11 +16,11 @@ package identity
 
 import (
 	"github.com/boltchat/client/config"
-	"github.com/boltchat/client/pgp"
+	"github.com/boltchat/lib/pgp"
 )
 
 func LoadIdentity(identity *config.Identity) (*Identity, error) {
-	entityPath := pgp.GetEntityLocation(identity.Nickname)
+	entityPath := GetEntityLocation(identity.Nickname)
 	entity, err := pgp.LoadPGPEntity(entityPath)
 
 	if err != nil {
