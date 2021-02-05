@@ -1,0 +1,15 @@
+[Unit]
+Description=Boltchat Server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/local/bin/boltchat-server
+Environment=BIND_IPV4=0.0.0.0
+Environment=BIND_IPV6=::/0
+
+[Install]
+WantedBy=multi-user.target
