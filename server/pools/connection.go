@@ -18,7 +18,9 @@ import (
 	"encoding/json"
 	"net"
 
-	"github.com/bolt-chat/protocol"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/logging"
 )
 
 // Connection TODO
@@ -46,14 +48,37 @@ func NewConnection(conn *net.TCPConn, user *protocol.User) *Connection {
 
 // Send TODO
 func (c *Connection) Send(data interface{}) error {
-	err := c.encoder.Encode(data)
-	return err
+	return c.encoder.Encode(data)
 }
 
-// Receive TODO
-func (c *Connection) Receive(data interface{}) error {
-	err := c.decoder.Decode(data)
-	return err
+// SendEvent TODO
+func (c *Connection) SendEvent(evt *events.Event) error {
+	err := c.Send(evt)
+	if err != nil {
+		return err
+	}
+
+	// Log the incoming event
+	logging.LogEvent(logging.SendType, c.User, evt)
+
+	return nil
+}
+
+func (c *Connection) Read(out *events.Event) error {
+	err := c.decoder.Decode(out)
+	if err != nil {
+		return err
+	}
+
+	// Log the incoming event
+	logging.LogEvent(logging.RecvType, c.User, out)
+
+	return nil
+}
+
+// SendError TODO
+func (c *Connection) SendError(err string) error {
+	return c.SendEvent(events.NewErrorEvent(err))
 }
 
 // Close closes the connection.

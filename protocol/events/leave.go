@@ -15,20 +15,18 @@
 package events
 
 import (
-	"github.com/bolt-chat/protocol"
+	"github.com/boltchat/protocol"
 )
 
 // LeaveType is the event type used for disconnects.
 const LeaveType Type = "leave"
 
-type LeaveEvent struct {
-	BaseEvent
-	User *protocol.User `json:"user"`
+type LeaveData struct {
+	User *protocol.User `json:"user" mapstructure:"user"`
 }
 
-func NewLeaveEvent(user *protocol.User) *LeaveEvent {
-	return &LeaveEvent{
-		BaseEvent: *NewBaseEvent(LeaveType),
-		User:      user,
-	}
+func NewLeaveEvent(user *protocol.User) *Event {
+	return NewEvent(LeaveType, LeaveData{
+		User: user,
+	})
 }

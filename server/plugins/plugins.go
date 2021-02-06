@@ -15,12 +15,13 @@
 package plugins
 
 import (
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/pools"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/pools"
 )
 
 type Plugin interface {
-	OnMessage(msg *events.MessageEvent, c *pools.Connection) error
+	OnMessage(msg *events.MessageData, c *pools.Connection) error
+	OnIdentify(data *events.JoinData, c *pools.Connection) error
 	GetInfo() *PluginInfo
 }
 

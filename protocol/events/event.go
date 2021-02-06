@@ -19,29 +19,28 @@ import "time"
 // Type represents an event type identifier.
 type Type string
 
-// Event represents a general protocol event.
-type Event struct {
+// EventMeta represents the metadata that is
+// accompanied with each event.
+type EventMeta struct {
 	// The event identifier/type.
 	Type Type `json:"t"`
 	// The event creation date (client-side, untrustworthy).
 	CreatedAt int64 `json:"c"`
-	// The event receipt date (server-side, trustworthy).
-	RecvAt int64 `json:"r,omitempty"` // TODO:
 }
 
-// BaseEvent represents a bare event without
-// additional provided data.
-type BaseEvent struct {
-	Event *Event  `json:"e"`
-	Raw   *[]byte `json:"-"`
+// Event represents a server event.
+type Event struct {
+	Meta *EventMeta  `json:"e"`
+	Data interface{} `json:"d"`
 }
 
-// NewBaseEvent TODO
-func NewBaseEvent(t Type) *BaseEvent {
-	return &BaseEvent{
-		Event: &Event{
+// NewEvent TODO
+func NewEvent(t Type, data interface{}) *Event {
+	return &Event{
+		Meta: &EventMeta{
 			Type:      t,
 			CreatedAt: time.Now().Unix(),
 		},
+		Data: data,
 	}
 }

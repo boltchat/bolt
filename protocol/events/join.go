@@ -15,20 +15,18 @@
 package events
 
 import (
-	"github.com/bolt-chat/protocol"
+	"github.com/boltchat/protocol"
 )
 
 // JoinType is the event type used for new connections.
 const JoinType Type = "join"
 
-type JoinEvent struct {
-	BaseEvent
-	User *protocol.User `json:"user"`
+type JoinData struct {
+	User *protocol.User `json:"user" mapstructure:"user"`
 }
 
-func NewJoinEvent(user *protocol.User) *JoinEvent {
-	return &JoinEvent{
-		BaseEvent: *NewBaseEvent(JoinType),
-		User:      user,
-	}
+func NewJoinEvent(user *protocol.User) *Event {
+	return NewEvent(JoinType, JoinData{
+		User: user,
+	})
 }

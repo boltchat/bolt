@@ -15,7 +15,8 @@
 package pools
 
 import (
-	"github.com/bolt-chat/server/logging"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/logging"
 )
 
 // ConnPool represents a group of connections.
@@ -72,5 +73,13 @@ func (c *ConnPool) RemoveFromPool(conn *Connection) {
 func (c *ConnPool) Broadcast(data interface{}) {
 	for _, conn := range *c {
 		conn.Send(data)
+	}
+}
+
+// BroadcastEvent emits an event to all connections that are
+// present in the pool.
+func (c *ConnPool) BroadcastEvent(evt *events.Event) {
+	for _, conn := range *c {
+		conn.SendEvent(evt)
 	}
 }

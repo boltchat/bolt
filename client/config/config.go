@@ -15,11 +15,7 @@
 package config
 
 import (
-	"io/ioutil"
-	"os"
-	"path"
-
-	"github.com/bolt-chat/client/errs"
+	"github.com/boltchat/client/errs"
 	"gopkg.in/yaml.v2"
 )
 
@@ -33,8 +29,9 @@ type Config struct {
 
 var config Config
 
-func getConfigLocation() string {
-	return path.Join(GetConfigRoot(), "config.yml")
+var ConfigFile = &File{
+	Filename: "config.yml",
+	Default:  *GetDefaultConfig(),
 }
 
 func parseConfig(raw []byte) (*Config, error) {
@@ -48,41 +45,8 @@ func parseConfig(raw []byte) (*Config, error) {
 	return config, nil
 }
 
-// TODO: fix duplication
-func readConfig() ([]byte, error) {
-	configLocation := getConfigLocation()
-	configRaw, err := ioutil.ReadFile(configLocation)
-
-	if err != nil && !os.IsNotExist(err) {
-		return nil, err
-	}
-
-	if len(configRaw) == 0 {
-		configRoot := GetConfigRoot()
-		defaultConf, marshalErr := yaml.Marshal(*GetDefaultConfig())
-
-		if marshalErr != nil {
-			return nil, marshalErr
-		}
-
-		stat, statErr := os.Stat(configRoot)
-		if statErr != nil || !stat.IsDir() {
-			os.MkdirAll(configRoot, 0755)
-		}
-
-		writeErr := ioutil.WriteFile(configLocation, defaultConf, 0644)
-		if writeErr != nil {
-			return nil, writeErr
-		}
-
-		configRaw = defaultConf
-	}
-
-	return configRaw, nil
-}
-
 func LoadConfig() {
-	configRaw, readErr := readConfig()
+	configRaw, readErr := ConfigFile.Read()
 	if readErr != nil {
 		errs.Emerg(readErr)
 	}

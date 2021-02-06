@@ -18,9 +18,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/bolt-chat/protocol/errs"
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/pools"
+	"github.com/boltchat/protocol/errs"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/pools"
 )
 
 type RateLimiterPlugin struct {
@@ -28,7 +28,13 @@ type RateLimiterPlugin struct {
 	Time   time.Duration
 }
 
-func (p RateLimiterPlugin) OnMessage(msg *events.MessageEvent, c *pools.Connection) error {
+func (RateLimiterPlugin) GetInfo() *PluginInfo {
+	return &PluginInfo{
+		Id: "rate-limiter",
+	}
+}
+
+func (p RateLimiterPlugin) OnMessage(msg *events.MessageData, c *pools.Connection) error {
 	const amountKey string = "rate:a"
 	const timeKey string = "rate:t"
 
@@ -56,8 +62,6 @@ func (p RateLimiterPlugin) OnMessage(msg *events.MessageEvent, c *pools.Connecti
 	return nil
 }
 
-func (RateLimiterPlugin) GetInfo() *PluginInfo {
-	return &PluginInfo{
-		Id: "rate-limiter",
-	}
+func (p RateLimiterPlugin) OnIdentify(data *events.JoinData, c *pools.Connection) error {
+	return nil
 }

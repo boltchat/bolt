@@ -15,8 +15,8 @@
 package plugins
 
 import (
-	"github.com/bolt-chat/protocol/events"
-	"github.com/bolt-chat/server/pools"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/pools"
 )
 
 var manager *PluginManager
@@ -33,9 +33,22 @@ func (p *PluginManager) GetInstalled() *[]Plugin {
 	return p.installedPlugins
 }
 
-func (p *PluginManager) HookMessage(msg *events.MessageEvent, conn *pools.Connection) error {
+func (p *PluginManager) HookMessage(msg *events.MessageData, conn *pools.Connection) error {
 	for _, plugin := range *p.GetInstalled() {
 		err := plugin.OnMessage(msg, conn)
+
+		// Fail fast if a plugin reports an error
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (p *PluginManager) HookIdentify(data *events.JoinData, conn *pools.Connection) error {
+	for _, plugin := range *p.GetInstalled() {
+		err := plugin.OnIdentify(data, conn)
 
 		// Fail fast if a plugin reports an error
 		if err != nil {

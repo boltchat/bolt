@@ -15,13 +15,14 @@
 package main
 
 import (
-	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
-	"github.com/bolt-chat/server"
-	"github.com/bolt-chat/server/plugins"
-	"github.com/bolt-chat/server/util"
+	"github.com/boltchat/server"
+	"github.com/boltchat/server/plugins"
+	"github.com/boltchat/server/util"
 )
 
 func main() {
@@ -32,6 +33,10 @@ func main() {
 		plugins.RateLimiterPlugin{
 			Amount: 5,
 			Time:   time.Second,
+		},
+		plugins.NicknameValidationPlugin{
+			MinChars: 2,
+			MaxChars: 24,
 		},
 	)
 
@@ -67,6 +72,8 @@ func main() {
 		panic(err)
 	}
 
-	// Exit on return
-	fmt.Scanln()
+	// Exit on syscall
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
+	<-sigs
 }

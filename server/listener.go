@@ -17,9 +17,9 @@ package server
 import (
 	"net"
 
-	"github.com/bolt-chat/server/handlers"
-	"github.com/bolt-chat/server/logging"
-	"github.com/bolt-chat/server/pools"
+	"github.com/boltchat/server/handlers"
+	"github.com/boltchat/server/logging"
+	"github.com/boltchat/server/pools"
 )
 
 type Bind struct {

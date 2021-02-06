@@ -15,16 +15,10 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
-	"github.com/bolt-chat/client/args"
-	"github.com/bolt-chat/client/config"
-	"github.com/bolt-chat/client/errs"
-	"github.com/bolt-chat/client/tui"
-	"github.com/bolt-chat/lib/client"
-	"github.com/bolt-chat/protocol/events"
-	"github.com/fatih/color"
+	"github.com/boltchat/client/cli"
+	"github.com/boltchat/client/config"
 )
 
 func main() {
@@ -32,45 +26,13 @@ func main() {
 	config.LoadConfig()
 	config.LoadIdentityList()
 
-	args := args.GetArgs()
-
-	identity, identityErr := config.GetIdentity(args.Identity)
-	if identityErr != nil {
-		errs.Emerg(identityErr)
+	cmd, cmdErr := cli.ParseCommand(os.Args[1:])
+	if cmdErr != nil {
+		cli.HandleCommandError(cmdErr)
 	}
 
-	if identity.Nickname == "" {
-		errs.General(
-			fmt.Sprintf(
-				"It looks like you haven't set your nickname "+
-					"yet.\nPlease do so by editing the %s field in %s.",
-				color.HiYellowString("nickname"),
-				config.GetIdentityLocation(),
-			),
-		)
+	execErr := cmd.Execute()
+	if execErr != nil {
+		cli.HandleCommandError(execErr)
 	}
-
-	c := client.NewClient(client.Options{
-		Hostname: args.Hostname,
-		Port:     args.Port,
-		Nickname: identity.Nickname,
-	})
-
-	err := c.Connect()
-
-	if err != nil {
-		errs.Connect(err)
-	}
-
-	evts := make(chan *events.BaseEvent)
-
-	serverClosed := make(chan bool)
-	go c.ReadEvents(evts, serverClosed)
-	go tui.Display(c, evts)
-
-	// Quit when the server closes
-	<-serverClosed
-	tui.Quit()
-	fmt.Println("The server closed.")
-	os.Exit(0)
 }

@@ -15,19 +15,28 @@
 package format
 
 import (
-	"encoding/json"
 	"fmt"
+	"strings"
 
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/events"
+	"github.com/fatih/color"
+	"github.com/mitchellh/mapstructure"
 )
 
-func FormatMessage(e *events.BaseEvent) string {
-	msgEvt := &events.MessageEvent{}
-	json.Unmarshal(*e.Raw, msgEvt)
+func FormatMessage(e *events.Event) string {
+	msgData := events.MessageData{}
+	mapstructure.Decode(e.Data, &msgData)
+
+	fprint := msgData.Message.Fingerprint
+
+	// Use the last four characters of the fingerprint
+	// for the user tag.
+	tag := fprint[len(fprint)-4:]
 
 	return fmt.Sprintf(
-		"<%s> %s",
-		msgEvt.Message.User.Nickname,
-		msgEvt.Message.Content,
+		"<%s#%s> %s",
+		msgData.Message.User.Nickname,
+		color.HiYellowString(strings.ToUpper(tag)),
+		msgData.Message.Content,
 	)
 }

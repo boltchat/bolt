@@ -12,18 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package util
+package version
 
 import (
-	"encoding/json"
-	"net"
+	"fmt"
 )
 
-func WriteJson(conn *net.TCPConn, data interface{}) {
-	b, err := json.Marshal(data)
-	if err != nil {
-		panic(err)
+func FormatVersion(versions []*Version) string {
+	str := "Copyright (c) 2021 The boltchat Authors\n"
+
+	for i, v := range versions {
+		str += fmt.Sprintf("%s version %s", v.Type, v.VersionString)
+
+		if i < len(versions)-1 {
+			str += "\n"
+		}
 	}
 
-	conn.Write(b)
+	return str
 }

@@ -15,7 +15,7 @@
 package tui
 
 import (
-	"github.com/bolt-chat/client/config"
+	"github.com/boltchat/client/config"
 	"github.com/gdamore/tcell/v2"
 )
 

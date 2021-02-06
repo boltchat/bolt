@@ -19,14 +19,23 @@ import (
 	"os"
 	"time"
 
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
+)
+
+type EventType int
+
+const (
+	RecvType EventType = iota
+	SendType EventType = iota
 )
 
 func logBase(
 	level string,
 	msg string,
 ) {
-	fmt.Printf("%s [%s] %s\n", color.HiBlackString(time.Now().Format("15:04:05")), level, msg)
+	fmt.Printf("%s %s %s\n", color.HiBlackString(time.Now().Format("15:04:05")), level, msg)
 }
 
 func LogInfo(msg string) {
@@ -50,8 +59,25 @@ func LogDebug(msg string, data interface{}) {
 	logBase(color.HiYellowString("DEBUG"), msg)
 }
 
-func LogEvent(evt interface{}) {
-	LogDebug("event:", evt)
+func LogEvent(evtType EventType, user *protocol.User, evt *events.Event) {
+	typeMap := map[EventType]string{
+		RecvType: color.HiCyanString("<--"),
+		SendType: color.HiRedString("-->"),
+	}
+
+	nickname := "unknown"
+
+	if user != nil {
+		nickname = color.HiYellowString(user.Nickname)
+	}
+
+	logBase(color.HiMagentaString("EVENT"), fmt.Sprintf(
+		"%s %s | %s | %s",
+		typeMap[evtType],
+		color.HiCyanString("%s", evt.Meta.Type),
+		color.HiBlackString("user: %s", nickname),
+		color.HiBlackString("data:\n")+fmt.Sprintf("%v", evt.Data),
+	))
 }
 
 // LogListener TODO

@@ -18,10 +18,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/bolt-chat/client/errs"
-	"github.com/bolt-chat/lib/client"
-	"github.com/bolt-chat/protocol"
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/client/errs"
+	"github.com/boltchat/lib/client"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/protocol/events"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/gdamore/tcell/v2/encoding"
@@ -32,7 +32,7 @@ var screen tcell.Screen
 /*
 Display displays the TUI.
 */
-func Display(c *client.Client, evts chan *events.BaseEvent) {
+func Display(c *client.Client, evts chan *events.Event) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
 	mode := MessageMode
@@ -81,12 +81,19 @@ func Display(c *client.Client, evts chan *events.BaseEvent) {
 
 				msg := protocol.Message{
 					Content: string(input),
-					User:    &c.User,
+					User: &protocol.User{
+						Nickname: c.Identity.Nickname, // TODO
+					},
 				}
 
-				err := c.SendMessage(&msg)
-				if err != nil {
-					errs.Emerg(err)
+				signErr := c.SignMessage(&msg)
+				if signErr != nil {
+					errs.Emerg(signErr)
+				}
+
+				sendErr := c.SendMessage(&msg)
+				if sendErr != nil {
+					errs.Emerg(sendErr)
 				}
 
 				input = []rune{}

@@ -23,10 +23,11 @@ const serverEntry string = "cmd/server/server.go"
 const clientEntry string = "cmd/client/client.go"
 
 type (
-	Build  mg.Namespace
-	Test   mg.Namespace
-	Docker mg.Namespace
-	CI     mg.Namespace
+	Build   mg.Namespace
+	Test    mg.Namespace
+	Docker  mg.Namespace
+	CI      mg.Namespace
+	Install mg.Namespace
 )
 
 type BuildOptions struct {
@@ -191,11 +192,21 @@ func License() {
 		"addlicense",
 		"-l", "apache",
 		"-c", "The boltchat Authors",
-		"client", "server", "protocol", "cmd", "util",
+		"client", "server", "protocol", "cmd", "util", "lib",
 	)
 }
 
 // Cleans up build directories
 func Clean() {
 	sh.Rm("build")
+}
+
+// Installs the server to /usr/local/bin
+// (Linux-only)
+func (Install) Server() error {
+	return sh.Run(
+		"cp",
+		"build/boltchat-server-linux-amd64",
+		"/usr/local/bin/boltchat-server",
+	)
 }

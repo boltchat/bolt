@@ -15,11 +15,11 @@
 package format
 
 import (
-	"encoding/json"
 	"fmt"
 
-	"github.com/bolt-chat/protocol/errs"
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/errs"
+	"github.com/boltchat/protocol/events"
+	"github.com/mitchellh/mapstructure"
 
 	"github.com/fatih/color"
 )
@@ -31,14 +31,14 @@ var errorMap = map[string]string{
 	errs.Unidentified:    "You need to identify yourself before you can interact with this server.",
 }
 
-func FormatError(e *events.BaseEvent) string {
-	errEvt := &events.ErrorEvent{}
-	json.Unmarshal(*e.Raw, errEvt)
+func FormatError(e *events.Event) string {
+	errData := events.ErrorData{}
+	mapstructure.Decode(e.Data, &errData)
 
-	err := errEvt.Error
+	err := errData.Error
 
 	// A formatter exists for this error
-	if format, ok := errorMap[errEvt.Error]; ok {
+	if format, ok := errorMap[errData.Error]; ok {
 		err = format
 	}
 

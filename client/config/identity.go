@@ -16,15 +16,15 @@ package config
 
 import (
 	"errors"
-	"io/ioutil"
-	"os"
-	"path"
 
-	"github.com/bolt-chat/client/errs"
+	"github.com/boltchat/client/errs"
 	"gopkg.in/yaml.v2"
 )
 
+var ErrNoSuchIdentity = errors.New("identity not found")
+
 type Identity struct {
+	ID       string `yaml:"-"`
 	Nickname string `yaml:"nickname"`
 }
 
@@ -32,11 +32,12 @@ type IdentityList map[string]Identity
 
 var identityList IdentityList
 
-const DefaultIdentity string = "default"
-
-func GetIdentityLocation() string {
-	return path.Join(GetConfigRoot(), "identity.yml")
+var IdentityFile = &File{
+	Filename: "identity.yml",
+	Default:  IdentityList{},
 }
+
+const DefaultIdentity string = "default"
 
 func parseIdentityList(raw []byte) (*IdentityList, error) {
 	identityList := &IdentityList{}
@@ -49,42 +50,8 @@ func parseIdentityList(raw []byte) (*IdentityList, error) {
 	return identityList, nil
 }
 
-// TODO: fix duplication
-func readIdentityList() ([]byte, error) {
-	raw, err := ioutil.ReadFile(GetIdentityLocation())
-
-	if err != nil && !os.IsNotExist(err) {
-		return nil, err
-	}
-
-	if len(raw) == 0 {
-		configRoot := GetConfigRoot()
-		defaultConf, marshalErr := yaml.Marshal(&IdentityList{
-			DefaultIdentity: Identity{},
-		})
-
-		if marshalErr != nil {
-			return nil, marshalErr
-		}
-
-		stat, statErr := os.Stat(configRoot)
-		if statErr != nil || !stat.IsDir() {
-			os.MkdirAll(configRoot, 0755)
-		}
-
-		writeErr := ioutil.WriteFile(GetIdentityLocation(), defaultConf, 0644)
-		if writeErr != nil {
-			return nil, writeErr
-		}
-
-		raw = defaultConf
-	}
-
-	return raw, nil
-}
-
 func LoadIdentityList() {
-	identityRaw, readErr := readIdentityList()
+	identityRaw, readErr := IdentityFile.Read()
 	if readErr != nil {
 		errs.Emerg(readErr)
 	}
@@ -101,10 +68,11 @@ func GetIdentityList() *IdentityList {
 	return &identityList
 }
 
-func GetIdentity(id string) (*Identity, error) {
+func GetIdentityEntry(id string) (*Identity, error) {
 	if identity, ok := identityList[id]; ok {
+		identity.ID = id
 		return &identity, nil
 	}
 
-	return nil, errors.New("identity not found")
+	return nil, ErrNoSuchIdentity
 }

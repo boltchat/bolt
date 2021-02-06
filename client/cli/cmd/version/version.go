@@ -12,20 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+package version
 
 import (
-	"os"
-	"path"
+	"fmt"
 
-	"github.com/bolt-chat/client/errs"
+	"github.com/boltchat/client"
+	"github.com/boltchat/client/cli/cmd"
+	"github.com/boltchat/protocol"
+	"github.com/boltchat/util/version"
 )
 
-func GetConfigRoot() string {
-	root, err := os.UserConfigDir()
-	if err != nil {
-		errs.Emerg(err)
-	}
+var VersionCommand = &cmd.Command{
+	Name:    "version",
+	Desc:    "Displays version information.",
+	Handler: versionHandler,
+}
 
-	return path.Join(root, "boltchat")
+func versionHandler(args []string) error {
+	fmt.Println(version.FormatVersion([]*version.Version{
+		client.Version,
+		protocol.Version,
+	}))
+	return nil
 }

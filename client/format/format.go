@@ -17,10 +17,10 @@ package format
 import (
 	"fmt"
 
-	"github.com/bolt-chat/protocol/events"
+	"github.com/boltchat/protocol/events"
 )
 
-type formatHandler = func(e *events.BaseEvent) string
+type formatHandler = func(e *events.Event) string
 
 var formatMap = map[events.Type]formatHandler{
 	events.MotdType:    FormatMotd,
@@ -31,9 +31,9 @@ var formatMap = map[events.Type]formatHandler{
 }
 
 // Format formats an event in a human-readable format.
-func Format(evt *events.BaseEvent) string {
-	if formatFunc, ok := formatMap[evt.Event.Type]; ok {
+func Format(evt *events.Event) string {
+	if formatFunc, ok := formatMap[evt.Meta.Type]; ok {
 		return formatFunc(evt)
 	}
-	return fmt.Sprintf("unable to format event: %v", evt.Event.Type)
+	return fmt.Sprintf("unable to format event: %v", evt.Meta.Type)
 }

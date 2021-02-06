@@ -34,7 +34,7 @@ execution afterwards.
 func Emerg(err error) {
 	fmt.Printf(color.HiRedString(
 		"An unexpected error has occurred.\nPlease consider creating " +
-			"an issue at <https://github.com/bolt-chat/boltchat/issues> " +
+			"an issue at <https://github.com/boltchat/bolt/issues> " +
 			"if this is repetitive behaviour.\n",
 	))
 
@@ -65,5 +65,13 @@ General is used for general errors.
 */
 func General(err string) {
 	fmt.Printf("General error: %s\n", err)
+	os.Exit(1)
+}
+
+/*
+Identity is used for Identity-related errors.
+*/
+func Identity(err error) {
+	fmt.Printf("Identity error: %s\n", err)
 	os.Exit(1)
 }
