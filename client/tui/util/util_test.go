@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tui
+package util
 
 import (
 	"testing"
@@ -21,7 +21,7 @@ import (
 func TestSplitChunks(t *testing.T) {
 	str := "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
-	got := splitChunks(str, 14)
+	got := SplitChunks(str, 14)
 	want := []string{"Lorem ipsum do", "lor sit amet, ", "consectetur ad", "ipiscing elit."}
 
 	for i, v := range want {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tui
+package chatbox
 
 import (
 	"fmt"
@@ -21,6 +21,7 @@ import (
 
 	"github.com/boltchat/client/config"
 	"github.com/boltchat/client/format"
+	"github.com/boltchat/client/tui/util"
 	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
 
@@ -65,7 +66,7 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.Event) int {
 
 	// Split the event into an array of chunks
 	for _, line := range strings.Split(evtStr, "\n") {
-		chunks = append(chunks, splitChunks(line, w-prefixLen)...)
+		chunks = append(chunks, util.SplitChunks(line, w-prefixLen)...)
 	}
 
 	for offset, line := range chunks {
@@ -73,23 +74,13 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.Event) int {
 			line = strings.Repeat(" ", prefixLen) + line
 		}
 
-		printLine(s, y+offset, line)
+		util.PrintLine(s, y+offset, line)
 	}
 
 	return len(chunks) - 1
 }
 
-func clearBuffer(s tcell.Screen) {
-	w, h := s.Size()
-	hBuff := h - config.GetConfig().Prompt.HOffset
-
-	// Clear the buffer
-	for y := 0; y < hBuff; y++ {
-		clearLine(s, y, w)
-	}
-}
-
-func displayChatbox(
+func DisplayChatbox(
 	s tcell.Screen,
 	evtChannel chan *events.Event,
 	clear chan bool,
@@ -119,7 +110,7 @@ func displayChatbox(
 			}
 
 			// Clear the buffer
-			clearBuffer(s)
+			util.ClearBuffer(s)
 
 			// Append all events to the chatbox buffer
 			for y, event := range buff {
@@ -138,7 +129,7 @@ func displayChatbox(
 		for c := range clear {
 			if c {
 				buff = make([]*events.Event, 0, 50)
-				clearBuffer(s)
+				util.ClearBuffer(s)
 				s.Sync()
 			}
 		}
