@@ -18,5 +18,5 @@ import "github.com/boltchat/util/version"
 
 var Version = &version.Version{
 	Type:          version.ClientType,
-	VersionString: "0.1.0-alpha",
+	VersionString: "0.2.0-alpha",
 }
