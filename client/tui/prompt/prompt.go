@@ -12,10 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tui
+package prompt
 
 import (
 	"github.com/boltchat/client/config"
+	"github.com/boltchat/client/tui/util"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -29,9 +30,10 @@ var modes = map[Mode]string{
 	MessageMode: "Msg",
 }
 
-func displayPrompt(s tcell.Screen, input []rune, mode Mode) {
+func DisplayPrompt(s tcell.Screen, input []rune, mode Mode) {
 	w, h := s.Size()
 	style := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
+
 	y := h - config.GetConfig().Prompt.HOffset
 
 	modeStr := modes[mode]
@@ -42,7 +44,7 @@ func displayPrompt(s tcell.Screen, input []rune, mode Mode) {
 	inputXPos := inputLen + arrowXPos
 
 	// Clear prompt line
-	clearLine(s, y, w)
+	util.ClearLine(s, y, w)
 
 	// Print prompt mode
 	for i := 0; i < modeLen; i++ {

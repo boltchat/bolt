@@ -19,6 +19,8 @@ import (
 	"strings"
 
 	"github.com/boltchat/client/errs"
+	"github.com/boltchat/client/tui/chatbox"
+	"github.com/boltchat/client/tui/prompt"
 	"github.com/boltchat/lib/client"
 	"github.com/boltchat/protocol"
 	"github.com/boltchat/protocol/events"
@@ -35,7 +37,7 @@ Display displays the TUI.
 func Display(c *client.Client, evts chan *events.Event) {
 	encoding.Register()
 	input := make([]rune, 0, 20)
-	mode := MessageMode
+	mode := prompt.MessageMode
 	clear := make(chan bool)
 
 	// Create a screen
@@ -55,9 +57,10 @@ func Display(c *client.Client, evts chan *events.Event) {
 	s.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite))
 
 	// Display prompt and chatbox
-	go displayPrompt(s, input, mode)
-	go displayChatbox(s, evts, clear)
+	go prompt.DisplayPrompt(s, input, mode)
+	go chatbox.DisplayChatbox(s, evts, clear)
 
+	// TODO: refactor
 	for {
 		switch ev := s.PollEvent().(type) {
 		// case *tcell.EventResize:
@@ -115,7 +118,7 @@ func Display(c *client.Client, evts chan *events.Event) {
 				input = append(input, ev.Rune())
 			}
 
-			displayPrompt(s, input, mode)
+			prompt.DisplayPrompt(s, input, mode)
 		}
 	}
 }

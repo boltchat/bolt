@@ -12,11 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package tui
+package util
 
-import "github.com/gdamore/tcell/v2"
+import (
+	"github.com/boltchat/client/config"
+	"github.com/gdamore/tcell/v2"
+)
 
-func splitChunks(str string, n int) []string {
+func SplitChunks(str string, n int) []string {
 	/*
 		Return one chunk containing the entire string
 		if the string does not exceed `n`.
@@ -42,7 +45,7 @@ func splitChunks(str string, n int) []string {
 	return chunks
 }
 
-func printLine(s tcell.Screen, y int, str string) {
+func PrintLine(s tcell.Screen, y int, str string) {
 	/*
 		I do not like this workaround at all, but at this
 		point, I've given up on trying to find a better
@@ -54,9 +57,19 @@ func printLine(s tcell.Screen, y int, str string) {
 	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
 }
 
-func clearLine(s tcell.Screen, y int, w int) {
+func ClearLine(s tcell.Screen, y int, w int) {
 	// Clear every cell to `w`
 	for x := 0; x < w; x++ {
 		s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
+	}
+}
+
+func ClearBuffer(s tcell.Screen) {
+	w, h := s.Size()
+	hBuff := h - config.GetConfig().Prompt.HOffset
+
+	// Clear the buffer
+	for y := 0; y < hBuff; y++ {
+		ClearLine(s, y, w)
 	}
 }
