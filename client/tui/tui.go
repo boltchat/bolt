@@ -15,14 +15,10 @@
 package tui
 
 import (
-	"os"
-	"strings"
-
 	"github.com/boltchat/client/errs"
 	"github.com/boltchat/client/tui/chatbox"
 	"github.com/boltchat/client/tui/prompt"
 	"github.com/boltchat/lib/client"
-	"github.com/boltchat/protocol"
 	"github.com/boltchat/protocol/events"
 
 	"github.com/gdamore/tcell/v2"
@@ -35,10 +31,12 @@ var screen tcell.Screen
 Display displays the TUI.
 */
 func Display(c *client.Client, evts chan *events.Event) {
+	// Register all encodings
 	encoding.Register()
-	input := make([]rune, 0, 20)
-	mode := prompt.MessageMode
+
+	// Channels
 	clear := make(chan bool)
+	termEvts := make(chan tcell.Event)
 
 	// Create a screen
 	s, err := tcell.NewScreen()
@@ -57,72 +55,18 @@ func Display(c *client.Client, evts chan *events.Event) {
 	s.SetStyle(tcell.StyleDefault.Foreground(tcell.ColorWhite))
 
 	// Display prompt and chatbox
-	go prompt.DisplayPrompt(s, input, mode)
+	go prompt.DisplayPrompt(s, c, termEvts, clear)
 	go chatbox.DisplayChatbox(s, evts, clear)
 
-	// TODO: refactor
-	for {
-		switch ev := s.PollEvent().(type) {
-		// case *tcell.EventResize:
-		// 	s.Sync()
-		// 	displayPrompt(s)
-		// 	displayChatbox(s)
-		case *tcell.EventKey:
-			if ev.Key() == tcell.KeyEscape ||
-				ev.Key() == tcell.KeyCtrlC ||
-				ev.Key() == tcell.KeyCtrlD {
-				// Exit TUI
-				Quit()
-				os.Exit(0)
-				return
-			} else if ev.Key() == tcell.KeyCtrlL {
-				go func() { clear <- true }()
-			} else if ev.Key() == tcell.KeyEnter {
-				if len(strings.TrimSpace(string(input))) < 1 {
-					break
-				}
-
-				msg := protocol.Message{
-					Content: string(input),
-					User: &protocol.User{
-						Nickname: c.Identity.Nickname, // TODO
-					},
-				}
-
-				signErr := c.SignMessage(&msg)
-				if signErr != nil {
-					errs.Emerg(signErr)
-				}
-
-				sendErr := c.SendMessage(&msg)
-				if sendErr != nil {
-					errs.Emerg(sendErr)
-				}
-
-				input = []rune{}
-			} else if ev.Key() == tcell.KeyBackspace2 {
-				if len(input) > 0 {
-					input = input[:len(input)-1]
-				}
-			} else if ev.Key() == tcell.KeyCtrlU {
-				input = []rune{}
-			} else if ev.Key() == tcell.KeyUp ||
-				ev.Key() == tcell.KeyDown ||
-				ev.Key() == tcell.KeyLeft ||
-				ev.Key() == tcell.KeyRight ||
-				ev.Key() == tcell.KeyHome ||
-				ev.Key() == tcell.KeyEnd {
-				// TODO: add logic
-				break
-			} else {
-				input = append(input, ev.Rune())
-			}
-
-			prompt.DisplayPrompt(s, input, mode)
+	// Poll terminal events
+	go func() {
+		for {
+			termEvts <- s.PollEvent()
 		}
-	}
+	}()
 }
 
+// Quit quits the TUI.
 func Quit() {
 	screen.Fini()
 }

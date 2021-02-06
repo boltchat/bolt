@@ -15,8 +15,14 @@
 package prompt
 
 import (
+	"os"
+	"strings"
+
 	"github.com/boltchat/client/config"
+	"github.com/boltchat/client/errs"
 	"github.com/boltchat/client/tui/util"
+	"github.com/boltchat/lib/client"
+	"github.com/boltchat/protocol"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -30,9 +36,13 @@ var modes = map[Mode]string{
 	MessageMode: "Msg",
 }
 
-func DisplayPrompt(s tcell.Screen, input []rune, mode Mode) {
+var input []rune
+
+var mode Mode
+
+func drawPrompt(s tcell.Screen) {
 	w, h := s.Size()
-	style := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
+	arrowStyle := tcell.StyleDefault.Foreground(tcell.ColorYellow).Bold(true)
 
 	y := h - config.GetConfig().Prompt.HOffset
 
@@ -52,7 +62,7 @@ func DisplayPrompt(s tcell.Screen, input []rune, mode Mode) {
 	}
 
 	// Print prompt arrow
-	s.SetContent(arrowXPos, y, '>', nil, style)
+	s.SetContent(arrowXPos, y, '>', nil, arrowStyle)
 
 	// Print user input
 	for i := 0; i < inputLen; i++ {
@@ -63,4 +73,77 @@ func DisplayPrompt(s tcell.Screen, input []rune, mode Mode) {
 	s.ShowCursor(inputXPos+2, y)
 
 	s.Show()
+}
+
+func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, clear chan bool) {
+	for termEvt := range termEvts {
+		switch termEvt.(type) {
+		case *tcell.EventKey:
+			evt := termEvt.(*tcell.EventKey)
+
+			if evt.Key() == tcell.KeyEscape ||
+				evt.Key() == tcell.KeyCtrlC ||
+				evt.Key() == tcell.KeyCtrlD {
+				// Exit TUI
+				s.Fini()
+				os.Exit(0)
+				return
+			} else if evt.Key() == tcell.KeyCtrlL {
+				go func() { clear <- true }()
+			} else if evt.Key() == tcell.KeyEnter {
+				if len(strings.TrimSpace(string(input))) < 1 {
+					break
+				}
+
+				msg := protocol.Message{
+					Content: string(input),
+					User: &protocol.User{
+						Nickname: c.Identity.Nickname, // TODO
+					},
+				}
+
+				signErr := c.SignMessage(&msg)
+				if signErr != nil {
+					errs.Emerg(signErr)
+				}
+
+				sendErr := c.SendMessage(&msg)
+				if sendErr != nil {
+					errs.Emerg(sendErr)
+				}
+
+				input = []rune{}
+			} else if evt.Key() == tcell.KeyBackspace2 {
+				if len(input) > 0 {
+					input = input[:len(input)-1]
+				}
+			} else if evt.Key() == tcell.KeyCtrlU {
+				input = []rune{}
+			} else if evt.Key() == tcell.KeyUp ||
+				evt.Key() == tcell.KeyDown ||
+				evt.Key() == tcell.KeyLeft ||
+				evt.Key() == tcell.KeyRight ||
+				evt.Key() == tcell.KeyHome ||
+				evt.Key() == tcell.KeyEnd {
+				// TODO: add logic
+				break
+			} else {
+				input = append(input, evt.Rune())
+			}
+
+			drawPrompt(s)
+		}
+	}
+}
+
+func DisplayPrompt(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, clear chan bool) {
+	// Initialize vars
+	input = make([]rune, 0, 50)
+	mode = MessageMode
+
+	// Draw initial (empty) prompt
+	drawPrompt(s)
+
+	// Handle terminal events
+	go handleEvents(s, c, termEvts, clear)
 }
