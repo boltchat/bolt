@@ -16,30 +16,18 @@ package prompt
 
 import (
 	"os"
-	"strings"
+	"unicode"
 
 	"github.com/boltchat/client/config"
-	"github.com/boltchat/client/errs"
 	"github.com/boltchat/client/tui/util"
 	"github.com/boltchat/lib/client"
-	"github.com/boltchat/protocol"
 	"github.com/gdamore/tcell/v2"
 )
 
-type Mode int
-
-const (
-	MessageMode Mode = iota
-	CommandMode Mode = iota
-)
-
-var modes = map[Mode]string{
-	MessageMode: "Msg",
-	CommandMode: "Cmd",
-}
-
+// FIXME: thread-unsafe
 var input []rune
 
+// FIXME: thread-unsafe
 var mode Mode
 
 func drawPrompt(s tcell.Screen) {
@@ -48,7 +36,7 @@ func drawPrompt(s tcell.Screen) {
 
 	y := h - config.GetConfig().Prompt.HOffset
 
-	modeStr := modes[mode]
+	modeStr := modeStrs[mode]
 	modeLen := len(modeStr)
 	inputLen := len(input)
 
@@ -77,36 +65,11 @@ func drawPrompt(s tcell.Screen) {
 	s.Show()
 }
 
-func sendMessage(c *client.Client) {
-	body := strings.TrimSpace(string(input))
-
-	if len(body) < 1 {
-		return
-	}
-
-	msg := protocol.Message{
-		Content: body,
-		User: &protocol.User{
-			Nickname: c.Identity.Nickname, // TODO
-		},
-	}
-
-	signErr := c.SignMessage(&msg)
-	if signErr != nil {
-		errs.Emerg(signErr)
-	}
-
-	sendErr := c.SendMessage(&msg)
-	if sendErr != nil {
-		errs.Emerg(sendErr)
-	}
-
-	// Clear input
-	input = []rune{}
-}
-
 func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, clear chan bool) {
 	for termEvt := range termEvts {
+		// Execute mode handlers
+		modeHandlers[mode](s, c, termEvt)
+
 		switch termEvt.(type) {
 		case *tcell.EventKey:
 			evt := termEvt.(*tcell.EventKey)
@@ -120,14 +83,12 @@ func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, c
 				return
 			} else if evt.Key() == tcell.KeyCtrlL {
 				go func() { clear <- true }()
-			} else if evt.Key() == tcell.KeyEnter {
-				sendMessage(c)
 			} else if evt.Key() == tcell.KeyBackspace2 {
 				if len(input) > 0 {
 					input = input[:len(input)-1]
 				}
 			} else if evt.Key() == tcell.KeyCtrlU {
-				input = []rune{}
+				clearInput()
 			} else if evt.Key() == tcell.KeyUp ||
 				evt.Key() == tcell.KeyDown ||
 				evt.Key() == tcell.KeyLeft ||
@@ -137,7 +98,10 @@ func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, c
 				// TODO: add logic
 				break
 			} else {
-				input = append(input, evt.Rune())
+				// Append the character if it's visible
+				if unicode.IsGraphic(evt.Rune()) {
+					input = append(input, evt.Rune())
+				}
 			}
 
 			drawPrompt(s)
@@ -147,7 +111,7 @@ func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, c
 
 func DisplayPrompt(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, clear chan bool) {
 	// Initialize vars
-	input = make([]rune, 0, 50)
+	clearInput()
 	mode = MessageMode
 
 	// Draw initial (empty) prompt
