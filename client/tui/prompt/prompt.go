@@ -75,6 +75,34 @@ func drawPrompt(s tcell.Screen) {
 	s.Show()
 }
 
+func sendMessage(c *client.Client) {
+	body := strings.TrimSpace(string(input))
+
+	if len(body) < 1 {
+		return
+	}
+
+	msg := protocol.Message{
+		Content: body,
+		User: &protocol.User{
+			Nickname: c.Identity.Nickname, // TODO
+		},
+	}
+
+	signErr := c.SignMessage(&msg)
+	if signErr != nil {
+		errs.Emerg(signErr)
+	}
+
+	sendErr := c.SendMessage(&msg)
+	if sendErr != nil {
+		errs.Emerg(sendErr)
+	}
+
+	// Clear input
+	input = []rune{}
+}
+
 func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, clear chan bool) {
 	for termEvt := range termEvts {
 		switch termEvt.(type) {
@@ -91,28 +119,7 @@ func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, c
 			} else if evt.Key() == tcell.KeyCtrlL {
 				go func() { clear <- true }()
 			} else if evt.Key() == tcell.KeyEnter {
-				if len(strings.TrimSpace(string(input))) < 1 {
-					break
-				}
-
-				msg := protocol.Message{
-					Content: string(input),
-					User: &protocol.User{
-						Nickname: c.Identity.Nickname, // TODO
-					},
-				}
-
-				signErr := c.SignMessage(&msg)
-				if signErr != nil {
-					errs.Emerg(signErr)
-				}
-
-				sendErr := c.SendMessage(&msg)
-				if sendErr != nil {
-					errs.Emerg(sendErr)
-				}
-
-				input = []rune{}
+				sendMessage(c)
 			} else if evt.Key() == tcell.KeyBackspace2 {
 				if len(input) > 0 {
 					input = input[:len(input)-1]
