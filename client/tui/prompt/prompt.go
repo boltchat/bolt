@@ -97,6 +97,9 @@ func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, c
 				evt.Key() == tcell.KeyEnd {
 				// TODO: add logic
 				break
+			} else if evt.Rune() == '/' && len(input) == 0 {
+				input = append(input, evt.Rune())
+				mode = CommandMode
 			} else {
 				// Append the character if it's visible
 				if unicode.IsGraphic(evt.Rune()) {
