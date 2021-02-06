@@ -29,6 +29,7 @@ var errorMap = map[string]string{
 	errs.InvalidFormat:   "The format of your request could not be parsed.",
 	errs.TooManyMessages: "You're sending too many messages. Please slow down.",
 	errs.Unidentified:    "You need to identify yourself before you can interact with this server.",
+	errs.SigVerifyFailed: "Signature verification failed. You might need to recreate your Identity.",
 }
 
 func FormatError(e *events.Event) string {
