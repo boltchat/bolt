@@ -28,6 +28,7 @@ var formatMap = map[events.Type]formatHandler{
 	events.ErrorType:   FormatError,
 	events.JoinType:    FormatJoin,
 	events.LeaveType:   FormatLeave,
+	events.NoticeType:  FormatNotice,
 }
 
 // Format formats an event in a human-readable format.

@@ -12,13 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package errs
+package format
 
-const (
-	InvalidEvent    string = "invalid_event"
-	InvalidFormat   string = "invalid_format"
-	Unidentified    string = "unidentified"
-	TooManyMessages string = "too_many_messages"
-	SigVerifyFailed string = "sig_verification_failed"
-	CommandNotFound string = "cmd_not_found"
+import (
+	"fmt"
+
+	"github.com/boltchat/protocol/events"
+	"github.com/mitchellh/mapstructure"
+
+	"github.com/fatih/color"
 )
+
+func FormatNotice(e *events.Event) string {
+	noticeData := events.NoticeData{}
+	mapstructure.Decode(e.Data, &noticeData)
+
+	return color.HiCyanString(
+		fmt.Sprintf("[i] %s", noticeData.Message),
+	)
+}

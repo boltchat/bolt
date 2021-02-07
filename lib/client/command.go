@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package errs
+package client
 
-const (
-	InvalidEvent    string = "invalid_event"
-	InvalidFormat   string = "invalid_format"
-	Unidentified    string = "unidentified"
-	TooManyMessages string = "too_many_messages"
-	SigVerifyFailed string = "sig_verification_failed"
-	CommandNotFound string = "cmd_not_found"
-)
+import "github.com/boltchat/protocol/events"
+
+func (c *Client) SendCommand(cmd *events.CommandData) error {
+	return c.SendRaw(*events.NewCommandEvent(cmd.Command, cmd.Args))
+}

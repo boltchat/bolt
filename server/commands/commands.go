@@ -12,13 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package errs
+package commands
 
-const (
-	InvalidEvent    string = "invalid_event"
-	InvalidFormat   string = "invalid_format"
-	Unidentified    string = "unidentified"
-	TooManyMessages string = "too_many_messages"
-	SigVerifyFailed string = "sig_verification_failed"
-	CommandNotFound string = "cmd_not_found"
+import (
+	"errors"
+
+	"github.com/boltchat/server/pools"
 )
+
+type CommandHandler func(p *pools.ConnPool, c *pools.Connection, args []string)
+
+var ErrCmdNotFound = errors.New("command not found")
+
+var commands = map[string]CommandHandler{
+	"ping": handlePing,
+}
+
+func Parse(cmd string) (CommandHandler, error) {
+	cmdHandler, ok := commands[cmd]
+	if !ok {
+		return nil, ErrCmdNotFound
+	}
+
+	return cmdHandler, nil
+}

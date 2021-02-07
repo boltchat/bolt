@@ -12,13 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package errs
+package handlers
 
-const (
-	InvalidEvent    string = "invalid_event"
-	InvalidFormat   string = "invalid_format"
-	Unidentified    string = "unidentified"
-	TooManyMessages string = "too_many_messages"
-	SigVerifyFailed string = "sig_verification_failed"
-	CommandNotFound string = "cmd_not_found"
+import (
+	"github.com/boltchat/protocol/errs"
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/commands"
+	"github.com/boltchat/server/pools"
+	"github.com/mitchellh/mapstructure"
 )
+
+func HandleCommand(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
+	cmdData := events.CommandData{}
+	mapstructure.Decode(e.Data, &cmdData)
+
+	cmdHandler, err := commands.Parse(cmdData.Command)
+	if err != nil {
+		c.SendError(errs.CommandNotFound)
+		return
+	}
+
+	cmdHandler(p, c, cmdData.Args)
+}

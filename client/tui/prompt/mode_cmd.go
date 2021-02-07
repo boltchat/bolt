@@ -15,25 +15,41 @@
 package prompt
 
 import (
+	"strings"
+
 	"github.com/boltchat/lib/client"
+	"github.com/boltchat/protocol/events"
 	"github.com/gdamore/tcell/v2"
 )
 
-type Mode int
+func handleCommandMode(s tcell.Screen, c *client.Client, evt tcell.Event) {
+	key, ok := evt.(*tcell.EventKey)
+	if !ok {
+		return
+	}
 
-type ModeHandler func(s tcell.Screen, c *client.Client, evt tcell.Event)
+	if (key.Key() == tcell.KeyBackspace || key.Key() == tcell.KeyBackspace2) &&
+		len(input) == 1 &&
+		input[0] == '/' {
+		// Return to message mode
+		mode = MessageMode
+		return
+	}
 
-const (
-	MessageMode Mode = iota
-	CommandMode Mode = iota
-)
-
-var modeHandlers = map[Mode]ModeHandler{
-	MessageMode: handleMessageMode,
-	CommandMode: handleCommandMode,
+	if key.Key() == tcell.KeyEnter && len(input) > 1 {
+		sendCommand(c)
+		mode = MessageMode
+		clearInput()
+	}
 }
 
-var modeStrs = map[Mode]string{
-	MessageMode: "Msg",
-	CommandMode: "Cmd",
+func sendCommand(c *client.Client) {
+	cmdSplit := strings.Split(string(input[1:]), " ")
+	cmd := cmdSplit[0]
+	args := cmdSplit[1:]
+
+	c.SendCommand(&events.CommandData{
+		Command: cmd,
+		Args:    args,
+	})
 }

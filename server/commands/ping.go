@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package errs
+package commands
 
-const (
-	InvalidEvent    string = "invalid_event"
-	InvalidFormat   string = "invalid_format"
-	Unidentified    string = "unidentified"
-	TooManyMessages string = "too_many_messages"
-	SigVerifyFailed string = "sig_verification_failed"
-	CommandNotFound string = "cmd_not_found"
+import (
+	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/pools"
 )
+
+func handlePing(p *pools.ConnPool, c *pools.Connection, args []string) {
+	c.SendEvent(events.NewNoticeEvent("Pong!"))
+}

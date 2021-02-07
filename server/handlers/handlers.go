@@ -24,6 +24,7 @@ type handler = func(p *pools.ConnPool, c *pools.Connection, e *events.Event)
 var handlerMap = map[events.Type]handler{
 	events.MessageType: HandleMessage,
 	events.JoinType:    HandleJoin,
+	events.CommandType: HandleCommand,
 }
 
 func GetHandler(evtType events.Type) handler {
