@@ -12,15 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package config
+package statusline
 
-func GetDefaultConfig() *Config {
-	return &Config{
-		Prompt: Prompt{
-			HOffset: 1,
-		},
-		StatusLine: StatusLine{
-			Height: 1,
-		},
-	}
+import (
+	"github.com/boltchat/client"
+	"github.com/boltchat/client/tui/util"
+	"github.com/boltchat/protocol/events"
+	"github.com/fatih/color"
+	"github.com/gdamore/tcell/v2"
+)
+
+func DisplayStatusLine(s tcell.Screen, evtsChan chan *events.Event) {
+	util.PrintLine(s, 0, 0, color.CyanString("Bolt Client v%s", client.Version.VersionString))
 }

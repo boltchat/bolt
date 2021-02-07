@@ -18,6 +18,7 @@ import (
 	"github.com/boltchat/client/errs"
 	"github.com/boltchat/client/tui/chatbox"
 	"github.com/boltchat/client/tui/prompt"
+	"github.com/boltchat/client/tui/statusline"
 	"github.com/boltchat/lib/client"
 	"github.com/boltchat/protocol/events"
 
@@ -57,6 +58,7 @@ func Display(c *client.Client, evts chan *events.Event) {
 	// Display prompt and chatbox
 	go prompt.DisplayPrompt(s, c, termEvts, clear)
 	go chatbox.DisplayChatbox(s, evts, clear)
+	go statusline.DisplayStatusLine(s, evts)
 
 	// Poll terminal events
 	go func() {

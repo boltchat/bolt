@@ -74,7 +74,7 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.Event) int {
 			line = strings.Repeat(" ", prefixLen) + line
 		}
 
-		util.PrintLine(s, y+offset, line)
+		util.PrintLine(s, 0, y+offset, line)
 	}
 
 	return len(chunks) - 1
@@ -95,8 +95,9 @@ func DisplayChatbox(
 	go func() {
 		for evt := range evtChannel {
 			w, h := s.Size()
-			hBuff := h - config.GetConfig().Prompt.HOffset
-			yOffset := 0
+			statusHeight := config.GetConfig().StatusLine.Height
+			hBuff := h - config.GetConfig().Prompt.HOffset - statusHeight
+			yOffset := statusHeight
 
 			// Append event to the events slice
 			evts = append(evts, evt)

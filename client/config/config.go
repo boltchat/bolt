@@ -23,8 +23,13 @@ type Prompt struct {
 	HOffset int `yaml:"hOffset"`
 }
 
+type StatusLine struct {
+	Height int `yaml:"height"`
+}
+
 type Config struct {
-	Prompt Prompt `yaml:"prompt"`
+	Prompt     Prompt     `yaml:"prompt"`
+	StatusLine StatusLine `yaml:"statusLine"`
 }
 
 var config Config

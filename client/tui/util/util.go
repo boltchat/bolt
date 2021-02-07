@@ -45,7 +45,7 @@ func SplitChunks(str string, n int) []string {
 	return chunks
 }
 
-func PrintLine(s tcell.Screen, y int, str string) {
+func PrintLine(s tcell.Screen, x int, y int, str string) {
 	/*
 		I do not like this workaround at all, but at this
 		point, I've given up on trying to find a better
@@ -54,7 +54,7 @@ func PrintLine(s tcell.Screen, y int, str string) {
 	*/
 	chars := []rune("\b\b" + str)
 
-	s.SetContent(0, y, ' ', chars[1:], tcell.StyleDefault)
+	s.SetContent(x, y, ' ', chars[1:], tcell.StyleDefault)
 }
 
 func ClearLine(s tcell.Screen, y int, w int) {
