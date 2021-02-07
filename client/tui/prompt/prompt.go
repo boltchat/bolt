@@ -83,7 +83,8 @@ func handleEvents(s tcell.Screen, c *client.Client, termEvts chan tcell.Event, c
 				return
 			} else if evt.Key() == tcell.KeyCtrlL {
 				go func() { clear <- true }()
-			} else if evt.Key() == tcell.KeyBackspace2 {
+			} else if evt.Key() == tcell.KeyBackspace ||
+				evt.Key() == tcell.KeyBackspace2 {
 				if len(input) > 0 {
 					input = input[:len(input)-1]
 				}
