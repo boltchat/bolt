@@ -25,7 +25,16 @@ Run `mage` to see all available targets.
 
 ## Server
 ### Docker (preferred)
-If you'd like to run the server in a Docker container, follow the compilation steps below and run `mage docker:build`.
+If you'd like to run the server in a Docker container, you should use the most up-to-date
+image from [Docker Hub](https://hub.docker.com/r/boltchat/server). The following command
+should get you up and running within seconds:
+
+```bash
+docker run -p 3300:3300 --tty boltchat/server:latest
+```
+
+### Docker Compose
+Sample configuration can be found [here](../conf/docker/docker-compose.yml).
 
 ### Daemon
 You can also run the server as a daemon. Service files can be found below:
