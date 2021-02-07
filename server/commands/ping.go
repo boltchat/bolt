@@ -12,26 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package handlers
+package commands
 
 import (
-	"github.com/boltchat/protocol/events"
 	"github.com/boltchat/server/pools"
 )
 
-type handler = func(p *pools.ConnPool, c *pools.Connection, e *events.Event)
-
-var handlerMap = map[events.Type]handler{
-	events.MessageType: HandleMessage,
-	events.JoinType:    HandleJoin,
-	events.CommandType: HandleCommand,
-}
-
-func GetHandler(evtType events.Type) handler {
-	if evtHandler, ok := handlerMap[evtType]; ok {
-		return evtHandler
-	}
-
-	// Use default handler if event is not recognized
-	return HandleDefault
+func handlePing(p *pools.ConnPool, c *pools.Connection, args []string) {
+	c.SendError("Pong!") // TODO
 }

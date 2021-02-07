@@ -15,23 +15,22 @@
 package handlers
 
 import (
+	"github.com/boltchat/protocol/errs"
 	"github.com/boltchat/protocol/events"
+	"github.com/boltchat/server/commands"
 	"github.com/boltchat/server/pools"
+	"github.com/mitchellh/mapstructure"
 )
 
-type handler = func(p *pools.ConnPool, c *pools.Connection, e *events.Event)
+func HandleCommand(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
+	cmdData := events.CommandData{}
+	mapstructure.Decode(e.Data, &cmdData)
 
-var handlerMap = map[events.Type]handler{
-	events.MessageType: HandleMessage,
-	events.JoinType:    HandleJoin,
-	events.CommandType: HandleCommand,
-}
-
-func GetHandler(evtType events.Type) handler {
-	if evtHandler, ok := handlerMap[evtType]; ok {
-		return evtHandler
+	cmdHandler, err := commands.Parse(cmdData.Command)
+	if err != nil {
+		c.SendError(errs.CommandNotFound)
+		return
 	}
 
-	// Use default handler if event is not recognized
-	return HandleDefault
+	cmdHandler(p, c, cmdData.Args)
 }

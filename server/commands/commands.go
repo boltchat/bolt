@@ -12,26 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package handlers
+package commands
 
 import (
-	"github.com/boltchat/protocol/events"
+	"errors"
+
 	"github.com/boltchat/server/pools"
 )
 
-type handler = func(p *pools.ConnPool, c *pools.Connection, e *events.Event)
+type CommandHandler func(p *pools.ConnPool, c *pools.Connection, args []string)
 
-var handlerMap = map[events.Type]handler{
-	events.MessageType: HandleMessage,
-	events.JoinType:    HandleJoin,
-	events.CommandType: HandleCommand,
+var ErrCmdNotFound = errors.New("command not found")
+
+var commands = map[string]CommandHandler{
+	"ping": handlePing,
 }
 
-func GetHandler(evtType events.Type) handler {
-	if evtHandler, ok := handlerMap[evtType]; ok {
-		return evtHandler
+func Parse(cmd string) (CommandHandler, error) {
+	cmdHandler, ok := commands[cmd]
+	if !ok {
+		return nil, ErrCmdNotFound
 	}
 
-	// Use default handler if event is not recognized
-	return HandleDefault
+	return cmdHandler, nil
 }
