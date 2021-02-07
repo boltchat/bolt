@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  server:
+    image: boltchat/server:latest
+    ports:
+      - 3300:3300
+    environment:
+      - BIND_IPV4=0.0.0.0
+      - BIND_IPV6=0.0.0.0
