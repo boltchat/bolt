@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/boltchat/client/markdown"
 	"github.com/boltchat/protocol/events"
 	"github.com/fatih/color"
 	"github.com/mitchellh/mapstructure"
@@ -37,6 +38,6 @@ func FormatMessage(e *events.Event) string {
 		"<%s#%s> %s",
 		msgData.Message.User.Nickname,
 		color.HiYellowString(strings.ToUpper(tag)),
-		msgData.Message.Content,
+		markdown.ReplaceAll(msgData.Message.Content),
 	)
 }
