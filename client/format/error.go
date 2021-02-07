@@ -30,6 +30,7 @@ var errorMap = map[string]string{
 	errs.TooManyMessages: "You're sending too many messages. Please slow down.",
 	errs.Unidentified:    "You need to identify yourself before you can interact with this server.",
 	errs.SigVerifyFailed: "Signature verification failed. You might need to recreate your Identity.",
+	errs.CommandNotFound: "Command not found.",
 }
 
 func FormatError(e *events.Event) string {
