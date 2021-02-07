@@ -18,23 +18,16 @@ import (
 	"fmt"
 
 	"github.com/boltchat/protocol/events"
+	"github.com/mitchellh/mapstructure"
+
+	"github.com/fatih/color"
 )
 
-type formatHandler = func(e *events.Event) string
+func FormatNotice(e *events.Event) string {
+	noticeData := events.NoticeData{}
+	mapstructure.Decode(e.Data, &noticeData)
 
-var formatMap = map[events.Type]formatHandler{
-	events.MotdType:    FormatMotd,
-	events.MessageType: FormatMessage,
-	events.ErrorType:   FormatError,
-	events.JoinType:    FormatJoin,
-	events.LeaveType:   FormatLeave,
-	events.NoticeType:  FormatNotice,
-}
-
-// Format formats an event in a human-readable format.
-func Format(evt *events.Event) string {
-	if formatFunc, ok := formatMap[evt.Meta.Type]; ok {
-		return formatFunc(evt)
-	}
-	return fmt.Sprintf("unable to format event: %v", evt.Meta.Type)
+	return color.HiCyanString(
+		fmt.Sprintf("[i] %s", noticeData.Message),
+	)
 }
