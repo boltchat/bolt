@@ -15,7 +15,6 @@
 package util
 
 import (
-	"github.com/boltchat/client/config"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -61,15 +60,5 @@ func ClearLine(s tcell.Screen, y int, w int) {
 	// Clear every cell to `w`
 	for x := 0; x < w; x++ {
 		s.SetContent(x, y, ' ', nil, tcell.StyleDefault)
-	}
-}
-
-func ClearBuffer(s tcell.Screen) {
-	w, h := s.Size()
-	hBuff := h - config.GetConfig().Prompt.HOffset
-
-	// Clear the buffer
-	for y := 0; y < hBuff; y++ {
-		ClearLine(s, y, w)
 	}
 }

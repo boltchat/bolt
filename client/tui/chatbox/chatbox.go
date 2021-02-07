@@ -80,6 +80,27 @@ func printEvent(s tcell.Screen, w int, y int, evt *events.Event) int {
 	return len(chunks) - 1
 }
 
+func getBufferDimensions(s tcell.Screen) (h, yOffset int) {
+	// Get heights & offsets
+	_, sHeight := s.Size()
+	statusHeight := config.GetConfig().StatusLine.Height
+	promptHOffset := config.GetConfig().Prompt.HOffset
+
+	h = sHeight - promptHOffset - statusHeight
+	yOffset = statusHeight
+	return
+}
+
+func clearBuffer(s tcell.Screen) {
+	hBuff, yOffset := getBufferDimensions(s)
+	w, _ := s.Size()
+
+	// Clear the buffer
+	for y := 0; y < hBuff; y++ {
+		util.ClearLine(s, y+yOffset, w)
+	}
+}
+
 func DisplayChatbox(
 	s tcell.Screen,
 	evtChannel chan *events.Event,
@@ -94,10 +115,8 @@ func DisplayChatbox(
 
 	go func() {
 		for evt := range evtChannel {
-			w, h := s.Size()
-			statusHeight := config.GetConfig().StatusLine.Height
-			hBuff := h - config.GetConfig().Prompt.HOffset - statusHeight
-			yOffset := statusHeight
+			w, _ := s.Size()
+			hBuff, yOffset := getBufferDimensions(s)
 
 			// Append event to the events slice
 			evts = append(evts, evt)
@@ -111,7 +130,7 @@ func DisplayChatbox(
 			}
 
 			// Clear the buffer
-			util.ClearBuffer(s)
+			clearBuffer(s)
 
 			// Append all events to the chatbox buffer
 			for y, event := range buff {
@@ -130,7 +149,7 @@ func DisplayChatbox(
 		for c := range clear {
 			if c {
 				buff = make([]*events.Event, 0, 50)
-				util.ClearBuffer(s)
+				clearBuffer(s)
 				s.Sync()
 			}
 		}

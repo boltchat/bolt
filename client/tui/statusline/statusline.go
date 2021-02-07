@@ -24,4 +24,5 @@ import (
 
 func DisplayStatusLine(s tcell.Screen, evtsChan chan *events.Event) {
 	util.PrintLine(s, 0, 0, color.CyanString("Bolt Client v%s", client.Version.VersionString))
+	s.Show()
 }
