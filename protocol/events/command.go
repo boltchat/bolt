@@ -12,13 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package errs
+package events
 
-const (
-	InvalidEvent    string = "invalid_event"
-	InvalidFormat   string = "invalid_format"
-	Unidentified    string = "unidentified"
-	TooManyMessages string = "too_many_messages"
-	SigVerifyFailed string = "sig_verification_failed"
-	CommandNotFound string = "cmd_not_found"
-)
+// CommandType is the event type used for commands.
+const CommandType Type = "cmd"
+
+type CommandData struct {
+	Command string   `json:"cmd" mapstructure:"cmd"`
+	Args    []string `json:"args" mapstructure:"args"`
+}
+
+// NewCommandEvent TODO
+func NewCommandEvent(cmd string, args []string) *Event {
+	return NewEvent(CommandType, CommandData{
+		Command: cmd,
+		Args:    args,
+	})
+}
