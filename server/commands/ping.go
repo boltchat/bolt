@@ -15,9 +15,10 @@
 package commands
 
 import (
+	"github.com/boltchat/protocol/events"
 	"github.com/boltchat/server/pools"
 )
 
 func handlePing(p *pools.ConnPool, c *pools.Connection, args []string) {
-	c.SendError("Pong!") // TODO
+	c.SendEvent(events.NewNoticeEvent("Pong!"))
 }
