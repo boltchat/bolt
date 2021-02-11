@@ -16,6 +16,8 @@ package prompt
 
 import (
 	"strings"
+	"time"
+	"unicode"
 
 	"github.com/boltchat/client/errs"
 	"github.com/boltchat/lib/client"
@@ -23,14 +25,39 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+const typingDuration = time.Second * 2
+
+var typingTimer *time.Timer
+
 func handleMessageMode(s tcell.Screen, c *client.Client, evt tcell.Event) {
 	key, ok := evt.(*tcell.EventKey)
 	if !ok {
 		return
 	}
 
+	// TODO: clean up this mess
+	// too tired for this now
 	if key.Key() == tcell.KeyEnter {
+		if typingTimer != nil {
+			typingTimer.Stop()
+			typingTimer = nil
+		}
+
+		// Disable typing indicator before sending message
+		c.SetTyping(false)
 		sendMessage(c)
+	} else if unicode.IsGraphic(key.Rune()) {
+		if typingTimer == nil {
+			// User starts typing
+			c.SetTyping(true)
+			typingTimer = time.AfterFunc(typingDuration, func() {
+				c.SetTyping(false)
+				typingTimer = nil
+			})
+		} else {
+			// User is still typing
+			typingTimer.Reset(typingDuration)
+		}
 	}
 }
 
