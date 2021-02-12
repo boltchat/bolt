@@ -28,6 +28,8 @@ import (
 	"github.com/gdamore/tcell/v2"
 )
 
+type EventBuffer = []*events.Event
+
 func printEvent(s tcell.Screen, w int, y int, evt *events.Event) int {
 	// Convert event timestamp to `time.Time`
 	timestamp := time.Unix(evt.Meta.CreatedAt, 0)
@@ -101,6 +103,16 @@ func clearBuffer(s tcell.Screen) {
 	}
 }
 
+func addToBuffer(evt *events.Event, hBuff int, buff EventBuffer) EventBuffer {
+	if len(buff) > hBuff {
+		// Remove first event from buffer and append
+		return append(buff[1:], evt)
+	}
+
+	// Append event to buffer
+	return append(buff, evt)
+}
+
 func DisplayChatbox(
 	s tcell.Screen,
 	evtChannel chan *events.Event,
@@ -110,23 +122,20 @@ func DisplayChatbox(
 		Preallocate a size of 50 for both the
 		events slice and the buffer slice.
 	*/
-	evts := make([]*events.Event, 0, 50)
-	buff := make([]*events.Event, 0, 50)
+	// evts := make([]*events.Event, 0, 50)
+	buff := make(EventBuffer, 0, 50)
 
 	go func() {
 		for evt := range evtChannel {
 			w, _ := s.Size()
 			hBuff, yOffset := getBufferDimensions(s)
 
-			// Append event to the events slice
-			evts = append(evts, evt)
+			// evts = append(evts, evt)
 
-			if len(buff) < hBuff {
-				// Append event to buffer
-				buff = append(buff, evt)
-			} else {
-				// Remove first event from buffer and append
-				buff = append(buff[1:], evt)
+			// Append event to the events slice if it has
+			// a formatter.
+			if format.HasFormat(evt) {
+				buff = addToBuffer(evt, hBuff, buff)
 			}
 
 			// Clear the buffer
