@@ -1,4 +1,4 @@
-![boltchat](./assets/banner/boltchat-banner.jpg)
+![boltchat](https://raw.githubusercontent.com/boltchat/branding/main/svg/bolt-banner.svg)
 > ⚡ A fast, lightweight, and secure chat protocol, client and server, written in Go.
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/boltchat/bolt/Deploy?label=deploy)
@@ -30,8 +30,8 @@ The project boards for _Bolt_ can be found [here](https://github.com/boltchat/bo
 ## Author
 [Kees van Voorthuizen (@keesvv)](https://github.com/keesvv)
 
-## Logo
-The lightning bolt used in the logo of this project is courtesy of [Icons8](https://icons8.com/icons/set/lightning-bolt--v1).
+## Branding
+The branding for this project can be found [in this repository](https://github.com/boltchat/branding).
 
 ## License
 This project is licensed under the [Apache License 2.0](./LICENSE).
