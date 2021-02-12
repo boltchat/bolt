@@ -1,4 +1,4 @@
-![boltchat](./assets/banner/boltchat-banner.jpg)
+![boltchat](https://raw.githubusercontent.com/boltchat/branding/main/svg/bolt-banner.svg)
 > ⚡ A fast, lightweight, and secure chat protocol, client and server, written in Go.
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/boltchat/bolt/Deploy?label=deploy)
