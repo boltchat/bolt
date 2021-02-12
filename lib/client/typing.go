@@ -18,5 +18,5 @@ import "github.com/boltchat/protocol/events"
 
 // SetTyping sends a typing indicator status to the server.
 func (c *Client) SetTyping(isTyping bool) {
-	c.SendRaw(*events.NewTypingEvent(isTyping))
+	c.SendRaw(*events.NewTypingEvent(isTyping, nil))
 }

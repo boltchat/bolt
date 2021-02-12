@@ -17,8 +17,12 @@ package handlers
 import (
 	"github.com/boltchat/protocol/events"
 	"github.com/boltchat/server/pools"
+	"github.com/mitchellh/mapstructure"
 )
 
 func HandleTyping(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
-	p.BroadcastEvent(e)
+	typingData := events.TypingData{}
+	mapstructure.Decode(e.Data, &typingData)
+
+	p.BroadcastEvent(events.NewTypingEvent(typingData.IsTyping, c.User))
 }

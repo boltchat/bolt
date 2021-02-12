@@ -14,14 +14,20 @@
 
 package events
 
+import "github.com/boltchat/protocol"
+
 const TypingType Type = "typing"
 
 type TypingData struct {
 	IsTyping bool `json:"typing" mapstructure:"typing"`
+
+	// TODO: move to server-specific typing event struct
+	User *protocol.User `json:"user" mapstructure:"user"`
 }
 
-func NewTypingEvent(isTyping bool) *Event {
+func NewTypingEvent(isTyping bool, user *protocol.User) *Event {
 	return NewEvent(TypingType, TypingData{
 		IsTyping: isTyping,
+		User:     user,
 	})
 }
