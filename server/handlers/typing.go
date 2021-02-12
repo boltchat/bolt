@@ -19,20 +19,6 @@ import (
 	"github.com/boltchat/server/pools"
 )
 
-type handler = func(p *pools.ConnPool, c *pools.Connection, e *events.Event)
-
-var handlerMap = map[events.Type]handler{
-	events.MessageType: HandleMessage,
-	events.JoinType:    HandleJoin,
-	events.CommandType: HandleCommand,
-	events.TypingType:  HandleTyping,
-}
-
-func GetHandler(evtType events.Type) handler {
-	if evtHandler, ok := handlerMap[evtType]; ok {
-		return evtHandler
-	}
-
-	// Use default handler if event is not recognized
-	return HandleDefault
+func HandleTyping(p *pools.ConnPool, c *pools.Connection, e *events.Event) {
+	p.BroadcastEvent(e)
 }
