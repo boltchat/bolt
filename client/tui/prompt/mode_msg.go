@@ -43,9 +43,15 @@ func handleMessageMode(s tcell.Screen, c *client.Client, evt tcell.Event) {
 			typingTimer = nil
 		}
 
+		body := strings.TrimSpace(string(input))
+
+		if len(body) < 1 {
+			return
+		}
+
 		// Disable typing indicator before sending message
 		c.SetTyping(false)
-		sendMessage(c)
+		sendMessage(body, c)
 	} else if unicode.IsGraphic(key.Rune()) {
 		if typingTimer == nil {
 			// User starts typing
@@ -61,13 +67,7 @@ func handleMessageMode(s tcell.Screen, c *client.Client, evt tcell.Event) {
 	}
 }
 
-func sendMessage(c *client.Client) {
-	body := strings.TrimSpace(string(input))
-
-	if len(body) < 1 {
-		return
-	}
-
+func sendMessage(body string, c *client.Client) {
 	msg := protocol.Message{
 		Content: body,
 		User: &protocol.User{
