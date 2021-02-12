@@ -15,8 +15,6 @@
 package format
 
 import (
-	"fmt"
-
 	"github.com/boltchat/protocol/events"
 )
 
@@ -33,8 +31,10 @@ var formatMap = map[events.Type]formatHandler{
 
 // Format formats an event in a human-readable format.
 func Format(evt *events.Event) string {
-	if formatFunc, ok := formatMap[evt.Meta.Type]; ok {
-		return formatFunc(evt)
-	}
-	return fmt.Sprintf("unable to format event: %v", evt.Meta.Type)
+	return formatMap[evt.Meta.Type](evt)
+}
+
+func HasFormat(evt *events.Event) bool {
+	_, ok := formatMap[evt.Meta.Type]
+	return ok
 }
