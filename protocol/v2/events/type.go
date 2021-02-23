@@ -1,6 +1,6 @@
 package events
 
-type EventType int
+type EventType uint8
 
 const (
 	JoinEvent    EventType = 0x01
