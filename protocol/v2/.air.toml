@@ -1,0 +1,7 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o tmp/playground playground/playground.go"
+bin = "tmp/playground"
+delay = 0

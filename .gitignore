@@ -1,2 +1,5 @@
 # Binary outputs
 build/
+
+# Temporary outputs
+tmp/
