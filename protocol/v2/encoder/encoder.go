@@ -27,14 +27,17 @@ func (e *Encoder) encodeHeader(h *events.Header) []byte {
 }
 
 func (e *Encoder) Encode(evt *events.Event) []byte {
+	// The final result
 	var res []byte
 
+	// The CRC-32 checksum split up into 4 bytes
 	var crc [4]byte
 
 	binary.BigEndian.PutUint32(crc[:], evt.CRC32)
 
 	res = e.encodeHeader(evt.Header)
 	res = append(res, crc[:]...)
+	res = append(res, *evt.Signature...)
 
 	return res
 }

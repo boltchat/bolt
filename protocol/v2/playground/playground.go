@@ -1,10 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"encoding/hex"
 	"fmt"
+	"github.com/boltchat/lib/pgp"
 	"github.com/boltchat/protocol/v2/encoder"
 	"github.com/boltchat/protocol/v2/events"
+	"golang.org/x/crypto/openpgp"
+	"golang.org/x/crypto/openpgp/packet"
+	"os"
+	"strings"
 )
 
 // This is very poorly written, but it's just
@@ -28,6 +34,27 @@ func printResult(res []byte) {
 	fmt.Println()
 }
 
+func sign(content string) *[]byte {
+	r := strings.NewReader(content)
+	buff := new(bytes.Buffer)
+
+	entity, entityErr := pgp.LoadPGPEntity(
+		"/home/kees/.config/boltchat/entities/default.pgp",
+	)
+
+	if entityErr != nil {
+		panic(entityErr)
+	}
+
+	err := openpgp.DetachSignText(buff, entity, r, &packet.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	b := buff.Bytes()
+	return &b
+}
+
 func main() {
 	d := encoder.NewEncoder(nil)
 	res := d.Encode(&events.Event{
@@ -36,8 +63,11 @@ func main() {
 			EventType: events.JoinEvent,
 			HasCRC:    false,
 		},
-		CRC32: 0xCBF43926,
+		CRC32:     0xCBF43926,
+		Signature: sign("Hello, world!"),
 	})
 
-	printResult(res)
+	os.Stdout.Write(res)
+
+	// printResult(res)
 }
