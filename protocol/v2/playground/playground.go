@@ -36,6 +36,7 @@ func main() {
 			EventType: events.JoinEvent,
 			HasCRC:    false,
 		},
+		CRC32: 0xCBF43926,
 	})
 
 	printResult(res)

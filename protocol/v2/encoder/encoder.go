@@ -1,6 +1,7 @@
 package encoder
 
 import (
+	"encoding/binary"
 	"github.com/boltchat/protocol/v2/events"
 	"io"
 )
@@ -26,7 +27,16 @@ func (e *Encoder) encodeHeader(h *events.Header) []byte {
 }
 
 func (e *Encoder) Encode(evt *events.Event) []byte {
-	return e.encodeHeader(evt.Header)
+	var res []byte
+
+	var crc [4]byte
+
+	binary.BigEndian.PutUint32(crc[:], evt.CRC32)
+
+	res = e.encodeHeader(evt.Header)
+	res = append(res, crc[:]...)
+
+	return res
 }
 
 func NewEncoder(r io.Reader) *Encoder {
