@@ -4,4 +4,5 @@ tmp_dir = "tmp"
 [build]
 cmd = "go build -o tmp/playground playground/playground.go"
 bin = "tmp/playground"
+full_bin = "bash -c './tmp/playground | hexdump -C'"
 delay = 0
