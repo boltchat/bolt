@@ -59,9 +59,10 @@ func main() {
 	d := encoder.NewEncoder(nil)
 	res := d.Encode(&events.Event{
 		Header: &events.Header{
-			Version:   1,
-			EventType: events.JoinEvent,
-			HasCRC:    false,
+			Version:        1,
+			EventType:      events.JoinEvent,
+			HasCRC:         true,
+			HasCompression: false,
 		},
 		CRC32:     0xCBF43926,
 		Signature: sign("Hello, world!"),
