@@ -19,9 +19,14 @@ func (e *Encoder) encodeHeader(h *events.Header) []byte {
 		crc = byte(0x01) << 1
 	}
 
+	compression := byte(0x00)
+	if h.HasCompression {
+		compression = byte(0x01)
+	}
+
 	header = events.ProtocolSignature[:]
 	header = append(header, byte(h.Version))
-	header = append(header, evtType|crc)
+	header = append(header, evtType|crc|compression)
 
 	return header
 }
