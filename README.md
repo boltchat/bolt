@@ -26,6 +26,7 @@ The project boards for _Bolt_ can be found [here](https://github.com/boltchat/bo
 * [Installation guide](./docs/installation.md)
 * [Quick start guide](./docs/quick-start.md)
 * [Protocol Specification](./docs/protocol-spec.md)
+* [Protocol Breakdown](https://github.com/boltchat/branding/blob/main/odg/bolt-protocol-breakdown.svg)
 
 ## Author
 [Kees van Voorthuizen (@keesvv)](https://github.com/keesvv)
