@@ -3,13 +3,11 @@ package encoder
 import (
 	"encoding/binary"
 	"github.com/boltchat/protocol/v2/events"
-	"io"
 )
 
-type Encoder struct {
-}
+type Encoder struct{}
 
-func (e *Encoder) encodeHeader(h *events.Header) []byte {
+func (e *Encoder) EncodeHeader(h *events.Header) []byte {
 	var header []byte
 
 	evtType := byte(h.EventType) << 2
@@ -32,23 +30,16 @@ func (e *Encoder) encodeHeader(h *events.Header) []byte {
 }
 
 func (e *Encoder) Encode(evt *events.Event) []byte {
-	// The final result
 	var res []byte
-
-	// The CRC-32 checksum
 	var crc [4]byte
-
-	// The PGP signature length
 	var sigLen [2]byte
-
-	// The event payload length
 	var payloadLen [2]byte
 
 	binary.BigEndian.PutUint32(crc[:], evt.CRC32)
 	binary.BigEndian.PutUint16(sigLen[:], uint16(len(*evt.Signature)))
 	binary.BigEndian.PutUint16(payloadLen[:], uint16(len(*evt.Payload)))
 
-	res = e.encodeHeader(evt.Header)
+	res = e.EncodeHeader(evt.Header)
 	res = append(res, crc[:]...)
 
 	res = append(res, sigLen[:]...)
@@ -60,6 +51,6 @@ func (e *Encoder) Encode(evt *events.Event) []byte {
 	return res
 }
 
-func NewEncoder(r io.Reader) *Encoder {
+func NewEncoder() *Encoder {
 	return &Encoder{}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/boltchat/lib/pgp"
 	"github.com/boltchat/protocol/v2/encoder"
 	"github.com/boltchat/protocol/v2/events"
+	"github.com/vmihailenco/msgpack/v5"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/packet"
 	"os"
@@ -56,12 +57,20 @@ func sign(content string) *[]byte {
 }
 
 func payload(d string) *[]byte {
-	b := []byte(d)
+	payload := struct{ msg string }{
+		msg: d,
+	}
+
+	b, err := msgpack.Marshal(&payload)
+	if err != nil {
+		panic(err)
+	}
+
 	return &b
 }
 
 func main() {
-	d := encoder.NewEncoder(nil)
+	d := encoder.NewEncoder()
 	res := d.Encode(&events.Event{
 		Header: &events.Header{
 			Version:        1,
