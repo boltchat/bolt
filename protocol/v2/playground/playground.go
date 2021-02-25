@@ -55,6 +55,11 @@ func sign(content string) *[]byte {
 	return &b
 }
 
+func payload(d string) *[]byte {
+	b := []byte(d)
+	return &b
+}
+
 func main() {
 	d := encoder.NewEncoder(nil)
 	res := d.Encode(&events.Event{
@@ -66,6 +71,7 @@ func main() {
 		},
 		CRC32:     0xCBF43926,
 		Signature: sign("Hello, world!"),
+		Payload:   payload("Hi there! This is an event."),
 	})
 
 	os.Stdout.Write(res)

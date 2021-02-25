@@ -35,14 +35,27 @@ func (e *Encoder) Encode(evt *events.Event) []byte {
 	// The final result
 	var res []byte
 
-	// The CRC-32 checksum split up into 4 bytes
+	// The CRC-32 checksum
 	var crc [4]byte
 
+	// The PGP signature length
+	var sigLen [2]byte
+
+	// The event payload length
+	var payloadLen [2]byte
+
 	binary.BigEndian.PutUint32(crc[:], evt.CRC32)
+	binary.BigEndian.PutUint16(sigLen[:], uint16(len(*evt.Signature)))
+	binary.BigEndian.PutUint16(payloadLen[:], uint16(len(*evt.Payload)))
 
 	res = e.encodeHeader(evt.Header)
 	res = append(res, crc[:]...)
+
+	res = append(res, sigLen[:]...)
 	res = append(res, *evt.Signature...)
+
+	res = append(res, payloadLen[:]...)
+	res = append(res, *evt.Payload...)
 
 	return res
 }
