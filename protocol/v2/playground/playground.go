@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
-	"encoding/hex"
 	"fmt"
 	"github.com/boltchat/lib/pgp"
+	"github.com/boltchat/protocol/v2/decoder"
 	"github.com/boltchat/protocol/v2/encoder"
 	"github.com/boltchat/protocol/v2/events"
 	"github.com/vmihailenco/msgpack/v5"
@@ -13,27 +13,6 @@ import (
 	"os"
 	"strings"
 )
-
-// This is very poorly written, but it's just
-// for debugging purposes. ;)
-func printResult(res []byte) {
-	fmt.Printf("bin: ")
-	for _, b := range res {
-		fmt.Printf("%08b ", b)
-	}
-
-	fmt.Println()
-
-	fmt.Printf("dec: ")
-	for _, b := range res {
-		fmt.Printf("%d ", b)
-	}
-	fmt.Println()
-
-	fmt.Printf("hex: %s", hex.EncodeToString(res))
-
-	fmt.Println()
-}
 
 func sign(content string) *[]byte {
 	r := strings.NewReader(content)
@@ -70,20 +49,30 @@ func payload(d string) *[]byte {
 }
 
 func main() {
-	d := encoder.NewEncoder()
-	res := d.Encode(&events.Event{
-		Header: &events.Header{
-			Version:        1,
-			EventType:      events.JoinEvent,
-			HasCRC:         true,
-			HasCompression: false,
-		},
+	enc := encoder.NewEncoder()
+	header := &events.Header{
+		Version:        1,
+		EventType:      events.JoinEvent,
+		HasCRC:         true,
+		HasCompression: false,
+	}
+
+	encResult := enc.Encode(&events.Event{
+		Header:    header,
 		CRC32:     0xCBF43926,
 		Signature: sign("Hello, world!"),
 		Payload:   payload("Hi there! This is an event."),
 	})
 
-	os.Stdout.Write(res)
+	dec := decoder.NewDecoder()
+	decResult, err := dec.Decode(encResult)
+	if err != nil {
+		panic(err)
+	}
 
-	// printResult(res)
+	os.Stderr.WriteString(
+		fmt.Sprintf("%v\n%v\n", *decResult.Header, *decResult),
+	)
+
+	os.Stdout.Write(encResult)
 }
