@@ -57,12 +57,26 @@ func main() {
 		HasCompression: false,
 	}
 
-	encResult := enc.Encode(&events.Event{
+	encEvt := &events.Event{
 		Header:    header,
 		CRC32:     0xCBF43926,
 		Signature: sign("Hello, world!"),
 		Payload:   payload("Hi there! This is an event."),
-	})
+	}
+
+	encResult := enc.Encode(encEvt)
+
+	os.Stderr.WriteString("---ENCODER---\n")
+	os.Stderr.WriteString(
+		fmt.Sprintf(
+			"siglen: %d\n"+
+				"sig: %v\n"+
+				"payload: %v\n",
+			len(*encEvt.Signature),
+			*encEvt.Signature,
+			*encEvt.Payload,
+		),
+	)
 
 	dec := decoder.NewDecoder()
 	decResult, err := dec.Decode(encResult)
@@ -70,9 +84,23 @@ func main() {
 		panic(err)
 	}
 
+	os.Stderr.WriteString("\n---DECODER---\n")
 	os.Stderr.WriteString(
-		fmt.Sprintf("%v\n%v\n", *decResult.Header, *decResult),
+		fmt.Sprintf(
+			"header: %v\n"+
+				"crc: %d\n"+
+				"siglen: %d\n"+
+				"sig: %v\n"+
+				"payload: %v\n",
+			*decResult.Header,
+			decResult.CRC32,
+			len(*decResult.Signature),
+			*decResult.Signature,
+			*decResult.Payload,
+		),
 	)
+
+	os.Stderr.WriteString("\n---ENCODER OUTPUT---\n")
 
 	os.Stdout.Write(encResult)
 }
