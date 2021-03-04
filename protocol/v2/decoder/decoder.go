@@ -47,9 +47,12 @@ func (d *Decoder) Decode(b []byte) (*events.Event, error) {
 	event.CRC32 = binary.BigEndian.Uint32(b[4:8])
 
 	sigLen := binary.BigEndian.Uint16(b[8:10])
-	sig := b[10:sigLen]
+
+	sig := b[10 : sigLen+10]
+	payload := b[10+sigLen:]
 
 	event.Signature = &sig
+	event.Payload = &payload
 
 	return event, nil
 }
