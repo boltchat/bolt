@@ -14,6 +14,10 @@ import (
 	"strings"
 )
 
+type TestEvent struct {
+	Msg string
+}
+
 func sign(content string) *[]byte {
 	r := strings.NewReader(content)
 	buff := new(bytes.Buffer)
@@ -36,8 +40,8 @@ func sign(content string) *[]byte {
 }
 
 func payload(d string) *[]byte {
-	payload := struct{ msg string }{
-		msg: d,
+	payload := TestEvent{
+		Msg: d,
 	}
 
 	b, err := msgpack.Marshal(&payload)
@@ -84,6 +88,9 @@ func main() {
 		panic(err)
 	}
 
+	decPayload := TestEvent{}
+	msgpack.Unmarshal(*decResult.Payload, &decPayload)
+
 	os.Stderr.WriteString("\n---DECODER---\n")
 	os.Stderr.WriteString(
 		fmt.Sprintf(
@@ -96,7 +103,7 @@ func main() {
 			decResult.CRC32,
 			len(*decResult.Signature),
 			*decResult.Signature,
-			*decResult.Payload,
+			decPayload,
 		),
 	)
 
