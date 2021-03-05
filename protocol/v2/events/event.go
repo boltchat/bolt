@@ -5,15 +5,16 @@ type Event struct {
 	CRC32      uint32
 	Signature  *[]byte
 	RawPayload *[]byte
+	Payload    interface{}
 }
 
 // NewEvent TODO
-func NewEvent(t EventType, payload *[]byte) *Event {
+func NewEvent(t EventType, payload interface{}) *Event {
 	return &Event{
 		Header: &Header{ // TODO:
 			Version:   1,
 			EventType: t,
 		},
-		RawPayload: payload,
+		Payload: payload,
 	}
 }
