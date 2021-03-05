@@ -6,3 +6,14 @@ type Event struct {
 	Signature *[]byte
 	Payload   *[]byte
 }
+
+// NewEvent TODO
+func NewEvent(t EventType, payload *[]byte) *Event {
+	return &Event{
+		Header: &Header{ // TODO:
+			Version:   1,
+			EventType: t,
+		},
+		Payload: payload,
+	}
+}
