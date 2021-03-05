@@ -3,6 +3,9 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/boltchat/lib/pgp"
 	"github.com/boltchat/protocol/v2/decoder"
 	"github.com/boltchat/protocol/v2/encoder"
@@ -10,8 +13,6 @@ import (
 	"github.com/vmihailenco/msgpack/v5"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/packet"
-	"os"
-	"strings"
 )
 
 type TestEvent struct {
@@ -62,10 +63,10 @@ func main() {
 	}
 
 	encEvt := &events.Event{
-		Header:    header,
-		CRC32:     0xCBF43926,
-		Signature: sign("Hello, world!"),
-		Payload:   payload("Hi there! This is an event."),
+		Header:     header,
+		CRC32:      0xCBF43926,
+		Signature:  sign("Hello, world!"),
+		RawPayload: payload("Hi there! This is an event."),
 	}
 
 	encResult := enc.Encode(encEvt)
@@ -78,7 +79,7 @@ func main() {
 				"payload: %v\n",
 			len(*encEvt.Signature),
 			*encEvt.Signature,
-			*encEvt.Payload,
+			*encEvt.RawPayload,
 		),
 	)
 
@@ -89,7 +90,7 @@ func main() {
 	}
 
 	decPayload := TestEvent{}
-	msgpack.Unmarshal(*decResult.Payload, &decPayload)
+	msgpack.Unmarshal(*decResult.RawPayload, &decPayload)
 
 	os.Stderr.WriteString("\n---DECODER---\n")
 	os.Stderr.WriteString(

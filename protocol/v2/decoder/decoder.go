@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+
 	"github.com/boltchat/protocol/v2/events"
 )
 
@@ -55,7 +56,7 @@ func (d *Decoder) Decode(b []byte) (*events.Event, error) {
 	payload := b[sigEnd+2 : payloadEnd]
 
 	event.Signature = &sig
-	event.Payload = &payload
+	event.RawPayload = &payload
 
 	return event, nil
 }
