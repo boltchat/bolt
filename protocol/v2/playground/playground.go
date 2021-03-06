@@ -69,7 +69,7 @@ func main() {
 		RawPayload: payload("Hi there! This is an event."),
 	}
 
-	encResult := enc.Encode(encEvt)
+	encResult, _ := enc.Encode(encEvt)
 
 	os.Stderr.WriteString("---ENCODER---\n")
 	os.Stderr.WriteString(

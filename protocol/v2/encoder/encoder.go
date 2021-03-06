@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 
 	"github.com/boltchat/protocol/v2/events"
+	"github.com/vmihailenco/msgpack/v5"
 )
 
 type Encoder struct{}
@@ -30,11 +31,24 @@ func (e *Encoder) EncodeHeader(h *events.Header) []byte {
 	return header
 }
 
-func (e *Encoder) Encode(evt *events.Event) []byte {
+func (e *Encoder) EncodePayload(p interface{}) ([]byte, error) {
+	return msgpack.Marshal(&p)
+}
+
+func (e *Encoder) Encode(evt *events.Event) ([]byte, error) {
 	var res []byte
 	var crc [4]byte
 	var sigLen [2]byte
 	var payloadLen [2]byte
+
+	if evt.RawPayload == nil {
+		b, err := e.EncodePayload(evt.Payload)
+		if err != nil {
+			return nil, err
+		}
+
+		evt.RawPayload = &b
+	}
 
 	binary.BigEndian.PutUint32(crc[:], evt.CRC32)
 	binary.BigEndian.PutUint16(sigLen[:], uint16(len(*evt.Signature)))
